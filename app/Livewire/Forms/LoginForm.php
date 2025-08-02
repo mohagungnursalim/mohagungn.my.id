@@ -21,6 +21,12 @@ class LoginForm extends Form
     #[Validate('boolean')]
     public bool $remember = false;
 
+
+    public function render()
+    {
+        return view('livewire.dashboard.pages.auth.login');
+    }
+    
     /**
      * Attempt to authenticate the request's credentials.
      *
