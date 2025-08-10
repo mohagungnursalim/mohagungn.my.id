@@ -24,7 +24,7 @@ class Tags extends Component
      */
     public $editId;
     public $editName;
-    public $showEditModal = false;
+    public $showEditModal;
 
 
     /**
@@ -33,7 +33,7 @@ class Tags extends Component
      */
     public $deleteId;
     public $deleteName;
-    public $showDeleteModal = false;
+    public $showDeleteModal;
 
     /**
      * Koleksi tag & total koleksi tag yang akan ditampilkan
