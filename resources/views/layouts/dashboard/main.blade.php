@@ -14,12 +14,15 @@
 
 <body class="dark:bg-gray-800">
 
+    {{-- Navbar --}}
+    @include('layouts.dashboard.navbar')
+
     {{-- Sidebar --}}
     @include('layouts.dashboard.sidebar')
 
     {{-- Konten --}}
     <div class="p-4 sm:ml-64 dark:bg-gray-800">
-        <div class="p-4 border-2 border-white border-dashed rounded-lg dark:border-gray-100">
+        <div class="p-4 border-2 border-white border-dashed rounded-lg dark:border-gray-100 mt-14">
             {{ $slot }}
         </div>
     </div>
