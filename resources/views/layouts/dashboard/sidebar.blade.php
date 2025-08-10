@@ -26,7 +26,7 @@
                    <span class="flex-1 ms-3 text-left rtl:text-right whitespace-nowrap">Posts</span>
                <i class="fa-solid fa-sort-down"></i>
              </button>
-             <ul id="dropdown-example" class="hidden py-2 space-y-2">
+             <ul id="dropdown-example" class="{{ request()->routeIs('tags') ? '' : 'hidden' }} py-2 space-y-2">
                    <li>
                       <a href="#" class="flex items-center w-full p-2 text-gray-900 transition duration-75 rounded-lg pl-11 group hover:bg-gray-100 dark:text-white dark:hover:bg-gray-700"><i class="fa-solid fa-arrow-right"></i>Manage Posts</a>
                    </li>
@@ -34,8 +34,13 @@
                       <a href="#" class="flex items-center w-full p-2 text-gray-900 transition duration-75 rounded-lg pl-11 group hover:bg-gray-100 dark:text-white dark:hover:bg-gray-700"><i class="fa-solid fa-arrow-right"></i>Manage Categories</a>
                    </li>
                    <li>
-                      <a href="#" class="flex items-center w-full p-2 text-gray-900 transition duration-75 rounded-lg pl-11 group hover:bg-gray-100 dark:text-white dark:hover:bg-gray-700"><i class="fa-solid fa-arrow-right"></i>Manage Tags</a>
+                     <a wire:navigate href="{{ route('tags') }}"
+                        class="{{ request()->routeIs('tags') ? 'dark:bg-gray-600' : '' }} flex items-center w-full p-2 text-gray-900 transition duration-75 rounded-lg pl-11 group hover:bg-gray-100 dark:text-white dark:hover:bg-gray-700">
+                        <i class="fa-solid fa-arrow-right"></i>
+                        Manage Tags
+                     </a>
                    </li>
+                   
              </ul>
           </li>
 
