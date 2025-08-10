@@ -1,5 +1,3 @@
-@extends('layouts.dashboard.main')
-@section('content')
 <div class="dark:bg-gray-800"> 
     <div class="py-12 bg-white dark:bg-gray-800 sm:rounded-lg">
         <div class="max-w-7xl mx-auto sm:px-6 lg:px-8">
@@ -11,6 +9,6 @@
         </div>
     </div>
 </div> 
-@endsection
+
 
 
