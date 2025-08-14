@@ -1,5 +1,6 @@
 <?php
 
+use App\Livewire\Dashboard\Categories;
 use App\Livewire\Dashboard\Tags;
 use Illuminate\Support\Facades\Route;
 
@@ -14,7 +15,11 @@ Route::view('dashboard', 'livewire.dashboard.dashboard')
 
 Route::get('dashboard/tags', Tags::class)
     ->middleware(['auth', 'verified'])
-    ->name('tags');    
+    ->name('tags');   
+
+Route::get('dashboard/categories', Categories::class)
+    ->middleware(['auth', 'verified'])
+    ->name('categories');
 
 Route::view('profile', 'livewire.dashboard.profile')
     ->middleware(['auth'])
