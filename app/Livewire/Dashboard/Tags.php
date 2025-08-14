@@ -71,10 +71,15 @@ class Tags extends Component
      * @var int
      */
 
-    public $ttl = 300; // 5 menit
+    public $ttl = 60 * 60 * 24 * 7; // 1 minggu
 
 
-    
+        
+    /**
+     * Method mount untuk inisialisasi komponen
+     *
+     * @return void
+     */
     public function mount()
     {
         // Ambil jumlah total tag dari cache
@@ -84,23 +89,39 @@ class Tags extends Component
 
     }
 
+        
+    /**
+     * Method updatingSearch lifecycle hook untuk memperbarui data & batas tag yang ditampilkan 
+     *
+     * @return void
+     */
     public function updatingSearch()
     {
         $this->limit = 5;
     }
 
+
+    /**
+     * Method updatedSearch untuk memperbarui tag berdasarkan pencarian
+     *
+     * @return void
+     */
     public function updatedSearch()
     {
         $this->loadInitialTags();
     }
 
+
+    /**
+     * Method loadInitialTags untuk memuat tag
+     *
+     * @return void
+     */
     public function loadInitialTags()
     {
-        $this->loaded = true;
-
         $key = "{$this->cacheKey}_{$this->search}_{$this->limit}";
 
-        // Simpan key-nya ke tracker manual
+        // Simpan key cache yang digunakan
         $this->trackCacheKey($key);
 
         $this->tags = Cache::remember($key, $this->ttl, function () {
@@ -109,14 +130,29 @@ class Tags extends Component
                 ->take($this->limit)
                 ->get();
         });
+
+        // Set loaded ke true hanya jika tag telah dimuat
+        $this->loaded = true;
     }
 
+
+    /**
+     * Method loadMore untuk memuat lebih banyak tag ditampilkan
+     *
+     * @return void
+     */
     public function loadMore()
     {
         $this->limit += 5;
         $this->loadInitialTags();
     }
 
+
+    /**
+     * Method store untuk menambahkan tag baru
+     *
+     * @return void
+     */
     public function store()
     {
         DB::listen(function ($query) {
@@ -145,6 +181,12 @@ class Tags extends Component
     }
 
 
+     /**
+     * Method edit untuk menampilkan modal edit tag
+     *
+     * @param  mixed $id
+     * @return void
+     */
     public function edit($id)
     {
         $tag = Tag::findOrFail($id);
@@ -153,6 +195,12 @@ class Tags extends Component
         $this->showEditModal = true;
     }
 
+
+    /**
+     * Method update untuk memperbarui tag 
+     *
+     * @return void
+     */
     public function update()
     {
         $this->validate([
@@ -176,6 +224,13 @@ class Tags extends Component
         ]);
     }
 
+
+    /**
+     * Method confirmDelete untuk menampilkan modal konfirmasi penghapusan kategori
+     *
+     * @param  mixed $id
+     * @return void
+     */
     public function confirmDelete($id)
     {
         $tag = Tag::findOrFail($id);
@@ -184,6 +239,12 @@ class Tags extends Component
         $this->showDeleteModal = true;
     }
 
+
+     /**
+     * Method delete untuk menghapus tag
+     *
+     * @return void
+     */
     public function delete()
     {
         $tag = Tag::findOrFail($this->deleteId);
@@ -199,6 +260,12 @@ class Tags extends Component
         ]);
     }
     
+
+    /**
+     * Method refreshCache untuk memperbarui cache tag
+     *
+     * @return void
+     */
     public function refreshCache()
     {
         // Hapus dan segarkan total tag
@@ -219,6 +286,13 @@ class Tags extends Component
         Cache::forget($trackerKey);
     }
 
+
+    /**
+     * Method trackCacheKey untuk menyimpan key cache yang digunakan
+     *
+     * @param  mixed $key
+     * @return void
+     */
     protected function trackCacheKey($key)
     {
         $trackerKey = "{$this->cacheKey}_tracked_keys";
@@ -231,6 +305,12 @@ class Tags extends Component
         }
     }
 
+
+    /**
+     * Method render untuk menampilkan halaman
+     *
+     * @return void
+     */
     public function render()
     {
         return view('livewire.dashboard.tags')

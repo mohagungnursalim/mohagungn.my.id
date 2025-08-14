@@ -4,13 +4,13 @@
             <div class="bg-gray-100 dark:bg-gray-800 overflow-hidden shadow-sm sm:rounded-lg">
                 <div x-data="{ showModalAdd: @entangle('showModalAdd') }">
 
-                    <!-- Add Button -->
+                    {{-- Add Button  --}}
                     <button @click="showModalAdd = true"
                         class="mb-4 px-5 py-2.5 text-sm font-medium border border-blue-700 text-blue-700 hover:text-white hover:bg-blue-800 focus:outline-none rounded-lg">
                         Add Tag
                     </button>
 
-                    <!-- Search -->
+                    {{-- Search --}}
                     <div class="relative w-full mb-3">
                         <div class="absolute inset-y-0 start-0 flex items-center ps-3 pointer-events-none">
                             <i class="fa-solid fa-magnifying-glass text-white text-lg"></i>
@@ -120,7 +120,7 @@
                     
 
 
-            <!-- Modal Add -->
+            {{-- Modal Add  --}}
             <div x-show="showModalAdd" 
                 x-transition:enter="transition ease-out duration-300"
                 x-transition:enter-start="opacity-0" 
@@ -130,7 +130,7 @@
                 x-transition:leave-end="opacity-0" 
                 x-cloak
                 class="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-50">
-                <!-- Modal Box -->
+                {{-- Modal Box  --}}
                 <div @click.outside="showModalAdd = true" 
                     x-transition:enter="transition ease-out duration-300"
                     x-transition:enter-start="opacity-0 scale-95" 
@@ -150,6 +150,7 @@
                         <p class="mb-2 text-sm text-red-500">{{ $message }}</p>
                         @enderror
 
+                        {{-- Button --}}
                         <div class="flex justify-center gap-2">
                             <button type="button" @click="showModalAdd = false"
                                 class="px-4 py-2 text-white bg-gray-500 rounded hover:bg-gray-600">
@@ -165,7 +166,7 @@
             </div>
 
 
-            <!-- Modal Edit -->
+            {{-- Modal Edit --}}
             <div x-data="{ showEditModal: @entangle('showEditModal') }">
                 <div x-show="showEditModal"
                     x-transition:enter="transition ease-out duration-300"
@@ -176,7 +177,7 @@
                     x-transition:leave-end="opacity-0"
                     x-cloak
                     class="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-50">
-                    <!-- Modal Box -->
+                    {{-- Modal Box --}}
                     <div @click.outside="showEditModal = true"
                         x-transition:enter="transition ease-out duration-300"
                         x-transition:enter-start="opacity-0 scale-95"
@@ -195,6 +196,7 @@
                             <p class="mb-2 text-sm text-red-500">{{ $message }}</p>
                             @enderror
 
+                            {{-- Button --}}
                             <div class="flex justify-center gap-2">
                                 <button type="button" @click="showEditModal = false"
                                     class="px-4 py-2 text-white bg-gray-500 rounded hover:bg-gray-600">
@@ -211,7 +213,7 @@
             </div>
 
 
-           <!-- Delete Confirmation Modal -->
+            {{-- Delete Confirmation Modal  --}}
             <div x-data="{ showDeleteModal: @entangle('showDeleteModal') }">
                 <div x-show="showDeleteModal"
                     x-transition:enter="transition ease-out duration-300"
@@ -223,7 +225,7 @@
                     x-cloak
                     class="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-50">
 
-                    <!-- Modal Box -->
+                     {{-- Modal Box  --}}
                     <div @click.outside="showDeleteModal = true"
                         x-transition:enter="transition ease-out duration-300"
                         x-transition:enter-start="opacity-0 scale-95"
@@ -242,6 +244,7 @@
                             </p>
                         </div>
 
+                        {{-- Button --}}
                         <div class="flex justify-center gap-2">
                             <button type="button" 
                                 @click="showDeleteModal = false"

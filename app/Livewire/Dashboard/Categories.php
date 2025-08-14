@@ -126,13 +126,15 @@ class Categories extends Component
     
 
     /**
-     * Method loadInitialCategories untuk memuat kategori awal
+     * Method loadInitialCategories untuk memuat kategori
      *
      * @return void
      */
     public function loadInitialCategories()
     {
         $key = "{$this->cacheKey}_{$this->search}_{$this->limit}";
+        
+        // Simpan key cache yang digunakan
         $this->trackCacheKey($key);
     
         $this->categories = Cache::remember($key, $this->ttl, function () {
