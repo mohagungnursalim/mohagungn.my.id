@@ -19,18 +19,26 @@
                   </li>
                   <li>
                      <a wire:navigate href="{{ route('categories') }}"
-                        class="{{ request()->routeIs('categories') ? 'dark:bg-gray-600' : '' }} flex items-center w-full p-2 text-gray-900 transition duration-75 rounded-lg pl-11 group hover:bg-gray-100 dark:text-white dark:hover:bg-gray-700">
-                        <i class="fa-solid fa-arrow-right"></i>
-                        Manage Categories
+                        class="flex items-center w-full p-2 rounded-lg pl-11 transition duration-75 group
+                               text-gray-900 dark:text-white
+                               hover:bg-gray-100 dark:hover:bg-gray-700
+                               {{ request()->routeIs('categories') ? 'bg-gray-200 dark:bg-gray-600' : '' }}">
+                         <i class="fa-solid fa-arrow-right"></i>
+                         <span class="ml-2">Manage Categories</span>
                      </a>
-                   </li>
-                  <li>
-                    <a wire:navigate href="{{ route('tags') }}"
-                       class="{{ request()->routeIs('tags') ? 'dark:bg-gray-600' : '' }} flex items-center w-full p-2 text-gray-900 transition duration-75 rounded-lg pl-11 group hover:bg-gray-100 dark:text-white dark:hover:bg-gray-700">
-                       <i class="fa-solid fa-arrow-right"></i>
-                       Manage Tags
-                    </a>
-                  </li>
+                 </li>
+                 
+                 <li>
+                     <a wire:navigate href="{{ route('tags') }}"
+                        class="flex items-center w-full p-2 rounded-lg pl-11 transition duration-75 group
+                               text-gray-900 dark:text-white
+                               hover:bg-gray-100 dark:hover:bg-gray-700
+                               {{ request()->routeIs('tags') ? 'bg-gray-200 dark:bg-gray-600' : '' }}">
+                         <i class="fa-solid fa-arrow-right"></i>
+                         <span class="ml-2">Manage Tags</span>
+                     </a>
+                 </li>
+                 
                   
             </ul>
          </li>

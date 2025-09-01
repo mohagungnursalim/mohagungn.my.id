@@ -1,7 +1,7 @@
 <div class="dark:bg-gray-800">
     <div class="py-12 bg-white dark:bg-gray-800 sm:rounded-lg">
         <div class="max-w-7xl mx-auto sm:px-6 lg:px-8">
-            <div class="bg-gray-100 dark:bg-gray-800 overflow-hidden shadow-sm sm:rounded-lg">
+            
                 <div x-data="{ showModalAdd: @entangle('showModalAdd') }">
 
                     {{-- Add Button  --}}
@@ -13,12 +13,12 @@
                     {{-- Search --}}
                     <div class="relative w-full mb-3">
                         <div class="absolute inset-y-0 start-0 flex items-center ps-3 pointer-events-none">
-                            <i class="fa-solid fa-magnifying-glass text-white text-lg"></i>
+                            <i class="fa-solid fa-magnifying-glass text-gray-300 dark:text-white text-lg"></i>
                         </div>
 
                         <input wire:model.live.debounce.500ms="search" id="search" name="name" type="text"
                             class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full ps-10 p-2.5  dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
-                            placeholder="Search branch name..." required autocomplete="true" />
+                            placeholder="Search tag..." required autocomplete="true" />
                     </div>
                     <div class="text-white" wire:loading wire:target='search'>Loading..</div>
 
@@ -105,14 +105,14 @@
 
                             {{-- Tombol Load More --}}
                             @if ($tags->count() >= $limit && $totalTags > $limit)
-                            <div class="flex justify-center mt-4">
+                            <div class="flex justify-center mt-4 mb-3">
                                 <button wire:click="loadMore" wire:loading.remove wire:target="loadMore"
-                                    class="px-4 py-2 text-sm text-white bg-blue-600 rounded hover:bg-blue-700">
+                                    class="px-4 py-2 text-sm text-white bg-blue-600 rounded-full hover:bg-blue-700">
                                     Load more
                                 </button>
 
                                 <button wire:loading wire:target="loadMore"
-                                    class="px-4 py-2 text-sm text-white bg-blue-800 rounded cursor-not-allowed">
+                                    class="px-4 py-2 text-sm text-white bg-blue-800 rounded-full cursor-not-allowed">
                                     Loading..
                                 </button>
                             </div>
@@ -271,7 +271,6 @@
 
 
                 </div>
-            </div>
         </div>
     </div>
 </div>

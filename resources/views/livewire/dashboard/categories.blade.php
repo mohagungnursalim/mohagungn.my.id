@@ -1,7 +1,7 @@
 <div class="dark:bg-gray-800">
     <div class="py-12 bg-white dark:bg-gray-800 sm:rounded-lg">
         <div class="max-w-7xl mx-auto sm:px-6 lg:px-8">
-            <div class="bg-gray-100 dark:bg-gray-800 overflow-hidden shadow-sm sm:rounded-lg">
+            
                 <div x-data="{ showModalAdd: @entangle('showModalAdd') }">
 
                     {{-- Add Button --}}
@@ -13,7 +13,7 @@
                     {{-- Search --}}
                     <div class="relative w-full mb-3">
                         <div class="absolute inset-y-0 start-0 flex items-center ps-3 pointer-events-none">
-                            <i class="fa-solid fa-magnifying-glass text-white text-lg"></i>
+                            <i class="fa-solid fa-magnifying-glass text-gray-300 dark:text-white text-lg"></i>
                         </div>
 
                         <input wire:model.live.debounce.500ms="search" id="search" name="name" type="text"
@@ -127,7 +127,7 @@
 
                             {{-- Tombol Load More --}}
                             @if ($categories->count() >= $limit && $totalCategories > $limit)
-                            <div class="flex justify-center mt-4">
+                            <div class="flex justify-center mt-4 mb-3">
                                 <button wire:click="loadMore" wire:loading.remove wire:target="loadMore"
                                     class="px-4 py-2 text-sm text-white bg-blue-600 rounded-full hover:bg-blue-700">
                                     Load More
@@ -411,7 +411,6 @@
 
 
                 </div>
-            </div>
         </div>
     </div>
 </div>
