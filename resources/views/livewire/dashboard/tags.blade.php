@@ -161,7 +161,6 @@
 
                                     <button wire:loading wire:target="store" wire:loading.attr="disabled"
                                         class="px-4 py-2 text-white bg-blue-600 rounded-full disabled:cursor-not-allowed hover:bg-blue-700">
-                                        Submitting...
                                         <i class="fas fa-spinner fa-spin"></i>
                                     </button>
                                 </div>
@@ -211,7 +210,6 @@
                                         </button>
                                         <button wire:loading wire:target="update" wire:loading.attr="disabled"
                                             class="px-4 py-2 text-white bg-blue-600 rounded-full disabled:cursor-not-allowed hover:bg-blue-700">
-                                            Saving...
                                             <i class="fas fa-spinner fa-spin"></i>
                                         </button>
                                     </div>
@@ -262,7 +260,6 @@
                                     </button>
                                     <button wire:loading wire:target="delete" wire:loading.attr="disabled"
                                         class="px-4 py-2 text-white bg-red-600 rounded-full disabled:cursor-not-allowed hover:bg-red-700">
-                                        Deleting...
                                         <i class="fas fa-spinner fa-spin"></i>
                                     </button>
                                 </div>
