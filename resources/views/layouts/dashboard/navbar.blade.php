@@ -24,7 +24,7 @@
 
                 <!-- 🌙 Dark Mode Toggle -->
                 <button @click="$store.theme.toggle()" class="mr-3 flex items-center justify-center w-9 h-9 rounded-full
-                        bg-gray-400 dark:bg-gray-400 hover:bg-gray-200
+                          hover:bg-gray-400
                         focus:ring-4 focus:ring-gray-300" aria-label="Toggle dark mode">
                     <span x-show="!$store.theme.dark" x-cloak>🌙</span>
                     <span x-show="$store.theme.dark" x-cloak>☀️</span>
