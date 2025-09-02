@@ -39,7 +39,7 @@ class Tags extends Component
      * Koleksi tag & total koleksi tag yang akan ditampilkan
      * @var \Illuminate\Support\Collection
      */
-    public $tags, $totalTags;
+    public $tags = [], $totalTags;
 
     /**
      * Kunci cache untuk menyimpan tag
@@ -119,7 +119,7 @@ class Tags extends Component
      */
     public function loadInitialTags()
     {
-        $key = "{$this->cacheKey}_{$this->search}_{$this->limit}";
+        $key = "{$this->cacheKey}_" . md5($this->search) . "_{$this->limit}";
 
         // Simpan key cache yang digunakan
         $this->trackCacheKey($key);

@@ -46,7 +46,7 @@ class Categories extends Component
      *
      * @var 
      */
-    public $categories, $totalCategories;
+    public $categories = [], $totalCategories;
     
         
     /**
@@ -132,7 +132,9 @@ class Categories extends Component
      */
     public function loadInitialCategories()
     {
-        $key = "{$this->cacheKey}_{$this->search}_{$this->limit}";
+        // Buat key cache unik berdasarkan pencarian & limit
+        $key = "{$this->cacheKey}_" . md5($this->search) . "_{$this->limit}";
+
         
         // Simpan key cache yang digunakan
         $this->trackCacheKey($key);
