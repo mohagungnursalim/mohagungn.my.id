@@ -13,27 +13,34 @@
                   <span class="flex-1 ms-3 text-left rtl:text-right whitespace-nowrap">Posts</span>
               <i class="fa-solid fa-sort-down"></i>
             </button>
-            <ul id="dropdown-example" class="{{ request()->routeIs('tags') || request()->routeIs('categories') ? '' : 'hidden' }} py-2 space-y-2">
+            <ul id="dropdown-example" class="{{ request()->routeIs(['dashboard.posts.index','dashboard.posts.create','dashboard.posts.edit','dashboard.categories','dashboard.tags']) ? '' : 'hidden' }} py-2 space-y-2">
+               <li>
+                  <a wire:navigate href="{{ route('dashboard.posts.index') }}"
+                     class="flex items-center w-full p-2 rounded-lg pl-11 transition duration-75 group
+                            text-gray-900 dark:text-white
+                            hover:bg-gray-100 dark:hover:bg-gray-700
+                            {{ request()->routeIs('dashboard.posts.index') ? 'bg-gray-200 dark:bg-gray-600' : '' }}">
+                      <i class="fa-solid fa-arrow-right"></i>
+                      <span class="ml-2">Manage Posts</span>
+                  </a>
+              </li>
                   <li>
-                     <a href="#" class="flex items-center w-full p-2 text-gray-900 transition duration-75 rounded-lg pl-11 group hover:bg-gray-100 dark:text-white dark:hover:bg-gray-700"><i class="fa-solid fa-arrow-right"></i>Manage Posts</a>
-                  </li>
-                  <li>
-                     <a wire:navigate href="{{ route('categories') }}"
+                     <a wire:navigate href="{{ route('dashboard.categories') }}"
                         class="flex items-center w-full p-2 rounded-lg pl-11 transition duration-75 group
                                text-gray-900 dark:text-white
                                hover:bg-gray-100 dark:hover:bg-gray-700
-                               {{ request()->routeIs('categories') ? 'bg-gray-200 dark:bg-gray-600' : '' }}">
+                               {{ request()->routeIs('dashboard.categories') ? 'bg-gray-200 dark:bg-gray-600' : '' }}">
                          <i class="fa-solid fa-arrow-right"></i>
                          <span class="ml-2">Manage Categories</span>
                      </a>
                  </li>
                  
                  <li>
-                     <a wire:navigate href="{{ route('tags') }}"
+                     <a wire:navigate href="{{ route('dashboard.tags') }}"
                         class="flex items-center w-full p-2 rounded-lg pl-11 transition duration-75 group
                                text-gray-900 dark:text-white
                                hover:bg-gray-100 dark:hover:bg-gray-700
-                               {{ request()->routeIs('tags') ? 'bg-gray-200 dark:bg-gray-600' : '' }}">
+                               {{ request()->routeIs('dashboard.tags') ? 'bg-gray-200 dark:bg-gray-600' : '' }}">
                          <i class="fa-solid fa-arrow-right"></i>
                          <span class="ml-2">Manage Tags</span>
                      </a>
