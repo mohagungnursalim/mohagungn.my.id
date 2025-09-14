@@ -3,7 +3,7 @@
         <div class="max-w-7xl mx-auto sm:px-6 lg:px-8">
 
             {{-- Add Button --}}
-            <a href="{{ route('dashboard.posts.create') }}"
+            <a wire:navigate href="{{ route('dashboard.posts.create') }}"
                 class="mb-4 inline-block px-5 py-2.5 text-sm font-medium border border-blue-700 text-blue-700 hover:text-white hover:bg-blue-800 focus:outline-none rounded-lg">
                 Add Post
             </a>
