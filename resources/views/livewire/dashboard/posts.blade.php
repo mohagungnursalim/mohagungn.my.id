@@ -31,7 +31,6 @@
                             <tr>
                                 <th class="px-6 py-3">Thumbnail</th>
                                 <th class="px-6 py-3">Title</th>
-                                <th class="px-6 py-3">Slug</th>
                                 <th class="px-6 py-3">Categories</th>
                                 <th class="px-6 py-3">Tags</th>
                                 <th class="px-6 py-3">Action</th>
@@ -57,7 +56,6 @@
                                     {{ $post->title }}
                                 </td>
 
-                                <td class="px-6 py-4">{{ $post->slug }}</td>
                                 <td class="px-6 py-4">{{ $post->categories->pluck('name')->join(', ') }}</td>
                                 <td class="px-6 py-4">{{ $post->tags->pluck('name')->join(', ') }}</td>
 

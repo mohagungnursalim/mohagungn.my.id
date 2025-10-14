@@ -21,23 +21,19 @@ class PostsCreate extends Component
     public $cacheKey = 'dashboard_posts';
     public $ttl = 60 * 60 * 24 * 7; // 1 minggu
 
+       
+    /**
+     * rules
+     *
+     * @var array
+     */
     protected $rules = [
         'title' => 'required|min:3',
-        'slug' => 'required|unique:posts,slug',
         'content' => 'required',
         'thumbnail' => 'nullable|image|max:2048',
     ];
     
-    /**
-     * updatedTitle
-     *
-     * @param  mixed $value
-     * @return void
-     */
-    public function updatedTitle($value)
-    {
-        $this->slug = Str::slug($value);
-    }
+   
     
     /**
      * store
@@ -47,6 +43,9 @@ class PostsCreate extends Component
     public function store()
     {
         $this->validate();
+
+        // Buat slug berdasarkan title
+        $this->slug = Str::slug($this->title) . '-' . Str::random(4);
 
         $thumbnailPath = $this->thumbnail ? $this->thumbnail->store('thumbnails', 'public') : null;
 
