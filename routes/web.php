@@ -1,11 +1,14 @@
 <?php
 
+use App\Http\Controllers\CkeditorController;
 use App\Livewire\Dashboard\Categories;
 use App\Livewire\Dashboard\Posts;
 use App\Livewire\Dashboard\PostsCreate;
 use App\Livewire\Dashboard\PostsEdit;
 use App\Livewire\Dashboard\Tags;
+use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
+use Illuminate\Support\Facades\Storage;
 
 Route::view('/', 'welcome');
 
@@ -17,6 +20,40 @@ Route::view('dashboard', 'livewire.dashboard.dashboard')
     ->name('dashboard');
 
 
+    Route::middleware(['auth'])->group(function () {
+
+        // 🔼 Upload gambar CKEditor
+        Route::post('/ckeditor/upload', function (Request $request) {
+            if ($request->hasFile('upload')) {
+                $path = $request->file('upload')->store('ckeditor', 'public');
+                $url = Storage::url($path);
+    
+                return response()->json(['url' => $url]);
+            }
+    
+            return response()->json(['error' => ['message' => 'Tidak ada file yang dikirim.']], 400);
+        })->name('ckeditor.upload');
+    
+        // 🔽 Hapus gambar dari storage
+        Route::post('/ckeditor/delete', function (Request $request) {
+            $url = $request->url;
+    
+            if (!$url) {
+                return response()->json(['error' => 'URL tidak dikirim'], 400);
+            }
+    
+            $path = str_replace('/storage/', '', parse_url($url, PHP_URL_PATH));
+    
+            if (Storage::disk('public')->exists($path)) {
+                Storage::disk('public')->delete($path);
+                return response()->json(['success' => true]);
+            }
+    
+            return response()->json(['error' => 'File tidak ditemukan'], 404);
+        })->name('ckeditor.delete');
+    });
+   
+    
 
 Route::prefix('dashboard')->name('dashboard.')->middleware(['auth'])->group(function () {
     // ========== Posts ==========

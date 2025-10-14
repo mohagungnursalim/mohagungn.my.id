@@ -3,3 +3,62 @@
 @tailwind utilities;
 
 
+/* ==================================CkEditor5 Style================================= */
+
+/* Tinggi default editor */
+.ck-editor__editable[role="textbox"] {
+    min-height: 300px;
+}
+
+/* === Dark Mode Styling === */
+.dark .ck.ck-editor {
+    background-color: #1f2937;
+    /* bg gray-800 */
+    color: #ffffff;
+    /* text gray-50 */
+    border-color: #374151;
+    /* border gray-700 */
+}
+
+/* Area content */
+.dark .ck-editor__editable {
+    background-color: #1f2937 !important;
+    color: #ffffff !important;
+}
+
+/* Placeholder text */
+.dark .ck-editor__editable .ck-placeholder::before {
+    color: #9ca3af !important;
+    /* gray-400 */
+}
+
+/* Toolbar */
+.dark .ck.ck-toolbar {
+    background-color: #374151 !important;
+    /* gray-700 */
+    border-color: #4b5563 !important;
+    /* gray-600 */
+}
+
+.dark .ck.ck-toolbar .ck-button {
+    color: #808a94 !important;
+}
+
+.dark .ck.ck-toolbar .ck-button:hover {
+    background-color: #4b5563 !important;
+}
+
+/* Panel pop-up (misal link, image, table) */
+.dark .ck.ck-balloon-panel {
+    background-color: #1f2937 !important;
+    border-color: #7f848b !important;
+    color: #c5cbcf !important;
+}
+
+/* Dropdown button caret biar putih */
+.dark .ck.ck-icon {
+    fill: #7a8692 !important;
+    color: #7a8692 !important;
+}
+
+

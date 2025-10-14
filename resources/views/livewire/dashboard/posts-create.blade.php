@@ -1,94 +1,83 @@
 <div class="p-6 max-w-4xl mx-auto">
     @push('styles')
     <link rel="stylesheet" href="https://cdn.ckeditor.com/ckeditor5/43.2.0/ckeditor5.css">
-    <style>
-        /* Tinggi default editor */
-        .ck-editor__editable[role="textbox"] {
-            min-height: 300px;
-        }
-
-        /* === Dark Mode Styling === */
-        .dark .ck.ck-editor {
-            background-color: #1f2937;
-            /* bg gray-800 */
-            color: #ffffff;
-            /* text gray-50 */
-            border-color: #374151;
-            /* border gray-700 */
-        }
-
-        /* Area content */
-        .dark .ck-editor__editable {
-            background-color: #1f2937 !important;
-            color: #ffffff !important;
-        }
-
-        /* Placeholder text */
-        .dark .ck-editor__editable .ck-placeholder::before {
-            color: #9ca3af !important;
-            /* gray-400 */
-        }
-
-        /* Toolbar */
-        .dark .ck.ck-toolbar {
-            background-color: #374151 !important;
-            /* gray-700 */
-            border-color: #4b5563 !important;
-            /* gray-600 */
-        }
-
-        .dark .ck.ck-toolbar .ck-button {
-            color: #808a94 !important;
-        }
-
-        .dark .ck.ck-toolbar .ck-button:hover {
-            background-color: #4b5563 !important;
-        }
-
-        /* Panel pop-up (misal link, image, table) */
-        .dark .ck.ck-balloon-panel {
-            background-color: #1f2937 !important;
-            border-color: #7f848b !important;
-            color: #c5cbcf !important;
-        }
-
-        /* Dropdown button caret biar putih */
-        .dark .ck.ck-icon {
-            fill: #7a8692 !important;
-            color: #7a8692 !important;
-        }
-
-    </style>
     @endpush
 
-    <a wire:navigate href="{{ route('dashboard.posts.index') }}" class="ml-2 text-sm text-gray-600">Back To Posts</a>
-    <h1 class="text-2xl font-bold mb-6 mt-5">Create New Post</h1>
+    <a wire:navigate href="{{ route('dashboard.posts.index') }}" class="ml-2 text-lg dark:text-gray-300">
+        <h1 class="text-lg font-bold mb-6 mt-5 underline"><i class="fa-solid fa-arrow-left"></i> Back To Posts</h1>
+    </a>
+    <h4 class="text-2xl font-bold mb-6 mt-5">Create New Post</h4>
 
     <form wire:submit.prevent="store">
         {{-- Title --}}
         <div class="mb-4">
             <label class="block font-semibold mb-1">Title</label>
-            <input type="text" wire:model.live.debounce.800ms="title"
-                class="w-full border rounded px-3 py-2 dark:bg-gray-700 dark:text-white">
+            <input type="text" wire:model="title" placeholder="Insert Title.."
+                class="block w-full text-sm text-gray-900 border border-gray-600 rounded-lg bg-gray-50 dark:text-gray-400 focus:outline-none dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400">
             @error('title') <p class="text-red-500 text-sm">{{ $message }}</p> @enderror
         </div>
 
-        {{-- Slug --}}
+        {{-- Thumbnail --}}
         <div class="mb-4">
-            <label class="block font-semibold mb-1">Slug</label>
-            <input type="text" wire:model="slug"
-                class="w-full border rounded px-3 py-2 dark:bg-gray-700 dark:text-white">
-            @error('slug') <p class="text-red-500 text-sm">{{ $message }}</p> @enderror
+            <label class="block font-semibold mb-1">Thumbnail</label>
+            <input type="file" wire:model="thumbnail" class="block w-full text-sm text-gray-900 border border-gray-600 rounded-lg cursor-pointer bg-gray-50 dark:text-gray-400 focus:outline-none dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400">
+            @error('thumbnail') <p class="text-red-500 text-sm">{{ $message }}</p> @enderror
+
+            @if ($thumbnail)
+			<div class="flex justify-center mt-2">	
+				<figure class="max-w-xs">
+					<img class="h-100 w-auto rounded-md object-contain border border-gray-200 dark:border-gray-700 shadow-sm" 
+						 src="{{ $thumbnail->temporaryUrl() }}" 
+						 alt="image description">
+				</figure>
+			</div>
+			<div class="mb-4">
+				<label class="block font-semibold mb-1">Image Description</label>
+				<input type="text" wire:model="image_description" placeholder="Insert Image Description.."
+					class="block w-full text-sm text-gray-900 border border-gray-600 rounded-lg bg-gray-50 dark:text-gray-400 focus:outline-none dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400">
+				@error('image_description') <p class="text-red-500 text-sm">{{ $message }}</p> @enderror
+			</div>
+			
+            @endif
+        </div>
+
+        {{-- Categories --}}
+        <div class="mb-4">
+            <label class="block font-semibold mb-1">Categories</label>
+            <div class="flex flex-wrap gap-3">
+                @foreach($allCategories as $category)
+                <label class="inline-flex items-center">
+                    <input type="checkbox" wire:model="selectedCategories" value="{{ $category->id }}"
+                        class="rounded border-gray-300 text-blue-600 focus:ring-blue-500">
+                    <span class="ml-2">{{ $category->name }}</span>
+                </label>
+                @endforeach
+            </div>
+            @error('selectedCategories') <p class="text-red-500 text-sm">{{ $message }}</p> @enderror
+        </div>
+
+        {{-- Tags --}}
+        <div class="mb-4">
+            <label class="block font-semibold mb-1">Tags</label>
+            <div class="flex flex-wrap gap-3">
+                @foreach($allTags as $tag)
+                <label class="inline-flex items-center">
+                    <input type="checkbox" wire:model="selectedTags" value="{{ $tag->id }}"
+                        class="rounded border-gray-300 text-blue-600 focus:ring-blue-500">
+                    <span class="ml-2">{{ $tag->name }}</span>
+                </label>
+                @endforeach
+            </div>
+            @error('selectedTags') <p class="text-red-500 text-sm">{{ $message }}</p> @enderror
         </div>
 
         {{-- Content pakai CKEditor --}}
-        <div class="mb-6" wire:ignore>
+        <div class="mb-4" wire:ignore>
             <label class="block font-semibold mb-1">Content</label>
             <textarea wire:model="content" id="editor" name="content"
                 class="custom-editor w-full border rounded px-3 py-2 dark:bg-gray-700 dark:text-white"></textarea>
-            @error('content') <p class="text-red-500 text-sm">{{ $message }}</p> @enderror
         </div>
-
+        @error('content') <p class="text-red-500 text-sm">{{ $message }}</p> @enderror
 
         <div class="flex justify-center">
             <button type="submit" class="bg-blue-600 text-white px-4 py-2 rounded">
@@ -96,6 +85,7 @@
             </button>
         </div>
     </form>
+
 </div>
 
 @push('scripts')
@@ -454,22 +444,83 @@
 		}
 	};
 
-	let debounceTimer;
+	ClassicEditor.create(document.querySelector('#editor'), editorConfig)
+    .then(editor => {
+        editor.plugins.get('FileRepository').createUploadAdapter = (loader) => new MyUploadAdapter(loader);
 
-	ClassicEditor
-		.create(document.querySelector('#editor'), editorConfig)
-		.then(editor => {
-			// Debounce ketika ada perubahan pada editor
-			editor.model.document.on('change:data', () => {
-				clearTimeout(debounceTimer);
-				debounceTimer = setTimeout(() => {
-					@this.set('content', editor.getData()); // Update Livewire property
-				}, 800); // Debounce selama 800ms
-			});
-		})
-		.catch(error => {
-			console.error(error);
-		});
+        let debounceTimer;
+        editor.model.document.on('change:data', () => {
+            clearTimeout(debounceTimer);
+            debounceTimer = setTimeout(() => {
+                const content = editor.getData();
+                @this.set('content', content);
+
+                // ✅ cari semua src yang masih ada
+                const parser = new DOMParser();
+                const doc = parser.parseFromString(content, 'text/html');
+                const currentImages = Array.from(doc.querySelectorAll('img')).map(img => img.getAttribute('src'));
+
+                // cari yang sudah dihapus
+                const removedImages = uploadedImages.filter(url => !currentImages.includes(url));
+
+                if (removedImages.length > 0) {
+                    removedImages.forEach(url => {
+                        fetch('/ckeditor/delete', {
+                            method: 'POST',
+                            headers: {
+                                'Content-Type': 'application/json',
+                                'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').getAttribute('content')
+                            },
+                            body: JSON.stringify({ url })
+                        });
+                    });
+
+                    // hapus dari list supaya gak dobel hapus
+                    uploadedImages = uploadedImages.filter(url => currentImages.includes(url));
+                }
+
+            }, 800);
+        });
+    })
+    .catch(console.error);
+
+
+
+	// 🔧 Custom Upload Adapter ke Laravel Route
+	let uploadedImages = [];
+
+	class MyUploadAdapter {
+		constructor(loader) {
+			this.loader = loader;
+			this.url = '/ckeditor/upload';
+		}
+
+		upload() {
+			return this.loader.file.then(file => new Promise((resolve, reject) => {
+				const data = new FormData();
+				data.append('upload', file);
+				data.append('_token', document.querySelector('meta[name="csrf-token"]').getAttribute('content'));
+
+				fetch(this.url, {
+					method: 'POST',
+					body: data
+				})
+				.then(res => res.json())
+				.then(result => {
+					if (result.url) {
+						uploadedImages.push(result.url); // ✅ simpan list image yang diupload
+						resolve({ default: result.url });
+					} else {
+						reject(result.error?.message || 'Upload gagal');
+					}
+				})
+				.catch(err => reject(err));
+			}));
+		}
+
+		abort() {}
+	}
+
 
 </script>
 @endpush
