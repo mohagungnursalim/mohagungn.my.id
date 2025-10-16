@@ -46,9 +46,15 @@ class Posts extends Component
 
     public function mount()
     {
-        $this->totalPosts = Cache::remember('totalPosts', $this->ttl, function () {
-            return Post::count();
-        });
+        // ==== Ambil total posts dari cache ====
+        $this->totalPosts = Cache::remember('totalPosts', $this->ttl, fn() => Post::count());
+
+        // ==== Cek apakah cache post sudah ada ====
+        $key = "{$this->cacheKey}_" . md5($this->search) . "_{$this->limit}";
+        if (Cache::has($key)) {
+            $this->posts = Cache::get($key);
+            $this->loaded = true; // Tandai sudah load → skip skeleton
+        }
     }
 
     public function updatingSearch()

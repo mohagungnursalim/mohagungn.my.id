@@ -100,6 +100,13 @@ class Categories extends Component
         $this->totalCategories = Cache::remember('totalCategories', $this->ttl, function () {
             return Category::count();
         });
+
+         // ==== Cek apakah cache categories sudah ada ====
+         $key = "{$this->cacheKey}_" . md5($this->search) . "_{$this->limit}";
+         if (Cache::has($key)) {
+             $this->categories = Cache::get($key);
+             $this->loaded = true; // Tandai sudah load → skip skeleton
+         }
     }
     
         
