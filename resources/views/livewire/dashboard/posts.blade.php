@@ -24,56 +24,91 @@
                 <div class="relative overflow-x-auto shadow-md sm:rounded-lg">
                     {{-- Skeleton --}}
                     @if (!$loaded)
-                    {{-- mirip skeleton categories --}}
+                        <table class="w-full text-sm text-left text-gray-500 dark:text-white">
+                            <thead class="text-xs text-gray-700 uppercase bg-gray-50 dark:bg-gray-700 dark:text-gray-400">
+                                <tr>
+                                    <th class="px-6 py-3">Thumbnail</th>
+                                    <th class="px-6 py-3">Title</th>
+                                    <th class="px-6 py-3">Categories</th>
+                                    <th class="px-6 py-3">Tags</th>
+                                    <th class="px-6 py-3">Action</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                @for ($i = 0; $i < 5; $i++)
+                                    <tr class="bg-white border-b dark:bg-gray-800 dark:border-gray-700">
+                                        <td class="px-6 py-4">
+                                            <div class="w-16 h-16 bg-gray-200 dark:bg-gray-700 animate-pulse rounded"></div>
+                                        </td>
+                                        <td class="px-6 py-4">
+                                            <div class="h-4 bg-gray-200 dark:bg-gray-700 rounded w-3/4 animate-pulse"></div>
+                                        </td>
+                                        <td class="px-6 py-4">
+                                            <div class="h-4 bg-gray-200 dark:bg-gray-700 rounded w-1/2 animate-pulse"></div>
+                                        </td>
+                                        <td class="px-6 py-4">
+                                            <div class="h-4 bg-gray-200 dark:bg-gray-700 rounded w-2/3 animate-pulse"></div>
+                                        </td>
+                                        <td class="px-6 py-4">
+                                            <div class="flex gap-2">
+                                                <div class="w-12 h-5 bg-gray-200 dark:bg-gray-700 rounded-full animate-pulse"></div>
+                                                <div class="w-12 h-5 bg-gray-200 dark:bg-gray-700 rounded-full animate-pulse"></div>
+                                            </div>
+                                        </td>
+                                    </tr>
+                                @endfor
+                            </tbody>
+                        </table>
                     @else
-                    <table class="w-full text-sm text-left text-gray-500 dark:text-white">
-                        <thead class="text-xs text-gray-700 uppercase bg-gray-50 dark:bg-gray-700 dark:text-gray-400">
-                            <tr>
-                                <th class="px-6 py-3">Thumbnail</th>
-                                <th class="px-6 py-3">Title</th>
-                                <th class="px-6 py-3">Categories</th>
-                                <th class="px-6 py-3">Tags</th>
-                                <th class="px-6 py-3">Action</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            @foreach($posts as $post)
-                            <tr
-                                class="bg-white border-b dark:bg-gray-800 dark:border-gray-700 hover:bg-gray-50 dark:hover:bg-gray-600">
-
-                                {{-- Thumbnail --}}
-                                <td class="px-6 py-4">
-                                    @if($post->thumbnail)
-                                    <img src="{{ asset('storage/' . $post->thumbnail) }}" alt="Thumbnail"
-                                        class="w-16 h-16 object-cover rounded">
-                                    @else
-                                    <span class="text-gray-400 text-sm italic">No image</span>
-                                    @endif
-                                </td>
-
-                                {{-- Title --}}
-                                <td class="px-6 py-4 font-medium text-gray-900 dark:text-white">
-                                    {{ $post->title }}
-                                </td>
-
-                                <td class="px-6 py-4">{{ $post->categories->pluck('name')->join(', ') }}</td>
-                                <td class="px-6 py-4">{{ $post->tags->pluck('name')->join(', ') }}</td>
-
-                                <td class="px-6 py-4">
-                                    <a href="{{ route('dashboard.posts.edit', $post) }}"
-                                        class="bg-green-100 text-green-800 text-xs font-medium px-2.5 py-0.5 rounded-full dark:bg-green-900 dark:text-green-300">
-                                        Edit
-                                    </a>
-                                    <button @click="showDeleteModal = true" wire:click="confirmDelete({{ $post->id }})"
-                                        class="bg-red-100 text-red-800 text-xs font-medium px-2.5 py-0.5 rounded-full dark:bg-red-900 dark:text-red-300">
-                                        Delete
-                                    </button>
-                                </td>
-                            </tr>
-                            @endforeach
-                        </tbody>
-
-                    </table>
+                        <table class="w-full text-sm text-left text-gray-500 dark:text-white">
+                            <thead class="text-xs text-gray-700 uppercase bg-gray-50 dark:bg-gray-700 dark:text-gray-400">
+                                <tr>
+                                    <th class="px-6 py-3">Thumbnail</th>
+                                    <th class="px-6 py-3">Title</th>
+                                    <th class="px-6 py-3">Categories</th>
+                                    <th class="px-6 py-3">Tags</th>
+                                    <th class="px-6 py-3">Action</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                @foreach($posts as $post)
+                                    <tr class="bg-white border-b dark:bg-gray-800 dark:border-gray-700 hover:bg-gray-50 dark:hover:bg-gray-600">
+                                        {{-- Thumbnail --}}
+                                        <td class="px-6 py-4">
+                                            @if($post->thumbnail)
+                                                <img src="{{ asset('storage/' . $post->thumbnail) }}" alt="Thumbnail"
+                                                    class="w-16 h-16 object-cover rounded">
+                                            @else
+                                                <span class="text-gray-400 text-sm italic">No image</span>
+                                            @endif
+                                        </td>
+            
+                                        {{-- Title --}}
+                                        <td class="px-6 py-4 font-medium text-gray-900 dark:text-white">
+                                            {{ $post->title }}
+                                        </td>
+            
+                                        {{-- Categories --}}
+                                        <td class="px-6 py-4">{{ $post->categories->pluck('name')->join(', ') }}</td>
+            
+                                        {{-- Tags --}}
+                                        <td class="px-6 py-4">{{ $post->tags->pluck('name')->join(', ') }}</td>
+            
+                                        {{-- Action --}}
+                                        <td class="px-6 py-4">
+                                            <a href="{{ route('dashboard.posts.edit', $post) }}"
+                                                class="bg-green-100 text-green-800 text-xs font-medium px-2.5 py-0.5 rounded-full dark:bg-green-900 dark:text-green-300">
+                                                Edit
+                                            </a>
+                                            <button @click="showDeleteModal = true" wire:click="confirmDelete({{ $post->id }})"
+                                                class="bg-red-100 text-red-800 text-xs font-medium px-2.5 py-0.5 rounded-full dark:bg-red-900 dark:text-red-300">
+                                                Delete
+                                            </button>
+                                        </td>
+                                    </tr>
+                                @endforeach
+                            </tbody>
+                        </table>
                     @endif
                 </div>
             </div>
