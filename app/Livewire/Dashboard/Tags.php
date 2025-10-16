@@ -82,11 +82,17 @@ class Tags extends Component
      */
     public function mount()
     {
-        // Ambil jumlah total tag dari cache
+        // ==== Ambil jumlah total tag dari cache ====
         $this->totalTags = Cache::remember('totalTags', $this->ttl, function () {
             return Tag::count();
         });
 
+         // ==== Cek apakah cache tags sudah ada ====
+         $key = "{$this->cacheKey}_" . md5($this->search) . "_{$this->limit}";
+         if (Cache::has($key)) {
+             $this->tags = Cache::get($key);
+             $this->loaded = true; // Tandai sudah load → skip skeleton
+         }
     }
 
         
