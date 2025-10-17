@@ -113,26 +113,51 @@
                 </div>
             </div>
 
-            {{-- Delete Confirmation Modal --}}
+            {{-- Delete Confirmation Modal  --}}
             <div x-data="{ showDeleteModal: @entangle('showDeleteModal') }">
-                <div x-show="showDeleteModal"
+                <div x-show="showDeleteModal" x-transition:enter="transition ease-out duration-300"
+                    x-transition:enter-start="opacity-0" x-transition:enter-end="opacity-100"
+                    x-transition:leave="transition ease-in duration-200" x-transition:leave-start="opacity-100"
+                    x-transition:leave-end="opacity-0" x-cloak
                     class="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-50">
-                    <div class="w-full max-w-md p-6 bg-white rounded shadow-lg dark:bg-gray-800">
+
+                    {{-- Modal Box  --}}
+                    <div @click.outside="showDeleteModal = true"
+                        x-transition:enter="transition ease-out duration-300"
+                        x-transition:enter-start="opacity-0 scale-95"
+                        x-transition:enter-end="opacity-100 scale-100"
+                        x-transition:leave="transition ease-in duration-200"
+                        x-transition:leave-start="opacity-100 scale-100"
+                        x-transition:leave-end="opacity-0 scale-95"
+                        class="w-full max-w-md p-6 bg-white rounded shadow-lg dark:bg-gray-800">
+
                         <h2 class="mb-4 text-lg font-bold dark:text-white">Delete Confirmation</h2>
-                        <p class="text-center dark:text-gray-300 mb-4">
-                            Are you sure you want to delete <span class="font-bold">{{ $deleteName }}</span> Post?
-                            <span class="font-semibold text-red-600">This action cannot be undone.</span>
-                        </p>
+
+                        <div class="flex justify-center mb-4">
+                            <p class="text-center dark:text-gray-300">
+                                Are you sure you want to delete this <span
+                                    class="font-bold">{{ $deleteName}}</span> ?
+                                <span class="font-semibold text-red-600">This action cannot be undone.</span>
+                            </p>
+                        </div>
+
+                        {{-- Button --}}
                         <div class="flex justify-center gap-2">
-                            <button @click="showDeleteModal = false"
+                            <button type="button" @click="showDeleteModal = false"
                                 class="px-4 py-2 text-white bg-gray-500 rounded-full hover:bg-gray-600">
                                 Cancel
                             </button>
-                            <button wire:click="delete" wire:loading.attr="disabled"
+
+                            <button type="button" wire:loading.remove wire:target="delete" wire:click="delete" wire:loading.attr="disabled"
                                 class="px-4 py-2 text-white bg-red-600 rounded-full hover:bg-red-700">
                                 Delete
                             </button>
+                            <button wire:loading wire:target="delete" wire:loading.attr="disabled"
+                                class="px-4 py-2 text-white bg-red-600 rounded-full disabled:cursor-not-allowed hover:bg-red-700">
+                                <i class="fas fa-spinner fa-spin"></i>
+                            </button>
                         </div>
+
                     </div>
                 </div>
             </div>
