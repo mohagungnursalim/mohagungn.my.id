@@ -94,7 +94,12 @@ class PostsEdit extends Component
         // refresh cache
         $this->refreshCache();
 
-        $this->redirectIntended(default: route('dashboard.posts.index'), navigate: true);
+       // Dispatch event dengan payload lengkap
+       $this->dispatch('notify', [
+            'type' => 'success',
+            'message' => 'Post updated successfully!',
+            'redirect' => route('dashboard.posts.index'),
+        ]);
         
     }
 
