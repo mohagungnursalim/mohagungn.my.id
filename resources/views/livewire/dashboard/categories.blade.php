@@ -101,16 +101,24 @@
                                         @endif
                                     </td>
                                     <td class="px-6 py-4">
-                                        <button @click="showEditModal = true" wire:click="edit({{ $category->id }})"
-                                            class="bg-green-100 text-green-800 text-xs font-medium me-2 px-2.5 py-0.5 rounded-full dark:bg-green-900 dark:text-green-300">
-                                            Edit
-                                        </button>
-                                        <button @click="confirmDeleteModal = true"
-                                            wire:click="confirmDelete({{ $category->id }})"
-                                            class="bg-red-100 text-red-800 text-xs font-medium me-2 px-2.5 py-0.5 rounded-full dark:bg-red-900 dark:text-red-300">
-                                            Delete
-                                        </button>
+                                        <div class="flex space-x-2">
+                                            <button 
+                                                @click="showEditModal = true" 
+                                                wire:click="edit({{ $category->id }})"
+                                                class="inline-flex items-center justify-center w-20 bg-green-100 text-green-800 text-xs font-medium px-3 py-1 
+                                                       rounded-full dark:bg-green-900 dark:text-green-300 hover:bg-green-200 transition">
+                                                Edit
+                                            </button>
+                                            <button 
+                                                @click="confirmDeleteModal = true"
+                                                wire:click="confirmDelete({{ $category->id }})"
+                                                class="inline-flex items-center justify-center w-20 bg-red-100 text-red-800 text-xs font-medium px-3 py-1 
+                                                       rounded-full dark:bg-red-900 dark:text-red-300 hover:bg-red-200 transition">
+                                                Delete
+                                            </button>
+                                        </div>
                                     </td>
+
                                 </tr>
                                 @endforeach
 

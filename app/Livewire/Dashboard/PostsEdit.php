@@ -94,7 +94,7 @@ class PostsEdit extends Component
         // refresh cache
         $this->refreshCache();
 
-       // Dispatch event dengan payload lengkap
+       // Dispatch event
        $this->dispatch('notify', [
             'type' => 'success',
             'message' => 'Post updated successfully!',
