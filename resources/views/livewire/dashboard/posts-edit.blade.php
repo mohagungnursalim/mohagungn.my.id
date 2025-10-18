@@ -94,7 +94,46 @@
     </form>
 </div>
 
-@push('scripts')    
+@push('scripts')
+
+{{-- Script toast dan redirect --}}
+<script>
+    window.addEventListener('notify', event => {
+        // Ambil index 0
+        const payload = Array.isArray(event.detail) ? event.detail[0] : event.detail;
+        const {
+            type,
+            message,
+            redirect
+        } = payload;
+
+        const Toast = Swal.mixin({
+            toast: true,
+            position: "top-end",
+            showConfirmButton: false,
+            timer: 1500,
+            timerProgressBar: true,
+            didOpen: (toastEl) => {
+                toastEl.addEventListener('mouseenter', Swal.stopTimer);
+                toastEl.addEventListener('mouseleave', Swal.resumeTimer);
+            },
+            willClose: () => {
+                if (redirect) {
+                    Livewire.navigate(redirect);
+                }
+            }
+        });
+
+        Toast.fire({
+            icon: type,
+            title: message
+        });
+    });
+
+</script>
+
+
+{{-- Script CkEditor --}}
 <script type="importmap">
     {
     "imports": {
