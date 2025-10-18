@@ -2,6 +2,8 @@
     <div class="py-12 bg-white dark:bg-gray-800 sm:rounded-lg">
         <div class="max-w-7xl mx-auto sm:px-6 lg:px-8">
 
+
+            
             {{-- Add Button --}}
             <a wire:navigate href="{{ route('dashboard.posts.create') }}"
                 class="mb-4 inline-block px-5 py-2.5 text-sm font-medium border border-blue-700 text-blue-700 hover:text-white hover:bg-blue-800 focus:outline-none rounded-lg">
@@ -96,7 +98,7 @@
             
                                         {{-- Action --}}
                                         <td class="px-6 py-4">
-                                            <a href="{{ route('dashboard.posts.edit', $post) }}"
+                                            <a wire:navigate href="{{ route('dashboard.posts.edit', $post->slug) }}"
                                                 class="bg-green-100 text-green-800 text-xs font-medium px-2.5 py-0.5 rounded-full dark:bg-green-900 dark:text-green-300">
                                                 Edit
                                             </a>

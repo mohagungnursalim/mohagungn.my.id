@@ -20,9 +20,10 @@ Route::view('dashboard', 'livewire.dashboard.dashboard')
     ->name('dashboard');
 
 
-    Route::middleware(['auth'])->group(function () {
+// ========= CkEditor Image Upload & Delete =========
+Route::middleware(['auth'])->group(function () {
 
-        // 🔼 Upload gambar CKEditor
+        // Upload gambar CKEditor
         Route::post('/ckeditor/upload', function (Request $request) {
             if ($request->hasFile('upload')) {
                 $path = $request->file('upload')->store('ckeditor', 'public');
@@ -34,7 +35,7 @@ Route::view('dashboard', 'livewire.dashboard.dashboard')
             return response()->json(['error' => ['message' => 'Tidak ada file yang dikirim.']], 400);
         })->name('ckeditor.upload');
     
-        // 🔽 Hapus gambar dari storage
+        // Hapus gambar dari storage
         Route::post('/ckeditor/delete', function (Request $request) {
             $url = $request->url;
     
@@ -51,7 +52,7 @@ Route::view('dashboard', 'livewire.dashboard.dashboard')
     
             return response()->json(['error' => 'File tidak ditemukan'], 404);
         })->name('ckeditor.delete');
-    });
+});
    
     
 
@@ -59,7 +60,7 @@ Route::prefix('dashboard')->name('dashboard.')->middleware(['auth'])->group(func
     // ========== Posts ==========
     Route::get('/posts', Posts::class)->name('posts.index');
     Route::get('/posts/create', PostsCreate::class)->name('posts.create');
-    Route::get('/posts/{post}/edit', PostsEdit::class)->name('posts.edit');
+    Route::get('/posts/{slug}/edit', PostsEdit::class)->name('posts.edit');
 
     // ========= Tags & Categories ==========
     Route::get('/tags', Tags::class)->name('tags');   

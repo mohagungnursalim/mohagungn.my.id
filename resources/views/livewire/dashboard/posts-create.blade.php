@@ -20,24 +20,24 @@
         {{-- Thumbnail --}}
         <div class="mb-4">
             <label class="block font-semibold mb-1">Thumbnail</label>
-            <input type="file" wire:model="thumbnail" class="block w-full text-sm text-gray-900 border border-gray-600 rounded-lg cursor-pointer bg-gray-50 dark:text-gray-400 focus:outline-none dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400">
+            <input type="file" wire:model="thumbnail"
+                class="block w-full text-sm text-gray-900 border border-gray-600 rounded-lg cursor-pointer bg-gray-50 dark:text-gray-400 focus:outline-none dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400">
             @error('thumbnail') <p class="text-red-500 text-sm">{{ $message }}</p> @enderror
 
             @if ($thumbnail)
-			<div class="flex justify-center mt-2">	
-				<figure class="max-w-xs">
-					<img class="h-100 w-auto rounded-md object-contain border border-gray-200 dark:border-gray-700 shadow-sm" 
-						 src="{{ $thumbnail->temporaryUrl() }}" 
-						 alt="image description">
-				</figure>
-			</div>
-			<div class="mb-4">
-				<label class="block font-semibold mb-1">Image Description</label>
-				<input type="text" wire:model="image_description" placeholder="Insert Image Description.."
-					class="block w-full text-sm text-gray-900 border border-gray-600 rounded-lg bg-gray-50 dark:text-gray-400 focus:outline-none dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400">
-				@error('image_description') <p class="text-red-500 text-sm">{{ $message }}</p> @enderror
-			</div>
-			
+            <div class="flex justify-center mt-2">
+                <figure class="max-w-xs">
+                    <img class="h-100 w-auto rounded-md object-contain border border-gray-200 dark:border-gray-700 shadow-sm"
+                        src="{{ $thumbnail->temporaryUrl() }}" alt="image description">
+                </figure>
+            </div>
+            <div class="mb-4">
+                <label class="block font-semibold mb-1">Image Description</label>
+                <input type="text" wire:model="image_description" placeholder="Insert Image Description.."
+                    class="block w-full text-sm text-gray-900 border border-gray-600 rounded-lg bg-gray-50 dark:text-gray-400 focus:outline-none dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400">
+                @error('image_description') <p class="text-red-500 text-sm">{{ $message }}</p> @enderror
+            </div>
+
             @endif
         </div>
 
@@ -444,23 +444,27 @@
 		}
 	};
 
+	let debounceTimer;
+	let uploadedImages = [];
+	
 	ClassicEditor.create(document.querySelector('#editor'), editorConfig)
     .then(editor => {
+        // Upload Adapter aktif
         editor.plugins.get('FileRepository').createUploadAdapter = (loader) => new MyUploadAdapter(loader);
 
-        let debounceTimer;
+		// Deteksi perubahan konten dengan debounce
         editor.model.document.on('change:data', () => {
             clearTimeout(debounceTimer);
             debounceTimer = setTimeout(() => {
                 const content = editor.getData();
                 @this.set('content', content);
 
-                // ✅ cari semua src yang masih ada
+                 // Parse HTML untuk deteksi gambar yang masih ada
                 const parser = new DOMParser();
                 const doc = parser.parseFromString(content, 'text/html');
                 const currentImages = Array.from(doc.querySelectorAll('img')).map(img => img.getAttribute('src'));
 
-                // cari yang sudah dihapus
+                // Cari gambar yang sudah dihapus dari editor
                 const removedImages = uploadedImages.filter(url => !currentImages.includes(url));
 
                 if (removedImages.length > 0) {
@@ -475,20 +479,19 @@
                         });
                     });
 
-                    // hapus dari list supaya gak dobel hapus
+                    // Update daftar image aktif
                     uploadedImages = uploadedImages.filter(url => currentImages.includes(url));
                 }
 
-            }, 800);
+            }, 800); // debounce 800ms
         });
     })
-    .catch(console.error);
+    .catch(error => {
+            console.error('CKEditor initialization error:', error);
+    });
 
 
-
-	// 🔧 Custom Upload Adapter ke Laravel Route
-	let uploadedImages = [];
-
+	// Upload Image
 	class MyUploadAdapter {
 		constructor(loader) {
 			this.loader = loader;

@@ -57,13 +57,19 @@ class PostsCreate extends Component
             'content'   => $this->content,
         ]);
 
+        // sync kategori dan tag
         $post->categories()->sync($this->selectedCategories);
         $post->tags()->sync($this->selectedTags);
 
+        // refresh cache
         $this->refreshCache();
 
-        session()->flash('success', 'Post created!');
-        return redirect()->route('dashboard.posts.index');
+        session()->flash('notif', [
+            'message' => 'Post has been created successfully!',
+            'type' => 'success'
+        ]);
+
+        $this->redirectIntended(default: route('dashboard.posts.index'), navigate: true);
     }
     
     /**
