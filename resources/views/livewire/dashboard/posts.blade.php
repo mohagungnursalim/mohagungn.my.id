@@ -157,14 +157,16 @@
                                 class="px-4 py-2 text-white bg-gray-500 rounded-full hover:bg-gray-600">
                                 Cancel
                             </button>
-
-                            <button type="button" wire:loading.remove wire:target="delete" wire:click="delete" wire:loading.attr="disabled"
-                                class="px-4 py-2 text-white bg-red-600 rounded-full hover:bg-red-700">
-                                Delete
-                            </button>
-                            <button wire:loading wire:target="delete" wire:loading.attr="disabled"
-                                class="px-4 py-2 text-white bg-red-600 rounded-full disabled:cursor-not-allowed hover:bg-red-700">
-                                <i class="fas fa-spinner fa-spin"></i>
+                            
+                            <!--Delete Button-->
+                            <button
+                                wire:target="delete" wire:click="delete"
+                                wire:loading.attr="disabled"
+                                class="px-4 py-2 w-32 text-white bg-red-600 rounded-full disabled hover:bg-red-600">
+                                <span wire:loading.remove wire:target="delete">Delete</span>
+                                <span wire:loading wire:target="delete" class="flex items-center justify-center">
+                                    <i class="fas fa-spinner fa-spin"></i>
+                                </span>
                             </button>
                         </div>
 

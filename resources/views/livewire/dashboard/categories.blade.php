@@ -235,28 +235,26 @@
                                 <i class="fas fa-spinner fa-spin"></i>
                             </div>
 
-
-                            {{-- Buttons --}}
+                              
+                            {{-- Button --}}
                             <div class="flex justify-center gap-2">
                                 {{-- Cancel --}}
-                                <button type="button" wire:loading.remove wire:target="store,image,removeImage" @click="showModalAdd = false"
+                                <button type="button"  @click="showModalAdd = false"
                                     class="px-4 py-2 text-white bg-gray-500 rounded-full hover:bg-gray-600">
                                     Cancel
                                 </button>
-
-                                {{-- Tombol Submit --}}
-                                <button type="submit" wire:loading.remove wire:target="store,image,removeImage"
-                                    wire:loading.attr="disabled"
-                                    class="px-4 py-2 text-white bg-blue-600 rounded-full disabled:cursor-not-allowed hover:bg-blue-700 disabled:opacity-50">
-                                    Submit
-                                </button>
-
-
-                                {{-- Tombol Submit loading (khusus store) --}}
-                                <button wire:loading wire:target="store" wire:loading.attr="disabled"
-                                    class="px-4 py-2 text-white bg-blue-600 rounded-full disabled:cursor-not-allowed hover:bg-blue-700">
-                                    <i class="fas fa-spinner fa-spin"></i>
-                                </button>
+                                
+                                <!-- Tombol Save -->
+                                  <button 
+                                      type="submit"
+                                      wire:target="store,image,removeImage"
+                                      wire:loading.attr="disabled"
+                                      class="px-4 py-2 w-32 text-white bg-blue-500 rounded-full disabled hover:bg-blue-600">
+                                      <span wire:loading.remove wire:target="store">Save</span>
+                                      <span wire:loading wire:target="store" class="flex items-center justify-center">
+                                          <i class="fas fa-spinner fa-spin"></i>
+                                      </span>
+                                  </button>
                             </div>
 
                         </form>
@@ -353,23 +351,28 @@
                                     <i class="fas fa-spinner fa-spin"></i>
                                 </div>
 
+                                
                                 {{-- Button --}}
                                 <div class="flex justify-center gap-2">
-                                    <button type="button" @click="showEditModal = false"
+                                    {{-- Cancel --}}
+                                    <button type="button"  @click="showEditModal = false"
                                         class="px-4 py-2 text-white bg-gray-500 rounded-full hover:bg-gray-600">
                                         Cancel
                                     </button>
-
-                                    <button type="submit" wire:loading.remove wire:target="update,editImage,removeImageEdit"
-                                        wire:loading.attr="disabled"
-                                        class="px-4 py-2 text-white bg-blue-600 rounded-full disabled:cursor-not-allowed hover:bg-blue-700">
-                                        Save
-                                    </button>
-                                    <button wire:loading wire:target="update" wire:loading.attr="disabled"
-                                        class="px-4 py-2 text-white bg-blue-600 rounded-full disabled:cursor-not-allowed hover:bg-blue-700">
-                                        <i class="fas fa-spinner fa-spin"></i>
-                                    </button>
+                                    
+                                    <!-- Tombol Update -->
+                                      <button 
+                                          type="submit"
+                                          wire:target="update,editImage,removeImageEdit"
+                                          wire:loading.attr="disabled"
+                                          class="px-4 py-2 w-32 text-white bg-blue-500 rounded-full disabled hover:bg-blue-600">
+                                          <span wire:loading.remove wire:target="update">Update</span>
+                                          <span wire:loading wire:target="update" class="flex items-center justify-center">
+                                              <i class="fas fa-spinner fa-spin"></i>
+                                          </span>
+                                      </button>
                                 </div>
+                                
                             </form>
                         </div>
                     </div>
@@ -408,14 +411,15 @@
                                     Cancel
                                 </button>
 
-                                <button type="button" wire:loading.remove wire:target="delete" wire:click="delete"
+                                <!--Delete Button-->
+                                <button
+                                    wire:target="delete" wire:click="delete"
                                     wire:loading.attr="disabled"
-                                    class="px-4 py-2 text-white bg-red-600 rounded-full hover:bg-red-700">
-                                    Delete
-                                </button>
-                                <button wire:loading wire:target="delete" wire:loading.attr="disabled"
-                                    class="px-4 py-2 text-white bg-red-600 rounded-full disabled:cursor-not-allowed hover:bg-red-700">
-                                    <i class="fas fa-spinner fa-spin"></i>
+                                    class="px-4 py-2 w-32 text-white bg-red-600 rounded-full disabled hover:bg-red-600">
+                                    <span wire:loading.remove wire:target="delete">Delete</span>
+                                    <span wire:loading wire:target="delete" class="flex items-center justify-center">
+                                        <i class="fas fa-spinner fa-spin"></i>
+                                    </span>
                                 </button>
 
                             </div>

@@ -80,23 +80,17 @@
         @error('content') <p class="text-red-500 text-sm">{{ $message }}</p> @enderror
 
         <div class="flex justify-center">
-            <!-- Tombol save -->
-            <button 
-                type="submit"
-                wire:loading.remove
-                wire:target="store"
-                class="px-4 py-2 w-32 text-white bg-blue-500 rounded-full disabled:cursor-not-allowed hover:bg-blue-600">
-                Save Post
-            </button>
-        
-            <!-- Tombol loading -->
-            <button 
-                wire:loading 
-                wire:target="store" 
-                wire:loading.attr="disabled"
-                class="px-4 py-2 w-32 text-white bg-blue-600 rounded-full disabled:cursor-not-allowed hover:bg-blue-700 flex items-center justify-center">
-                <i class="fas fa-spinner fa-spin"></i>
-            </button>
+            <!-- Tombol Save -->
+              <button 
+                  type="submit"
+                  wire:target="store"
+                  wire:loading.attr="disabled"
+                  class="px-4 py-2 w-32 text-white bg-blue-500 rounded-full disabled hover:bg-blue-600">
+                  <span wire:loading.remove wire:target="store">Save</span>
+                  <span wire:loading wire:target="store" class="flex items-center justify-center">
+                      <i class="fas fa-spinner fa-spin"></i>
+                  </span>
+              </button>
         </div>
 
     </form>
