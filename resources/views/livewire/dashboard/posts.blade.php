@@ -117,13 +117,22 @@
 
                                     </tr>
                                 @endforeach
+                                
+                                {{-- Jika Data Kosong --}}
+                                @if($posts->isEmpty())
+                                <tr>
+                                    <td colspan="5" class="px-6 py-4 text-center text-gray-500 dark:text-gray-400">
+                                        No Posts found
+                                    </td>
+                                </tr>
+                                @endif
                             </tbody>
                         </table>
                     @endif
                 </div>
             </div>
 
-            {{-- Delete Confirmation Modal  --}}
+            {{-- Modal Konfirmasi Hapus  --}}
             <div x-data="{ showDeleteModal: @entangle('showDeleteModal') }">
                 <div x-show="showDeleteModal" x-transition:enter="transition ease-out duration-300"
                     x-transition:enter-start="opacity-0" x-transition:enter-end="opacity-100"

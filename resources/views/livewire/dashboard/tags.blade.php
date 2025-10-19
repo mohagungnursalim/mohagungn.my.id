@@ -96,11 +96,11 @@
                                     </tr>
                                     @endforeach
 
-                                    {{-- Jika kosong --}}
+                                    {{-- Jika Data Kosong --}}
                                     @if($tags->isEmpty())
                                     <tr>
                                         <td colspan="3" class="px-6 py-4 text-center text-gray-500 dark:text-gray-400">
-                                            No tags found
+                                            No Tags found
                                         </td>
                                     </tr>
                                     @endif
