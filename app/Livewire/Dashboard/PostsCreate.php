@@ -8,8 +8,8 @@ use App\Models\Post;
 use App\Models\Category;
 use App\Models\Tag;
 use Illuminate\Support\Facades\Auth;
-use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Str;
+use App\Helpers\PostsCacheHelper; // ⬅️ Tambahkan helper
 
 class PostsCreate extends Component
 {
@@ -18,37 +18,31 @@ class PostsCreate extends Component
     public $title, $slug, $thumbnail, $content;
     public $selectedCategories = [], $selectedTags = [];
 
-    public $cacheKey = 'dashboard_posts';
-    public $ttl = 60 * 60 * 24 * 7; // 1 minggu
-
-       
     /**
      * rules
-     *
-     * @var array
      */
     protected $rules = [
         'title' => 'required|min:3',
         'content' => 'required',
         'thumbnail' => 'nullable|image|max:2048',
     ];
-    
-   
-    
+
     /**
      * store
-     *
-     * @return void
      */
     public function store()
     {
         $this->validate();
 
-        // Buat slug berdasarkan title
+        // Buat slug unik berdasarkan title
         $this->slug = Str::slug($this->title) . '-' . Str::random(4);
 
-        $thumbnailPath = $this->thumbnail ? $this->thumbnail->store('thumbnails', 'public') : null;
+        // Upload thumbnail (opsional)
+        $thumbnailPath = $this->thumbnail 
+            ? $this->thumbnail->store('thumbnails', 'public') 
+            : null;
 
+        // Buat post baru
         $post = Post::create([
             'title'     => $this->title,
             'slug'      => $this->slug,
@@ -57,39 +51,29 @@ class PostsCreate extends Component
             'content'   => $this->content,
         ]);
 
-        // sync kategori dan tag
+        // Sinkronisasi kategori dan tag
         $post->categories()->sync($this->selectedCategories);
         $post->tags()->sync($this->selectedTags);
 
-        // refresh cache
+        // Refresh cache global per user
         $this->refreshCache();
 
+        // Notifikasi
         session()->flash('notif', [
             'message' => 'Post has been created successfully!',
-            'type' => 'success'
+            'type' => 'success',
         ]);
 
+        // Redirect ke index
         $this->redirectIntended(default: route('dashboard.posts.index'), navigate: true);
     }
-    
+
     /**
      * refreshCache
-     *
-     * @return void
      */
     public function refreshCache()
     {
-        Cache::forget('totalPosts');
-        Cache::put('totalPosts', Post::count(), $this->ttl);
-
-        $trackerKey = "{$this->cacheKey}_tracked_keys";
-        $trackedKeys = Cache::get($trackerKey, []);
-
-        foreach ($trackedKeys as $key) {
-            Cache::forget($key);
-        }
-
-        Cache::forget($trackerKey);
+        PostsCacheHelper::refreshAll(); // ✅ gunakan helper, bukan manual Cache::forget
     }
 
     public function render()

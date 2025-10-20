@@ -7,6 +7,7 @@ use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\Storage;
 use Livewire\Attributes\Url;
 use Livewire\Component;
+use App\Helpers\PostsCacheHelper; // ⬅️ Tambahkan ini
 
 class Posts extends Component
 {
@@ -46,11 +47,11 @@ class Posts extends Component
 
     public function mount()
     {
-        // ==== Ambil total posts dari cache ====
-        $this->totalPosts = Cache::remember('totalPosts', $this->ttl, fn() => Post::count());
+        // ==== Ambil total posts dari helper (per user) ====
+        $this->totalPosts = PostsCacheHelper::getTotalPosts();
 
         // ==== Cek apakah cache post sudah ada ====
-        $key = "{$this->cacheKey}_" . md5($this->search) . "_{$this->limit}";
+        $key = $this->buildCacheKey();
         if (Cache::has($key)) {
             $this->posts = Cache::get($key);
             $this->loaded = true; // Tandai sudah load → skip skeleton
@@ -69,11 +70,12 @@ class Posts extends Component
 
     public function loadInitialPosts()
     {
-        $key = "{$this->cacheKey}_" . md5($this->search) . "_{$this->limit}";
+        $key = $this->buildCacheKey();
         $this->trackCacheKey($key);
 
         $this->posts = Cache::remember($key, $this->ttl, function () {
             return Post::with(['categories', 'tags'])
+                ->where('user_id', auth()->id()) // ⬅️ Tambahkan filter per user
                 ->where('title', 'like', '%' . $this->search . '%')
                 ->latest()
                 ->take($this->limit)
@@ -107,6 +109,7 @@ class Posts extends Component
 
         $post->delete();
 
+        // Refresh cache global per user
         $this->refreshCache();
         $this->loadInitialPosts();
 
@@ -119,28 +122,29 @@ class Posts extends Component
 
     public function refreshCache()
     {
-        Cache::forget('totalPosts');
-        Cache::put('totalPosts', Post::count(), $this->ttl);
-
-        $trackerKey = "{$this->cacheKey}_tracked_keys";
-        $trackedKeys = Cache::get($trackerKey, []);
-
-        foreach ($trackedKeys as $key) {
-            Cache::forget($key);
-        }
-
-        Cache::forget($trackerKey);
+        PostsCacheHelper::refreshAll(); // ⬅️ Panggil helper, bukan manual Cache::forget
     }
 
     protected function trackCacheKey($key)
     {
-        $trackerKey = "{$this->cacheKey}_tracked_keys";
+        $trackerKey = $this->buildUserCacheKey('_tracked_keys');
         $tracked = Cache::get($trackerKey, []);
 
         if (!in_array($key, $tracked)) {
             $tracked[] = $key;
             Cache::put($trackerKey, $tracked, $this->ttl);
         }
+    }
+
+    protected function buildCacheKey()
+    {
+        return $this->buildUserCacheKey('_' . md5($this->search) . "_{$this->limit}");
+    }
+
+    protected function buildUserCacheKey($suffix = '')
+    {
+        $userId = auth()->id() ?? 'guest';
+        return "{$this->cacheKey}_user_{$userId}{$suffix}";
     }
 
     public function render()
