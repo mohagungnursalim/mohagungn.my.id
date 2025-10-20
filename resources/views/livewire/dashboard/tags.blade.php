@@ -11,16 +11,32 @@
                     </button>
 
                     {{-- Search --}}
-                    <div class="relative w-full mb-3">
-                        <div class="absolute inset-y-0 start-0 flex items-center ps-3 pointer-events-none">
-                            <i class="fa-solid fa-magnifying-glass text-gray-300 dark:text-white text-lg"></i>
+                    <div class="w-full mb-3">
+                        <div class="relative">
+                            {{-- Icon Search --}}
+                            <div class="absolute inset-y-0 left-0 flex items-center pl-3 pointer-events-none">
+                                <i class="fa-solid fa-magnifying-glass text-gray-300 dark:text-white text-lg"></i>
+                            </div>
+                    
+                            {{-- Input Search --}}
+                            <input
+                                type="text"
+                                wire:model.live.debounce.500ms="search"
+                                placeholder="Search post..."
+                                class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg
+                                       focus:ring-blue-500 focus:border-blue-500
+                                       block w-full pl-10 pr-10 p-2.5
+                                       dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white
+                                       dark:focus:ring-blue-500 dark:focus:border-blue-500"
+                            />
                         </div>
-
-                        <input wire:model.live.debounce.500ms="search" id="search" name="name" type="text"
-                            class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full ps-10 p-2.5  dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
-                            placeholder="Search tag..." required autocomplete="true" />
+                    
+                        {{-- Spinner Loading --}}
+                        <div wire:loading wire:target="search" class="flex items-center gap-2 mt-2 text-gray-500 dark:text-gray-300">
+                            <i class="fas fa-spinner fa-spin text-gray-400 dark:text-white text-xs"></i>
+                            <span class="text-xs">Searching...</span>
+                        </div>
                     </div>
-                    <div class="text-white" wire:loading wire:target='search'>Loading..</div>
 
 
 
