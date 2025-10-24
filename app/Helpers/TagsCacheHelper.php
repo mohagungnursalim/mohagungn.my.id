@@ -8,7 +8,7 @@ use Illuminate\Support\Facades\Cache;
 class TagsCacheHelper
 {
     protected static $ttl = 60 * 60 * 24 * 7; // 1 minggu
-    protected static $baseKey = 'dashboard_tags';
+    protected static $baseKey = 'cache_tags';
 
     /**
      * Ambil total semua kategori (cached)

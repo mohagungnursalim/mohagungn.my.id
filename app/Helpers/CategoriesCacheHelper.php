@@ -8,7 +8,7 @@ use Illuminate\Support\Facades\Cache;
 class CategoriesCacheHelper
 {
     protected static $ttl = 60 * 60 * 24 * 7; // 1 minggu
-    protected static $baseKey = 'dashboard_categories';
+    protected static $baseKey = 'cache_categories';
 
     /**
      * Ambil total semua kategori (cached)

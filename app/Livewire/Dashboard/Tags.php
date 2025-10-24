@@ -15,7 +15,7 @@ class Tags extends Component
     public $editId, $editName, $showEditModal;
     public $deleteId, $deleteName, $showDeleteModal;
     public $tags = [], $totalTags;
-    public $cacheKey = 'dashboard_tags';
+    public $cacheKey = 'cache_tags';
     
     #[Url()]
     public $search;
