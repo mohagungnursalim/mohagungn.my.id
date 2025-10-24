@@ -9,7 +9,7 @@ use Illuminate\Support\Facades\Cache;
 class PostsCacheHelper
 {
     protected static $ttl = 60 * 60 * 24 * 7; // 1 minggu
-    protected static $baseKey = 'dashboard_posts';
+    protected static $baseKey = 'cache_posts';
 
     protected static function userKey()
     {

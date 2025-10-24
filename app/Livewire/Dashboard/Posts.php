@@ -41,7 +41,7 @@ class Posts extends Component
     /**
      * Cache
      */
-    public $cacheKey = 'dashboard_posts';
+    public $cacheKey = 'cache_posts';
     public $ttl = 60 * 60 * 24 * 7; // 1 minggu
 
 

@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\Api\DataController;
 use App\Http\Controllers\CkeditorController;
 use App\Livewire\Dashboard\Categories;
 use App\Livewire\Dashboard\Posts;
@@ -14,10 +15,16 @@ Route::view('/', 'welcome');
 
 
 
-// ===========DASHBOARD ROUTES==========
+// =========== Dashboard Page ==========
 Route::view('dashboard', 'livewire.dashboard.dashboard')
     ->middleware(['auth', 'verified'])
     ->name('dashboard');
+
+// =========== Api Routes ==========
+Route::get('api/categories', [DataController::class, 'categories']);
+Route::get('api/tags', [DataController::class, 'tags']);
+Route::post('api/tags', [DataController::class, 'storeTag']); // ubah jadi storeTag khusus POST
+
 
 
 // ========= CkEditor Image Upload & Delete =========
@@ -55,7 +62,7 @@ Route::middleware(['auth'])->group(function () {
 });
    
     
-
+// ============= Dashboard Prefix =============
 Route::prefix('dashboard')->name('dashboard.')->middleware(['auth'])->group(function () {
     // ========== Posts ==========
     Route::get('/posts', Posts::class)->name('posts.index');
@@ -66,6 +73,8 @@ Route::prefix('dashboard')->name('dashboard.')->middleware(['auth'])->group(func
     Route::get('/tags', Tags::class)->name('tags');   
     Route::get('/categories', Categories::class)->name('categories');
 });
+
+
 
 Route::view('profile', 'livewire.dashboard.profile')
     ->middleware(['auth'])

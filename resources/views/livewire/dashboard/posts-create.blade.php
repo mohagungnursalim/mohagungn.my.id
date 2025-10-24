@@ -13,7 +13,7 @@
         <div class="mb-4">
             <label class="block font-semibold mb-1">Title</label>
             <input type="text" wire:model="title" placeholder="Insert Title.."
-                class="block w-full text-sm text-gray-900 border border-gray-600 rounded-lg bg-gray-50 dark:text-gray-400 focus:outline-none dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400">
+                class="block w-full text-sm text-gray-900 border border-gray-600 rounded bg-gray-50 dark:text-gray-400 focus:outline-none dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400">
             @error('title') <p class="text-red-500 text-sm">{{ $message }}</p> @enderror
         </div>
 
@@ -21,7 +21,7 @@
         <div class="mb-4">
             <label class="block font-semibold mb-1">Thumbnail</label>
             <input type="file" wire:model="thumbnail"
-                class="block w-full text-sm text-gray-900 border border-gray-600 rounded-lg cursor-pointer bg-gray-50 dark:text-gray-400 focus:outline-none dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400">
+                class="block w-full text-sm text-gray-900 border border-gray-600 rounded cursor-pointer bg-gray-50 dark:text-gray-400 focus:outline-none dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400">
             @error('thumbnail') <p class="text-red-500 text-sm">{{ $message }}</p> @enderror
 
             @if ($thumbnail)
@@ -34,42 +34,27 @@
             <div class="mb-4">
                 <label class="block font-semibold mb-1">Image Description</label>
                 <input type="text" wire:model="image_description" placeholder="Insert Image Description.."
-                    class="block w-full text-sm text-gray-900 border border-gray-600 rounded-lg bg-gray-50 dark:text-gray-400 focus:outline-none dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400">
+                    class="block w-full text-sm text-gray-900 border border-gray-600 rounded bg-gray-50 dark:text-gray-400 focus:outline-none dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400">
                 @error('image_description') <p class="text-red-500 text-sm">{{ $message }}</p> @enderror
             </div>
 
             @endif
         </div>
 
-        {{-- Categories --}}
-        <div class="mb-4">
+        <div class="mb-4" wire:ignore>
             <label class="block font-semibold mb-1">Categories</label>
-            <div class="flex flex-wrap gap-3">
-                @foreach($allCategories as $category)
-                <label class="inline-flex items-center">
-                    <input type="checkbox" wire:model="selectedCategories" value="{{ $category->id }}"
-                        class="rounded border-gray-300 text-blue-600 focus:ring-blue-500">
-                    <span class="ml-2">{{ $category->name }}</span>
-                </label>
-                @endforeach
-            </div>
+            <select id="categoriesSelect" multiple placeholder="Pilih kategori..."></select>
             @error('selectedCategories') <p class="text-red-500 text-sm">{{ $message }}</p> @enderror
         </div>
-
-        {{-- Tags --}}
-        <div class="mb-4">
+        
+        <div class="mb-4" wire:ignore>
             <label class="block font-semibold mb-1">Tags</label>
-            <div class="flex flex-wrap gap-3">
-                @foreach($allTags as $tag)
-                <label class="inline-flex items-center">
-                    <input type="checkbox" wire:model="selectedTags" value="{{ $tag->id }}"
-                        class="rounded border-gray-300 text-blue-600 focus:ring-blue-500">
-                    <span class="ml-2">{{ $tag->name }}</span>
-                </label>
-                @endforeach
-            </div>
+            <select id="tagsSelect" multiple placeholder="Pilih tag..."></select>
             @error('selectedTags') <p class="text-red-500 text-sm">{{ $message }}</p> @enderror
         </div>
+
+
+
 
         {{-- Content pakai CKEditor --}}
         <div class="mb-4" wire:ignore>
@@ -98,6 +83,240 @@
 </div>
 
 @push('scripts')
+
+
+<script>
+    // Global observer untuk cleanup
+    let observer;
+    
+    // Cleanup function untuk mencegah memory leaks
+    function cleanup() {
+        if (observer) {
+            observer.disconnect();
+            observer = null;
+        }
+        document.querySelectorAll('#categoriesSelect, #tagsSelect').forEach(el => {
+            if (el.tomselect) {
+                el.tomselect.destroy();
+            }
+        });
+    }
+    
+    // Debounce function untuk mengoptimalkan performa
+    function debounce(func, wait) {
+        let timeout;
+        return function executedFunction(...args) {
+            const later = () => {
+                clearTimeout(timeout);
+                func(...args);
+            };
+            clearTimeout(timeout);
+            timeout = setTimeout(later, wait);
+        };
+    }
+    
+    // Event listener dengan cleanup
+    document.addEventListener('livewire:navigated', () => {
+        cleanup();
+        initTomSelect('categoriesSelect', @this, 'selectedCategories', '/api/categories', false);
+        initTomSelect('tagsSelect', @this, 'selectedTags', '/api/tags', true);
+    });
+    
+    function initTomSelect(id, livewire, model, url, allowCreate = false) {
+        const el = document.getElementById(id);
+        if (!el) {
+            console.warn(`Element with id ${id} not found`);
+            return;
+        }
+    
+        // Validasi CSRF Token
+        const csrfToken = document.querySelector('meta[name="csrf-token"]')?.content;
+        if (!csrfToken) {
+            console.error('CSRF token not found');
+            return;
+        }
+    
+        // Simpan nilai sebelumnya jika ada
+        const previousValue = el.tomselect ? el.tomselect.getValue() : null;
+    
+        if (el.tomselect) el.tomselect.destroy();
+    
+        let nextPage = null;
+        let isLoading = false;
+    
+        const select = new TomSelect(el, {
+            valueField: 'id',
+            labelField: 'name',
+            searchField: 'name',
+            plugins: ['remove_button', 'clear_button'],
+            preload: true,
+    
+            // Konfigurasi pembuatan tag baru
+            create: allowCreate ? function(input, callback) {
+                if (isLoading) return;
+                isLoading = true;
+    
+                fetch(url, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'X-CSRF-TOKEN': csrfToken
+                    },
+                    body: JSON.stringify({ name: input })
+                })
+                    .then(res => {
+                        if (!res.ok) throw new Error(`HTTP error! status: ${res.status}`);
+                        return res.json();
+                    })
+                    .then(json => {
+                        if (json.success && json.item) {
+                            callback({ id: json.item.id, name: json.item.name });
+                        } else {
+                            console.warn('Failed to create item:', json);
+                            callback();
+                        }
+                    })
+                    .catch((error) => {
+                        console.error('Failed to create item:', error);
+                        callback();
+                    })
+                    .finally(() => {
+                        isLoading = false;
+                    });
+            } : false,
+    
+            // Konfigurasi loading data
+            load: function(query, callback) {
+                if (isLoading) return;
+                isLoading = true;
+    
+                const endpoint = `${url}?search=${encodeURIComponent(query || '')}&page=1`;
+                select.settings.render.loading_more();
+    
+                fetch(endpoint)
+                    .then(res => {
+                        if (!res.ok) throw new Error(`HTTP error! status: ${res.status}`);
+                        return res.json();
+                    })
+                    .then(json => {
+                        nextPage = json.next_page_url || null;
+                        callback(json.data || []);
+                    })
+                    .catch((error) => {
+                        console.error('Failed to load data:', error);
+                        callback([]);
+                    })
+                    .finally(() => {
+                        isLoading = false;
+                    });
+            },
+    
+            // Template rendering
+            render: {
+                loading: function() {
+                    
+                    return '<div class="loading ml-2">Searching <i class="fas fa-spinner fa-spin text-gray-400 dark:text-white text-xs"></i></div>';
+                },
+                loading_more: function() {
+                    return '<div class="loading-more">Loading more results...</div>';
+                },
+                no_results: function() {
+                    return '<div class="no-results">No results</div>';
+                },
+                option: function(data, escape) {
+                    return `<div class="py-2 px-3">${escape(data.name)}</div>`;
+                }
+            }
+        });
+    
+        // Kembalikan nilai sebelumnya jika ada
+        if (previousValue) {
+            select.setValue(previousValue);
+        }
+    
+        // Livewire binding
+        select.on('change', () => {
+            if (!isLoading) {
+                livewire.set(model, select.getValue());
+            }
+        });
+    
+        // Handle dropdown open dengan debounce
+        select.on('dropdown_open', debounce(() => {
+            setupLoadMoreObserver();
+        }, 100)); //300ms
+    
+        function setupLoadMoreObserver() {
+            const dropdown = select.dropdown_content;
+            if (!dropdown) return;
+    
+            // Hapus tombol load more yang ada
+            dropdown.querySelectorAll('.ts-load-more').forEach(e => e.remove());
+    
+            if (!nextPage) return;
+    
+            const btn = document.createElement('div');
+            btn.className =
+                'ts-load-more text-center py-2 text-blue-500 cursor-pointer border-t border-gray-200 dark:border-gray-700 hover:bg-gray-100 dark:hover:bg-gray-800';
+            btn.textContent = 'Load more...';
+            btn.style.userSelect = 'none';
+    
+            const loadMoreHandler = debounce(async (e) => {
+                if (isLoading) return;
+                
+                e.stopPropagation();
+                btn.textContent = 'Loading...';
+                btn.classList.add('opacity-70', 'pointer-events-none');
+                isLoading = true;
+    
+                try {
+                    const res = await fetch(nextPage);
+                    if (!res.ok) throw new Error(`HTTP error! status: ${res.status}`);
+                    
+                    const json = await res.json();
+                    nextPage = json.next_page_url || null;
+    
+                    (json.data || []).forEach(item => select.addOption(item));
+    
+                    // Refresh dropdown tanpa menutupnya
+                    select.refreshOptions(false);
+                    select.open();
+    
+                    // Setup ulang observer
+                    setupLoadMoreObserver();
+    
+                } catch (error) {
+                    console.error('Failed to load more:', error);
+                    btn.textContent = 'Load more...';
+                    btn.classList.remove('opacity-70', 'pointer-events-none');
+                } finally {
+                    isLoading = false;
+                }
+            }, 100); //300ms
+    
+            btn.addEventListener('click', loadMoreHandler);
+            dropdown.appendChild(btn);
+    
+            // Setup observer untuk menjaga tombol tetap terlihat
+            if (observer) {
+                observer.disconnect();
+            }
+    
+            observer = new MutationObserver(() => {
+                if (!dropdown.contains(btn) && nextPage) {
+                    dropdown.appendChild(btn);
+                }
+            });
+    
+            observer.observe(dropdown, { childList: true });
+        }
+    
+        // Cleanup saat halaman unload
+        window.addEventListener('unload', cleanup);
+    }
+</script>
+
+
 <script type="importmap">
     {
             "imports": {
@@ -532,7 +751,5 @@
 
 		abort() {}
 	}
-
-
 </script>
 @endpush

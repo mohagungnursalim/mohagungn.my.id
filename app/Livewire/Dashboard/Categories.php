@@ -25,7 +25,7 @@ class Categories extends Component
     public $showDeleteModal;
 
     public $categories = [], $totalCategories;
-    public $cacheKey = 'dashboard_categories';
+    public $cacheKey = 'cache_categories';
 
     #[Url()]
     public $search;

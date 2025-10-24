@@ -78,9 +78,7 @@ class PostsCreate extends Component
 
     public function render()
     {
-        return view('livewire.dashboard.posts-create', [
-            'allCategories' => Category::all(),
-            'allTags'       => Tag::all(),
-        ])->layout('layouts.dashboard.main');
+        return view('livewire.dashboard.posts-create')
+        ->layout('layouts.dashboard.main');
     }
 }
