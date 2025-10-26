@@ -13,33 +13,27 @@ use Illuminate\Support\Str;
 
 class DataController extends Controller
 {
+
     /**
      * Ambil data categories dengan pagination + search
      */
     public function categories(Request $request)
     {
         $search  = $request->get('search', '');
-        $page    = (int) $request->get('page', 1);
         $perPage = 5;
 
-        $cacheKey = "categories_{$search}_page_{$page}";
-        CategoriesCacheHelper::trackCacheKey($cacheKey);
+        $query = Category::query();
 
-        $data = Cache::remember($cacheKey, 60 * 60 * 24, function () use ($search, $perPage) {
-            $query = Category::query();
+        if (!empty($search)) {
+            $query->where('name', 'like', "%{$search}%");
+        }
 
-            if (!empty($search)) {
-                $query->where('name', 'like', "%{$search}%");
-            }
-
-            return $query->orderBy('name')
-                         ->simplePaginate($perPage, ['id', 'name']);
-        });
+        $data = $query->orderBy('name')
+                      ->simplePaginate($perPage, ['id', 'name']);
 
         return response()->json([
             'data' => $data->items(),
             'next_page_url' => $data->nextPageUrl(),
-            'cached_total' => CategoriesCacheHelper::getTotalCategories(),
         ]);
     }
 
@@ -49,27 +43,20 @@ class DataController extends Controller
     public function tags(Request $request)
     {
         $search  = $request->get('search', '');
-        $page    = (int) $request->get('page', 1);
         $perPage = 5;
 
-        $cacheKey = "tags_{$search}_page_{$page}";
-        TagsCacheHelper::trackCacheKey($cacheKey);
+        $query = Tag::query();
 
-        $data = Cache::remember($cacheKey, 60 * 60 * 24, function () use ($search, $perPage) {
-            $query = Tag::query();
+        if (!empty($search)) {
+            $query->where('name', 'like', "%{$search}%");
+        }
 
-            if (!empty($search)) {
-                $query->where('name', 'like', "%{$search}%");
-            }
-
-            return $query->orderBy('name')
-                         ->simplePaginate($perPage, ['id', 'name']);
-        });
+        $data = $query->orderBy('name')
+                      ->simplePaginate($perPage, ['id', 'name']);
 
         return response()->json([
             'data' => $data->items(),
             'next_page_url' => $data->nextPageUrl(),
-            'cached_total' => TagsCacheHelper::getTotalTags(),
         ]);
     }
 
