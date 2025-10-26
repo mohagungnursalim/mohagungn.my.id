@@ -41,12 +41,14 @@
             @endif
         </div>
 
+        {{-- Categories --}}
         <div class="mb-4" wire:ignore>
             <label class="block font-semibold mb-1">Categories</label>
             <select id="categoriesSelect" multiple placeholder="Pilih kategori..."></select>
             @error('selectedCategories') <p class="text-red-500 text-sm">{{ $message }}</p> @enderror
         </div>
         
+        {{-- Tags --}}
         <div class="mb-4" wire:ignore>
             <label class="block font-semibold mb-1">Tags</label>
             <select id="tagsSelect" multiple placeholder="Pilih tag..."></select>
@@ -54,9 +56,7 @@
         </div>
 
 
-
-
-        {{-- Content pakai CKEditor --}}
+        {{-- Content CKEditor --}}
         <div class="mb-4" wire:ignore>
             <label class="block font-semibold mb-1">Content</label>
             <textarea wire:model="content" id="editor" name="content"
@@ -84,7 +84,7 @@
 
 @push('scripts')
 
-
+{{-- TomSelect Create Post --}}
 <script>
     // Global observer untuk cleanup
     let observer;
@@ -117,9 +117,11 @@
     
     // Event listener dengan cleanup
     document.addEventListener('livewire:navigated', () => {
-        cleanup();
-        initTomSelect('categoriesSelect', @this, 'selectedCategories', '/api/categories', false);
-        initTomSelect('tagsSelect', @this, 'selectedTags', '/api/tags', true);
+            setTimeout(() => { 
+                cleanup();
+                initTomSelect('categoriesSelect', @this, 'selectedCategories', '/api/categories', false);
+                initTomSelect('tagsSelect', @this, 'selectedTags', '/api/tags', true);
+            }, 100);
     });
     
     function initTomSelect(id, livewire, model, url, allowCreate = false) {
@@ -155,8 +157,8 @@
             create: allowCreate ? function(input, callback) {
                 if (isLoading) return;
                 isLoading = true;
-    
-                fetch(url, {
+            
+                fetch('/api/tags', { // pastikan ini endpoint POST ke storeTag
                     method: 'POST',
                     headers: {
                         'Content-Type': 'application/json',
@@ -164,26 +166,35 @@
                     },
                     body: JSON.stringify({ name: input })
                 })
-                    .then(res => {
-                        if (!res.ok) throw new Error(`HTTP error! status: ${res.status}`);
-                        return res.json();
-                    })
-                    .then(json => {
-                        if (json.success && json.item) {
-                            callback({ id: json.item.id, name: json.item.name });
-                        } else {
-                            console.warn('Failed to create item:', json);
-                            callback();
-                        }
-                    })
-                    .catch((error) => {
-                        console.error('Failed to create item:', error);
+                .then(res => {
+                    if (!res.ok) throw new Error(`HTTP error! status: ${res.status}`);
+                    return res.json();
+                })
+                .then(json => {
+                    if (json.success && json.item) {
+                        const newItem = { id: json.item.id, name: json.item.name };
+                        // Tambahkan ke option
+                        select.addOption(newItem);
+                        // Langsung pilih item baru
+                        select.addItem(newItem.id);
+                        // Trigger ke Livewire
+                        livewire.set(model, select.getValue());
+                        // Callback ke TomSelect
+                        callback(newItem);
+                    } else {
+                        console.warn('Failed to create item:', json);
                         callback();
-                    })
-                    .finally(() => {
-                        isLoading = false;
-                    });
+                    }
+                })
+                .catch(error => {
+                    console.error('Failed to create item:', error);
+                    callback();
+                })
+                .finally(() => {
+                    isLoading = false;
+                });
             } : false,
+
     
             // Konfigurasi loading data
             load: function(query, callback) {

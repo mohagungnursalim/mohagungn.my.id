@@ -47,37 +47,18 @@
             @endif
         </div>
 
-        {{-- Categories --}}
-        <div class="mb-4">
-            <label class="block font-semibold mb-1">Categories</label>
-            <div class="flex flex-wrap gap-3">
-                @foreach($allCategories as $category)
-                <label class="inline-flex items-center">
-                    <input type="checkbox" wire:model="selectedCategories" value="{{ $category->id }}"
-                        class="rounded border-gray-300 text-blue-600 focus:ring-blue-500">
-                    <span class="ml-2">{{ $category->name }}</span>
-                </label>
-                @endforeach
-            </div>
-            @error('selectedCategories') <p class="text-red-500 text-sm">{{ $message }}</p> @enderror
+        <div class="mb-4" wire:ignore>
+            <label class="font-semibold">Categories</label>
+            <select id="categoriesSelect" multiple></select>
+        </div>
+        
+        <div class="mb-4" wire:ignore>
+            <label class="font-semibold">Tags</label>
+            <select id="tagsSelect" multiple></select>
         </div>
 
-        {{-- Tags --}}
-        <div class="mb-4">
-            <label class="block font-semibold mb-1">Tags</label>
-            <div class="flex flex-wrap gap-3">
-                @foreach($allTags as $tag)
-                <label class="inline-flex items-center">
-                    <input type="checkbox" wire:model="selectedTags" value="{{ $tag->id }}"
-                        class="rounded border-gray-300 text-blue-600 focus:ring-blue-500">
-                    <span class="ml-2">{{ $tag->name }}</span>
-                </label>
-                @endforeach
-            </div>
-            @error('selectedTags') <p class="text-red-500 text-sm">{{ $message }}</p> @enderror
-        </div>
 
-        {{-- Content pakai CKEditor --}}
+        {{-- Content CKEditor --}}
         <div class="mb-4" wire:ignore>
             <textarea id="editor">
                 {!! $content !!}
@@ -137,8 +118,350 @@
             title: message
         });
     });
-
 </script>
+
+
+{{-- TomSelect Script --}}
+{{-- <script>
+    document.addEventListener('livewire:navigated', () => {
+        setTimeout(() => {
+            cleanup();
+            initTomSelect(
+                'categoriesSelect',
+                @this,
+                'selectedCategories',
+                '/api/categories',
+                false,
+                @js($existingCategories)
+            );
+            initTomSelect(
+                'tagsSelect',
+                @this,
+                'selectedTags',
+                '/api/tags',
+                true,
+                @js($existingTags)
+            );
+        }, 150);
+    });
+    
+    let observer;
+    
+    function cleanup() {
+        if (observer) {
+            observer.disconnect();
+            observer = null;
+        }
+        document.querySelectorAll('#categoriesSelect, #tagsSelect').forEach(el => {
+            if (el.tomselect) el.tomselect.destroy();
+        });
+    }
+    
+    function debounce(fn, delay) {
+        let timer;
+        return (...args) => {
+            clearTimeout(timer);
+            timer = setTimeout(() => fn(...args), delay);
+        };
+    }
+    
+    function initTomSelect(id, livewire, model, url, allowCreate = false, existingData = []) {
+        const el = document.getElementById(id);
+        if (!el) return;
+    
+        const csrf = document.querySelector('meta[name="csrf-token"]').content;
+        if (el.tomselect) el.tomselect.destroy();
+    
+        let nextPage = null;
+        let isLoading = false;
+    
+        const select = new TomSelect(el, {
+            valueField: 'id',
+            labelField: 'name',
+            searchField: 'name',
+            options: existingData,
+            items: existingData.map(item => item.id),
+            preload: true,
+            plugins: ['remove_button', 'clear_button'],
+    
+            create: allowCreate
+                ? (input, cb) => {
+                    fetch('/api/tags', {
+                        method: 'POST',
+                        headers: {
+                            'Content-Type': 'application/json',
+                            'X-CSRF-TOKEN': csrf
+                        },
+                        body: JSON.stringify({ name: input })
+                    })
+                        .then(res => res.json())
+                        .then(json => {
+                            if (json.success && json.item) {
+                                select.addOption(json.item);
+                                select.addItem(json.item.id);
+                                livewire.set(model, select.getValue());
+                                cb(json.item);
+                            } else cb();
+                        })
+                        .catch(() => cb());
+                }
+                : false,
+    
+            load: (query, cb) => {
+                if (isLoading) return;
+                isLoading = true;
+                fetch(`${url}?search=${encodeURIComponent(query)}&page=1`)
+                    .then(res => res.json())
+                    .then(json => {
+                        nextPage = json.next_page_url || null;
+                        cb(json.data || []);
+                    })
+                    .catch(() => cb([]))
+                    .finally(() => (isLoading = false));
+            },
+    
+            render: {
+                option: (data, escape) => `<div class="px-3 py-2">${escape(data.name)}</div>`,
+                no_results: () => `<div class="text-gray-500 p-2">No results</div>`,
+                loading: () => `<div class="text-gray-400 p-2">Loading...</div>`
+            }
+        });
+    
+        select.on('change', () => livewire.set(model, select.getValue()));
+    
+        select.on('dropdown_open', debounce(() => setupLoadMore(select), 200));
+    
+        function setupLoadMore(select) {
+            const dropdown = select.dropdown_content;
+            if (!dropdown || !nextPage) return;
+    
+            const btn = document.createElement('div');
+            btn.className =
+                'ts-load-more text-center py-2 text-blue-500 cursor-pointer border-t hover:bg-gray-100';
+            btn.textContent = 'Load more...';
+    
+            btn.addEventListener(
+                'click',
+                debounce(async () => {
+                    if (isLoading) return;
+                    isLoading = true;
+                    btn.textContent = 'Loading...';
+    
+                    try {
+                        const res = await fetch(nextPage);
+                        const json = await res.json();
+                        nextPage = json.next_page_url || null;
+                        (json.data || []).forEach(item => select.addOption(item));
+                        select.refreshOptions(false);
+                        select.open();
+                        setupLoadMore(select);
+                    } finally {
+                        isLoading = false;
+                        btn.textContent = nextPage ? 'Load more...' : 'No more data';
+                    }
+                }, 200)
+            );
+    
+            dropdown.appendChild(btn);
+    
+            observer = new MutationObserver(() => {
+                if (!dropdown.contains(btn) && nextPage) dropdown.appendChild(btn);
+            });
+    
+            observer.observe(dropdown, { childList: true });
+        }
+    }
+</script> --}}
+
+{{-- TomSelect Script --}}
+<script>
+    document.addEventListener('livewire:navigated', () => {
+        setTimeout(() => {
+            cleanup();
+            initTomSelect(
+                'categoriesSelect',
+                @this,
+                'selectedCategories',
+                '/api/categories',
+                false,
+                @js($existingCategories)
+            );
+            initTomSelect(
+                'tagsSelect',
+                @this,
+                'selectedTags',
+                '/api/tags',
+                true,
+                @js($existingTags)
+            );
+        }, 150);
+    });
+    
+    // Menggunakan Map untuk menyimpan observer untuk setiap select
+    const observers = new Map();
+    
+    function cleanup() {
+        // Membersihkan semua observer
+        observers.forEach(observer => observer.disconnect());
+        observers.clear();
+        
+        document.querySelectorAll('#categoriesSelect, #tagsSelect').forEach(el => {
+            if (el.tomselect) el.tomselect.destroy();
+        });
+    }
+    
+    function debounce(fn, delay) {
+        let timer;
+        return (...args) => {
+            clearTimeout(timer);
+            timer = setTimeout(() => fn(...args), delay);
+        };
+    }
+    
+    function initTomSelect(id, livewire, model, url, allowCreate = false, existingData = []) {
+        const el = document.getElementById(id);
+        if (!el) return;
+    
+        const csrf = document.querySelector('meta[name="csrf-token"]').content;
+        if (el.tomselect) el.tomselect.destroy();
+    
+        let nextPage = null;
+        let isLoading = false;
+        let loadMoreBtn = null; // Menyimpan referensi tombol load more
+    
+        const select = new TomSelect(el, {
+            valueField: 'id',
+            labelField: 'name',
+            searchField: 'name',
+            options: existingData,
+            items: existingData.map(item => item.id),
+            preload: true,
+            plugins: ['remove_button', 'clear_button'],
+    
+            create: allowCreate
+                ? (input, cb) => {
+                    fetch('/api/tags', {
+                        method: 'POST',
+                        headers: {
+                            'Content-Type': 'application/json',
+                            'X-CSRF-TOKEN': csrf
+                        },
+                        body: JSON.stringify({ name: input })
+                    })
+                        .then(res => res.json())
+                        .then(json => {
+                            if (json.success && json.item) {
+                                select.addOption(json.item);
+                                select.addItem(json.item.id);
+                                livewire.set(model, select.getValue());
+                                cb(json.item);
+                            } else cb();
+                        })
+                        .catch(() => cb());
+                }
+                : false,
+    
+            load: (query, cb) => {
+                if (isLoading) return;
+                isLoading = true;
+                fetch(`${url}?search=${encodeURIComponent(query)}&page=1`)
+                    .then(res => res.json())
+                    .then(json => {
+                        nextPage = json.next_page_url || null;
+                        cb(json.data || []);
+                    })
+                    .catch(() => cb([]))
+                    .finally(() => (isLoading = false));
+            },
+    
+            render: {
+                option: (data, escape) => `<div class="px-3 py-2">${escape(data.name)}</div>`,
+                no_results: () => `<div class="text-gray-500 p-2">No results</div>`,
+                loading: () => `<div class="text-gray-400 p-2">Loading...</div>`
+            }
+        });
+    
+        select.on('change', () => livewire.set(model, select.getValue()));
+    
+        // Bersihkan observer yang ada saat dropdown ditutup
+        select.on('dropdown_close', () => {
+            if (observers.has(id)) {
+                observers.get(id).disconnect();
+                observers.delete(id);
+            }
+            // Hapus tombol load more yang ada
+            if (loadMoreBtn && loadMoreBtn.parentNode) {
+                loadMoreBtn.remove();
+            }
+            loadMoreBtn = null;
+        });
+    
+        select.on('dropdown_open', debounce(() => setupLoadMore(select, id), 200));
+    
+        function setupLoadMore(select, selectId) {
+            const dropdown = select.dropdown_content;
+            if (!dropdown || !nextPage) return;
+    
+            // Hapus tombol load more yang sudah ada jika ada
+            if (loadMoreBtn && loadMoreBtn.parentNode) {
+                loadMoreBtn.remove();
+            }
+    
+            // Buat tombol load more baru
+            loadMoreBtn = document.createElement('div');
+            loadMoreBtn.className =
+                'ts-load-more text-center py-2 text-blue-500 cursor-pointer border-t hover:bg-gray-100';
+            loadMoreBtn.textContent = 'Load more...';
+    
+            loadMoreBtn.addEventListener(
+                'click',
+                debounce(async () => {
+                    if (isLoading) return;
+                    isLoading = true;
+                    loadMoreBtn.textContent = 'Loading...';
+    
+                    try {
+                        const res = await fetch(nextPage);
+                        const json = await res.json();
+                        nextPage = json.next_page_url || null;
+                        (json.data || []).forEach(item => select.addOption(item));
+                        select.refreshOptions(false);
+                        
+                        // Update tombol load more
+                        if (!nextPage) {
+                            loadMoreBtn.textContent = 'No more data';
+                            loadMoreBtn.classList.add('opacity-50', 'cursor-not-allowed');
+                        } else {
+                            loadMoreBtn.textContent = 'Load more...';
+                        }
+                    } catch (error) {
+                        console.error('Error loading more:', error);
+                        loadMoreBtn.textContent = 'Error loading more';
+                    } finally {
+                        isLoading = false;
+                    }
+                }, 200)
+            );
+    
+            dropdown.appendChild(loadMoreBtn);
+    
+            // Buat observer baru dan simpan di Map
+            if (observers.has(selectId)) {
+                observers.get(selectId).disconnect();
+            }
+    
+            const observer = new MutationObserver(() => {
+                if (!dropdown.contains(loadMoreBtn) && nextPage) {
+                    dropdown.appendChild(loadMoreBtn);
+                }
+            });
+    
+            observer.observe(dropdown, { childList: true });
+            observers.set(selectId, observer);
+        }
+    }
+</script>
+
 
 
 {{-- Script CkEditor --}}

@@ -5,7 +5,7 @@
 
             
             {{-- Add Button --}}
-            <a wire:navigate href="{{ route('dashboard.posts.create') }}"
+            <a href="{{ route('dashboard.posts.create') }}"
                 class="mb-4 inline-block px-5 py-2.5 text-sm font-medium border border-blue-700 text-blue-700 hover:text-white hover:bg-blue-800 focus:outline-none rounded-lg">
                 Add Post
             </a>
@@ -116,8 +116,7 @@
                                         {{-- Action --}}
                                         <td class="px-6 py-4">
                                             <div class="flex space-x-2">
-                                                <a wire:navigate 
-                                                    href="{{ route('dashboard.posts.edit', $post->slug) }}"
+                                                <a href="{{ route('dashboard.posts.edit', $post->slug) }}"
                                                     class="inline-flex items-center justify-center w-20 bg-green-100 text-green-800 text-xs font-medium px-3 py-1 rounded-full 
                                                            dark:bg-green-900 dark:text-green-300 hover:bg-green-200 transition">
                                                     Edit
