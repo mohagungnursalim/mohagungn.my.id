@@ -49,6 +49,14 @@
     border-color: #4b5563 !important;
     /* gray-600 */
 }
+.dark .ck.ck-button {
+    background-color: #1f2937;
+    /* bg gray-800 */
+    color: #ffffff;
+    /* text gray-50 */
+    border-color: #ffffff;
+    /* border gray-700 */
+}
 
 .dark .ck.ck-toolbar .ck-button {
     color: #808a94 !important;
