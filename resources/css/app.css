@@ -11,22 +11,14 @@
 }
 
 /* === Dark Mode Styling === */
-.dark .ck.ck-editor {
-    background-color: #1f2937;
-    /* bg gray-800 */
-    color: #ffffff;
-    /* text gray-50 */
-    border-color: #374151;
-    /* border gray-700 */
-}
 
 /* Area content */
 .dark .ck-editor__editable {
-    background-color: #1f2937 !important;
+    background-color: rgb(55 65 81) !important;
     color: #ffffff !important;
 }
 
-/* Placeholder text */
+/* ========== Placeholder text ========== */
 
 /* Light Mode */
 .ck-editor__editable .ck-placeholder::before {
