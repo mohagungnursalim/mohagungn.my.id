@@ -1,5 +1,124 @@
 <div class="p-6 max-w-4xl mx-auto">
     @push('styles')
+    <style>
+    /* ====== TOM SELECT STYLE (Tailwind inline style equivalent) ====== */
+    
+    .ts-wrapper {
+        width: 100%;
+        font-size: 0.875rem; /* text-sm */
+    }
+    
+    /* Input utama */
+    .ts-control {
+        display: block;
+        width: 100%;
+        font-size: 0.875rem;
+        color: rgb(17 24 39); /* text-gray-900 */
+        border: 1px solid rgb(209 213 219); /* border-gray-300 */
+        border-radius: 0.375rem; /* rounded-md */
+        background-color: rgb(249 250 251); /* bg-gray-50 */
+        transition: all 0.2s ease-in-out;
+        min-height: 38px;
+        padding: 6px 8px;
+    }
+    
+    .dark .ts-control {
+        color: rgb(156 163 175); /* dark:text-gray-400 */
+        border-color: rgb(209 213 219); /* dark:border-gray-300 */
+        background-color: rgb(55 65 81); /* dark:bg-gray-700 */
+    }
+    
+    .ts-control:focus,
+    .ts-control.focus {
+        outline: none;
+        border-color: rgb(59 130 246); /* blue-500 */
+        box-shadow: 0 0 0 1px rgb(59 130 246);
+    }
+    
+    /* Placeholder lightmode */
+    .ts-control input {
+        color: rgb(17 24 39); /* gray-900 */
+        background-color: rgb(249 250 251); /* gray-50 */
+    }
+    
+    /* Placeholder darkmode */
+    .dark .ts-control input {
+        color: rgb(229 231 235); /* gray-200 */
+        background-color: rgb(55 65 81); /* gray-700 */
+    }
+   
+
+
+    
+    /* Selected items */
+    .ts-control .item {
+        background-color: rgb(229 231 235); /* bg-gray-200 */
+        color: rgb(31 41 55); /* text-gray-800 */
+        border-radius: 0.25rem;
+        padding: 2px 6px;
+        margin-right: 4px;
+    }
+    
+    .dark .ts-control .item {
+        background-color: rgb(75 85 99); /* dark:bg-gray-600 */
+        color: rgb(243 244 246); /* dark:text-gray-100 */
+    }
+    
+    /* Dropdown */
+    .ts-dropdown {
+        background-color: rgb(255 255 255); /* bg-white */
+        border: 1px solid rgb(209 213 219); /* border-gray-300 */
+        border-radius: 0.375rem;
+        color: rgb(17 24 39); /* text-gray-900 */
+        box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    }
+    
+    .dark .ts-dropdown {
+        background-color: rgb(55 65 81); /* dark:bg-gray-700 */
+        border-color: rgb(209 213 219); /* dark:border-gray-300 */
+        color: rgb(243 244 246); /* dark:text-gray-100 */
+    }
+    
+    /* Hover item */
+    .ts-dropdown .option:hover {
+        background-color: rgb(59 130 246); /* bg-blue-500 */
+        color: white;
+        cursor: pointer;
+    }
+    
+    /* Selected in dropdown */
+    .ts-dropdown .option.selected {
+        background-color: rgb(37 99 235); /* blue-600 */
+        color: white;
+    }
+    
+    /* No result / loading */
+    .ts-dropdown .loading,
+    .ts-dropdown .no-results {
+        color: rgb(156 163 175); /* text-gray-400 */
+        text-align: center;
+        padding: 0.5rem 0;
+    }
+    
+    /* Clear & remove buttons */
+    .ts-wrapper .clear-button,
+    .ts-wrapper .remove {
+        color: rgb(107 114 128); /* gray-500 */
+    }
+    
+    .dark .ts-wrapper .clear-button,
+    .dark .ts-wrapper .remove {
+        color: rgb(156 163 175); /* dark:gray-400 */
+    }
+    
+    .ts-wrapper .clear-button:hover,
+    .ts-wrapper .remove:hover {
+        color: rgb(59 130 246); /* hover:blue-500 */
+    }
+    </style>
+
+
+
     <link rel="stylesheet" href="https://cdn.ckeditor.com/ckeditor5/43.2.0/ckeditor5.css">
     @endpush
 
@@ -13,7 +132,7 @@
         <div class="mb-4">
             <label class="block font-semibold mb-1">Title</label>
             <input type="text" wire:model="title" placeholder="Insert Title.."
-                class="block w-full text-sm text-gray-900 border border-gray-600 rounded bg-gray-50 dark:text-gray-400 focus:outline-none dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400">
+                class="block w-full text-sm text-gray-900 border border-gray-300 rounded dark:text-gray-400 focus:outline-none dark:bg-gray-700 dark:border-gray-300 dark:placeholder-gray-200">
             @error('title') <p class="text-red-500 text-sm">{{ $message }}</p> @enderror
         </div>
 
@@ -21,7 +140,7 @@
         <div class="mb-4">
             <label class="block font-semibold mb-1">Thumbnail</label>
             <input type="file" wire:model="thumbnail"
-                class="block w-full text-sm text-gray-900 border border-gray-600 rounded cursor-pointer bg-gray-50 dark:text-gray-400 focus:outline-none dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400">
+                class="block w-full text-sm text-gray-900 border border-gray-300 rounded cursor-pointer dark:text-gray-400 focus:outline-none dark:bg-gray-700 dark:border-gray-300 dark:placeholder-gray-200">           
             @error('thumbnail') <p class="text-red-500 text-sm">{{ $message }}</p> @enderror
 
             @if ($thumbnail)
@@ -34,7 +153,7 @@
             <div class="mb-4">
                 <label class="block font-semibold mb-1">Image Description</label>
                 <input type="text" wire:model="image_description" placeholder="Insert Image Description.."
-                    class="block w-full text-sm text-gray-900 border border-gray-600 rounded bg-gray-50 dark:text-gray-400 focus:outline-none dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400">
+                    class="block w-full text-sm text-gray-900 border border-gray-300 rounded bg-gray-50 dark:text-gray-400 focus:outline-none dark:bg-gray-700 dark:border-gray-300 dark:placeholder-gray-200">
                 @error('image_description') <p class="text-red-500 text-sm">{{ $message }}</p> @enderror
             </div>
 
@@ -44,14 +163,14 @@
         {{-- Categories --}}
         <div class="mb-4" wire:ignore>
             <label class="block font-semibold mb-1">Categories</label>
-            <select id="categoriesSelect" multiple placeholder="Pilih kategori..."></select>
+            <select class="block w-full text-sm text-gray-900 rounded bg-gray-50 dark:text-gray-400 focus:outline-none dark:bg-gray-700 dark:placeholder-gray-200" id="categoriesSelect" multiple placeholder="Select Categories..."></select>
             @error('selectedCategories') <p class="text-red-500 text-sm">{{ $message }}</p> @enderror
         </div>
         
         {{-- Tags --}}
         <div class="mb-4" wire:ignore>
             <label class="block font-semibold mb-1">Tags</label>
-            <select id="tagsSelect" multiple placeholder="Pilih tag..."></select>
+            <select class="block w-full text-sm text-gray-900 rounded bg-gray-50 dark:text-gray-400 focus:outline-none dark:bg-gray-700 dark:placeholder-gray-200" id="tagsSelect" multiple placeholder="Select Tags..."></select>
             @error('selectedTags') <p class="text-red-500 text-sm">{{ $message }}</p> @enderror
         </div>
 
@@ -60,7 +179,7 @@
         <div class="mb-4" wire:ignore>
             <label class="block font-semibold mb-1">Content</label>
             <textarea wire:model="content" id="editor" name="content"
-                class="custom-editor w-full border rounded px-3 py-2 dark:bg-gray-700 dark:text-white"></textarea>
+                class="custom-editor w-full border rounded px-3 py-2 dark:bg-gray-700 dark:placeholder-gray-200"></textarea>
         </div>
         @error('content') <p class="text-red-500 text-sm">{{ $message }}</p> @enderror
 

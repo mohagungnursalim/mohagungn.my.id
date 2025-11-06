@@ -27,9 +27,19 @@
 }
 
 /* Placeholder text */
-.dark .ck-editor__editable .ck-placeholder::before {
-    color: #9ca3af !important;
+
+/* Light Mode */
+.ck-editor__editable .ck-placeholder::before {
+    color: rgb(17 24 39) !important;
     /* gray-400 */
+    font-size: 14px;
+}
+
+/* Dark Mode */
+.dark .ck-editor__editable .ck-placeholder::before {
+    color: rgb(229 231 235) !important;
+    /* gray-400 */
+    font-size: 14;
 }
 
 /* Toolbar */
