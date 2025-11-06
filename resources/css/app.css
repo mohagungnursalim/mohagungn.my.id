@@ -11,25 +11,27 @@
 }
 
 /* === Dark Mode Styling === */
-.dark .ck.ck-editor {
-    background-color: #1f2937;
-    /* bg gray-800 */
-    color: #ffffff;
-    /* text gray-50 */
-    border-color: #374151;
-    /* border gray-700 */
-}
 
 /* Area content */
 .dark .ck-editor__editable {
-    background-color: #1f2937 !important;
+    background-color: rgb(55 65 81) !important;
     color: #ffffff !important;
 }
 
-/* Placeholder text */
-.dark .ck-editor__editable .ck-placeholder::before {
-    color: #9ca3af !important;
+/* ========== Placeholder text ========== */
+
+/* Light Mode */
+.ck-editor__editable .ck-placeholder::before {
+    color: rgb(17 24 39) !important;
     /* gray-400 */
+    font-size: 14px;
+}
+
+/* Dark Mode */
+.dark .ck-editor__editable .ck-placeholder::before {
+    color: rgb(229 231 235) !important;
+    /* gray-400 */
+    font-size: 14;
 }
 
 /* Toolbar */
@@ -38,6 +40,14 @@
     /* gray-700 */
     border-color: #4b5563 !important;
     /* gray-600 */
+}
+.dark .ck.ck-button {
+    background-color: #1f2937;
+    /* bg gray-800 */
+    color: #ffffff;
+    /* text gray-50 */
+    border-color: #ffffff;
+    /* border gray-700 */
 }
 
 .dark .ck.ck-toolbar .ck-button {
