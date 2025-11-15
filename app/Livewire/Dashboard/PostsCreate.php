@@ -15,22 +15,25 @@ class PostsCreate extends Component
 {
     use WithFileUploads;
 
-    public $title, $slug, $thumbnail, $content;
+    public $title, $slug, $thumbnail,$thumbnail_description,$content;
+
     public $selectedCategories = [], $selectedTags = [];
 
     /**
      * rules
      */
-    protected $rules = [
-        'title' => 'required|min:3',
-        'content' => 'required',
-        'thumbnail' => 'nullable|image|max:2048',
-    ];
+     protected $rules = [
+         'title' => 'required|min:3',
+         'content' => 'required',
+         'thumbnail' => 'nullable|image|max:2048',
+         'thumbnail_description' => 'nullable|string|max:150',
+     ];
+
 
     /**
      * store
      */
-    public function store()
+    public function store() :void
     {
         $this->validate();
 
@@ -47,6 +50,7 @@ class PostsCreate extends Component
             'title'     => $this->title,
             'slug'      => $this->slug,
             'thumbnail' => $thumbnailPath,
+            'thumbnail_description' => $this->thumbnail_description,
             'user_id'   => Auth::id(),
             'content'   => $this->content,
         ]);
@@ -66,6 +70,12 @@ class PostsCreate extends Component
 
         // Redirect ke index
         $this->redirectIntended(default: route('dashboard.posts.index'), navigate: true);
+    }
+    
+    public function removeThumbnail()
+    {
+        $this->thumbnail = null;
+        $this->thumbnail_description = null;
     }
 
     /**

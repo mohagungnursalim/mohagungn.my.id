@@ -1,120 +1,118 @@
 <div class="p-6 max-w-4xl mx-auto">
     @push('styles')
     <style>
-    /* ====== TOM SELECT STYLE (Tailwind inline style equivalent) ====== */
+        /* ====== TOM SELECT STYLE ====== */
+        
+        .ts-wrapper {
+            width: 100%;
+            font-size: 0.875rem; /* text-sm */
+        }
+        
+        /* Input utama */
+        .ts-control {
+            display: block;
+            width: 100%;
+            font-size: 0.875rem;
+            color: rgb(17 24 39); /* text-gray-900 */
+            border: 1px solid rgb(209 213 219); /* border-gray-300 */
+            border-radius: 0.375rem; /* rounded-md */
+            background-color: rgb(249 250 251); /* bg-gray-50 */
+            transition: all 0.2s ease-in-out;
+            min-height: 38px;
+            padding: 6px 8px;
+        }
+        
+        .dark .ts-control {
+            color: rgb(156 163 175); /* dark:text-gray-400 */
+            border-color: rgb(209 213 219); /* dark:border-gray-300 */
+            background-color: rgb(55 65 81); /* dark:bg-gray-700 */
+        }
+        
+        .ts-control:focus,
+        .ts-control.focus {
+            outline: none;
+            border-color: rgb(59 130 246); /* blue-500 */
+            box-shadow: 0 0 0 1px rgb(59 130 246);
+        }
+        
+        /* Placeholder lightmode */
+        .ts-control input {
+            color: rgb(17 24 39); /* gray-900 */
+            background-color: rgb(249 250 251); /* gray-50 */
+        }
+        
+        /* Placeholder darkmode */
+        .dark .ts-control input {
+            color: rgb(229 231 235); /* gray-200 */
+            background-color: rgb(55 65 81); /* gray-700 */
+        }
     
-    .ts-wrapper {
-        width: 100%;
-        font-size: 0.875rem; /* text-sm */
-    }
-    
-    /* Input utama */
-    .ts-control {
-        display: block;
-        width: 100%;
-        font-size: 0.875rem;
-        color: rgb(17 24 39); /* text-gray-900 */
-        border: 1px solid rgb(209 213 219); /* border-gray-300 */
-        border-radius: 0.375rem; /* rounded-md */
-        background-color: rgb(249 250 251); /* bg-gray-50 */
-        transition: all 0.2s ease-in-out;
-        min-height: 38px;
-        padding: 6px 8px;
-    }
-    
-    .dark .ts-control {
-        color: rgb(156 163 175); /* dark:text-gray-400 */
-        border-color: rgb(209 213 219); /* dark:border-gray-300 */
-        background-color: rgb(55 65 81); /* dark:bg-gray-700 */
-    }
-    
-    .ts-control:focus,
-    .ts-control.focus {
-        outline: none;
-        border-color: rgb(59 130 246); /* blue-500 */
-        box-shadow: 0 0 0 1px rgb(59 130 246);
-    }
-    
-    /* Placeholder lightmode */
-    .ts-control input {
-        color: rgb(17 24 39); /* gray-900 */
-        background-color: rgb(249 250 251); /* gray-50 */
-    }
-    
-    /* Placeholder darkmode */
-    .dark .ts-control input {
-        color: rgb(229 231 235); /* gray-200 */
-        background-color: rgb(55 65 81); /* gray-700 */
-    }
-   
-
-
-    
-    /* Selected items */
-    .ts-control .item {
-        background-color: rgb(229 231 235); /* bg-gray-200 */
-        color: rgb(31 41 55); /* text-gray-800 */
-        border-radius: 0.25rem;
-        padding: 2px 6px;
-        margin-right: 4px;
-    }
-    
-    .dark .ts-control .item {
-        background-color: rgb(75 85 99); /* dark:bg-gray-600 */
-        color: rgb(243 244 246); /* dark:text-gray-100 */
-    }
-    
-    /* Dropdown */
-    .ts-dropdown {
-        background-color: rgb(255 255 255); /* bg-white */
-        border: 1px solid rgb(209 213 219); /* border-gray-300 */
-        border-radius: 0.375rem;
-        color: rgb(17 24 39); /* text-gray-900 */
-        box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-    }
-    
-    .dark .ts-dropdown {
-        background-color: rgb(55 65 81); /* dark:bg-gray-700 */
-        border-color: rgb(209 213 219); /* dark:border-gray-300 */
-        color: rgb(243 244 246); /* dark:text-gray-100 */
-    }
-    
-    /* Hover item */
-    .ts-dropdown .option:hover {
-        background-color: rgb(59 130 246); /* bg-blue-500 */
-        color: white;
-        cursor: pointer;
-    }
-    
-    /* Selected in dropdown */
-    .ts-dropdown .option.selected {
-        background-color: rgb(37 99 235); /* blue-600 */
-        color: white;
-    }
-    
-    /* No result / loading */
-    .ts-dropdown .loading,
-    .ts-dropdown .no-results {
-        color: rgb(156 163 175); /* text-gray-400 */
-        text-align: center;
-        padding: 0.5rem 0;
-    }
-    
-    /* Clear & remove buttons */
-    .ts-wrapper .clear-button,
-    .ts-wrapper .remove {
-        color: rgb(107 114 128); /* gray-500 */
-    }
-    
-    .dark .ts-wrapper .clear-button,
-    .dark .ts-wrapper .remove {
-        color: rgb(156 163 175); /* dark:gray-400 */
-    }
-    
-    .ts-wrapper .clear-button:hover,
-    .ts-wrapper .remove:hover {
-        color: rgb(59 130 246); /* hover:blue-500 */
-    }
+        
+        /* Selected items */
+        .ts-control .item {
+            background-color: rgb(229 231 235); /* bg-gray-200 */
+            color: rgb(31 41 55); /* text-gray-800 */
+            border-radius: 0.25rem;
+            padding: 2px 6px;
+            margin-right: 4px;
+        }
+        
+        .dark .ts-control .item {
+            background-color: rgb(75 85 99); /* dark:bg-gray-600 */
+            color: rgb(243 244 246); /* dark:text-gray-100 */
+        }
+        
+        /* Dropdown */
+        .ts-dropdown {
+            background-color: rgb(255 255 255); /* bg-white */
+            border: 1px solid rgb(209 213 219); /* border-gray-300 */
+            border-radius: 0.375rem;
+            color: rgb(17 24 39); /* text-gray-900 */
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        }
+        
+        .dark .ts-dropdown {
+            background-color: rgb(55 65 81); /* dark:bg-gray-700 */
+            border-color: rgb(209 213 219); /* dark:border-gray-300 */
+            color: rgb(243 244 246); /* dark:text-gray-100 */
+        }
+        
+        /* Hover item */
+        .ts-dropdown .option:hover {
+            background-color: rgb(59 130 246); /* bg-blue-500 */
+            color: white;
+            cursor: pointer;
+        }
+        
+        /* Selected in dropdown */
+        .ts-dropdown .option.selected {
+            background-color: rgb(37 99 235); /* blue-600 */
+            color: white;
+        }
+        
+        /* No result / loading */
+        .ts-dropdown .loading,
+        .ts-dropdown .no-results {
+            color: rgb(156 163 175); /* text-gray-400 */
+            text-align: center;
+            padding: 0.5rem 0;
+        }
+        
+        /* Clear & remove buttons */
+        .ts-wrapper .clear-button,
+        .ts-wrapper .remove {
+            color: rgb(107 114 128); /* gray-500 */
+        }
+        
+        .dark .ts-wrapper .clear-button,
+        .dark .ts-wrapper .remove {
+            color: rgb(156 163 175); /* dark:gray-400 */
+        }
+        
+        .ts-wrapper .clear-button:hover,
+        .ts-wrapper .remove:hover {
+            color: rgb(59 130 246); /* hover:blue-500 */
+        }
     </style>
 
 
@@ -135,69 +133,142 @@
                 class="block w-full text-sm text-gray-900 border border-gray-300 rounded dark:text-gray-400 focus:outline-none dark:bg-gray-700 dark:border-gray-300 dark:placeholder-gray-200">
             @error('title') <p class="text-red-500 text-sm">{{ $message }}</p> @enderror
         </div>
-
-        {{-- Thumbnail --}}
-        <div class="mb-4">
+    
+        {{-- Thumbnail Upload --}}
+        <div 
+            x-cloak x-transition x-data="{ progress: 0 }"
+            x-on:livewire-upload-start="progress = 0"
+            x-on:livewire-upload-finish="progress = 0"
+            x-on:livewire-upload-error="progress = 0"
+            x-on:livewire-upload-progress="progress = $event.detail.progress"
+            class="mb-4">
+                
             <label class="block font-semibold mb-1">Thumbnail</label>
-            <input type="file" wire:model="thumbnail"
-                class="block w-full text-sm text-gray-900 border border-gray-300 rounded cursor-pointer dark:text-gray-400 focus:outline-none dark:bg-gray-700 dark:border-gray-300 dark:placeholder-gray-200">           
-            @error('thumbnail') <p class="text-red-500 text-sm">{{ $message }}</p> @enderror
-
+            {{-- File Input --}}
+            <input 
+                wire:model="thumbnail" 
+                type="file" 
+                accept="image/*"
+                class="w-full p-2 mb-3 border border-gray-300 rounded dark:bg-gray-700 dark:text-white" 
+            />
+            @error('thumbnail') 
+                <p class="text-sm text-red-500">{{ $message }}</p> 
+            @enderror
+    
+            {{-- Progress Bar --}}
+            <div x-show="progress > 0" class="w-full mb-4 bg-gray-300 rounded">
+                <div 
+                    class="h-2 rounded transition-all duration-200" 
+                    :class="progress < 100 ? 'bg-blue-600' : 'bg-green-600'"
+                    :style="'width: ' + progress + '%'">
+                </div>
+            </div>
+    
+            {{-- Thumbnail Preview --}}
             @if ($thumbnail)
-            <div class="flex justify-center mt-2">
-                <figure class="max-w-xs">
-                    <img class="h-100 w-auto rounded-md object-contain border border-gray-200 dark:border-gray-700 shadow-sm"
-                        src="{{ $thumbnail->temporaryUrl() }}" alt="image description">
-                </figure>
-            </div>
-            <div class="mb-4">
-                <label class="block font-semibold mb-1">Image Description</label>
-                <input type="text" wire:model="image_description" placeholder="Insert Image Description.."
-                    class="block w-full text-sm text-gray-900 border border-gray-300 rounded bg-gray-50 dark:text-gray-400 focus:outline-none dark:bg-gray-700 dark:border-gray-300 dark:placeholder-gray-200">
-                @error('image_description') <p class="text-red-500 text-sm">{{ $message }}</p> @enderror
-            </div>
+            <div class="mb-4 flex justify-center">
+                <div class="relative inline-block">
+                    <img 
+                        src="{{ $thumbnail->temporaryUrl() }}" 
+                        alt="Preview"
+                        class="w-32 h-32 object-cover rounded border transition-opacity"
+                        wire:loading.class="opacity-50"
+                    />
+    
+                    {{-- Tombol Hapus --}}
+                    <button 
+                        type="button" 
+                        wire:click="removeThumbnail" 
+                        wire:target="removeThumbnail"
+                        wire:loading.attr="disabled"
+                        class="absolute top-0 right-0 transform translate-x-1/3 -translate-y-1/3 bg-red-500 hover:bg-red-600 text-white p-1 rounded-full shadow"
+                        title="Remove Thumbnail"
+                    >
+                        <i class="fas fa-times"></i>
+                    </button>
+                </div>
+                
+                {{-- Thumbnail Description --}}
+                <textarea
+                    wire:model="thumbnail_description"
+                    placeholder="Describe the thumbnail..."
+                    rows="3"
+                    class="block w-full text-sm text-gray-500 border border-gray-300 rounded dark:bg-gray-700 dark:text-gray-200 focus:outline-none px-3 py-2"
+                ></textarea>
 
+                @error('thumbnail_description') 
+                    <p class="text-red-500 text-sm">{{ $message }}</p> 
+                @enderror
+            </div>
             @endif
+    
+            {{-- Status Upload --}}
+            <div wire:loading wire:target="thumbnail" class="flex items-center gap-2 mb-3 text-blue-500">
+                <span>Uploading thumbnail...</span>
+                <i class="fas fa-spinner fa-spin"></i>
+            </div>
+    
+            {{-- Status Remove --}}
+            <div wire:loading wire:target="removeThumbnail" class="flex items-center gap-2 mb-3 text-blue-500">
+                <span>Removing thumbnail...</span>
+                <i class="fas fa-spinner fa-spin"></i>
+            </div>
         </div>
-
+    
         {{-- Categories --}}
         <div class="mb-4" wire:ignore>
             <label class="block font-semibold mb-1">Categories</label>
-            <select class="block w-full text-sm text-gray-900 rounded bg-gray-50 dark:text-gray-400 focus:outline-none dark:bg-gray-700 dark:placeholder-gray-200" id="categoriesSelect" multiple placeholder="Select Categories..."></select>
-            @error('selectedCategories') <p class="text-red-500 text-sm">{{ $message }}</p> @enderror
+            <select 
+                class="block w-full text-sm text-gray-900 rounded bg-gray-50 dark:text-gray-400 focus:outline-none dark:bg-gray-700 dark:placeholder-gray-200" 
+                id="categoriesSelect" multiple placeholder="Select Categories...">
+            </select>
+            @error('selectedCategories') 
+                <p class="text-red-500 text-sm">{{ $message }}</p> 
+            @enderror
         </div>
         
         {{-- Tags --}}
         <div class="mb-4" wire:ignore>
             <label class="block font-semibold mb-1">Tags</label>
-            <select class="block w-full text-sm text-gray-900 rounded bg-gray-50 dark:text-gray-400 focus:outline-none dark:bg-gray-700 dark:placeholder-gray-200" id="tagsSelect" multiple placeholder="Select Tags..."></select>
-            @error('selectedTags') <p class="text-red-500 text-sm">{{ $message }}</p> @enderror
+            <select 
+                class="block w-full text-sm text-gray-900 rounded bg-gray-50 dark:text-gray-400 focus:outline-none dark:bg-gray-700 dark:placeholder-gray-200" 
+                id="tagsSelect" multiple placeholder="Select Tags...">
+            </select>
+            @error('selectedTags') 
+                <p class="text-red-500 text-sm">{{ $message }}</p> 
+            @enderror
         </div>
-
-
-        {{-- Content CKEditor --}}
+    
+        {{-- Content CKEditor form create --}}
         <div class="mb-4" wire:ignore>
             <label class="block font-semibold mb-1">Content</label>
-            <textarea wire:model="content" id="editor" name="content"
-                class="custom-editor w-full border rounded px-3 py-2 dark:bg-gray-700 dark:placeholder-gray-200"></textarea>
+            <textarea 
+                wire:model="content" 
+                id="editor" 
+                name="content"
+                class="custom-editor w-full border rounded px-3 py-2 dark:bg-gray-700 dark:placeholder-gray-200"
+            ></textarea>
         </div>
-        @error('content') <p class="text-red-500 text-sm">{{ $message }}</p> @enderror
-
+        @error('content') 
+            <p class="text-red-500 text-sm">{{ $message }}</p> 
+        @enderror
+    
+        {{-- Tombol Save --}}
         <div class="flex justify-center">
-            <!-- Tombol Save -->
-              <button 
-                  type="submit"
-                  wire:target="store"
-                  wire:loading.attr="disabled"
-                  class="px-4 py-2 w-32 text-white bg-blue-500 rounded-full disabled hover:bg-blue-600">
-                  <span wire:loading.remove wire:target="store">Save</span>
-                  <span wire:loading wire:target="store" class="flex items-center justify-center">
-                      <i class="fas fa-spinner fa-spin"></i>
-                  </span>
-              </button>
+            <button 
+                type="submit"
+                wire:target="store"
+                wire:loading.attr="disabled"
+                class="px-4 py-2 w-32 text-white bg-blue-500 rounded-full hover:bg-blue-600 disabled:opacity-50 transition"
+            >
+                <span wire:loading.remove wire:target="store">Save</span>
+                <span wire:loading wire:target="store" class="flex items-center justify-center">
+                    <i class="fas fa-spinner fa-spin"></i>
+                </span>
+            </button>
         </div>
-
     </form>
+
 
 </div>
 
