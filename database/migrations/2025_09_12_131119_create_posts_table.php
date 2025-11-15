@@ -17,6 +17,7 @@ return new class extends Migration
             $table->string('slug')->unique();
             $table->text('content')->nullable();
             $table->string('thumbnail')->nullable(); // optional: untuk gambar
+            $table->string('thumbnail_description')->nullable(); // optional: untuk deskripsi gambar
             $table->foreignId('user_id')->constrained()->onDelete('cascade'); // penulis
             $table->timestamps();
         });

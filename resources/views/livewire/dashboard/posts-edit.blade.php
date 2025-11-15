@@ -1,5 +1,119 @@
 <div class="p-6 max-w-4xl mx-auto">
     @push('styles')
+    <style>
+        /* ====== TOM SELECT STYLE ====== */
+        
+        .ts-wrapper {
+            width: 100%;
+            font-size: 0.875rem; /* text-sm */
+        }
+        
+        /* Input utama */
+        .ts-control {
+            display: block;
+            width: 100%;
+            font-size: 0.875rem;
+            color: rgb(17 24 39); /* text-gray-900 */
+            border: 1px solid rgb(209 213 219); /* border-gray-300 */
+            border-radius: 0.375rem; /* rounded-md */
+            background-color: rgb(249 250 251); /* bg-gray-50 */
+            transition: all 0.2s ease-in-out;
+            min-height: 38px;
+            padding: 6px 8px;
+        }
+        
+        .dark .ts-control {
+            color: rgb(156 163 175); /* dark:text-gray-400 */
+            border-color: rgb(209 213 219); /* dark:border-gray-300 */
+            background-color: rgb(55 65 81); /* dark:bg-gray-700 */
+        }
+        
+        .ts-control:focus,
+        .ts-control.focus {
+            outline: none;
+            border-color: rgb(59 130 246); /* blue-500 */
+            box-shadow: 0 0 0 1px rgb(59 130 246);
+        }
+        
+        /* Placeholder lightmode */
+        .ts-control input {
+            color: rgb(17 24 39); /* gray-900 */
+            background-color: rgb(249 250 251); /* gray-50 */
+        }
+        
+        /* Placeholder darkmode */
+        .dark .ts-control input {
+            color: rgb(229 231 235); /* gray-200 */
+            background-color: rgb(55 65 81); /* gray-700 */
+        }
+    
+        
+        /* Selected items */
+        .ts-control .item {
+            background-color: rgb(229 231 235); /* bg-gray-200 */
+            color: rgb(31 41 55); /* text-gray-800 */
+            border-radius: 0.25rem;
+            padding: 2px 6px;
+            margin-right: 4px;
+        }
+        
+        .dark .ts-control .item {
+            background-color: rgb(75 85 99); /* dark:bg-gray-600 */
+            color: rgb(243 244 246); /* dark:text-gray-100 */
+        }
+        
+        /* Dropdown */
+        .ts-dropdown {
+            background-color: rgb(255 255 255); /* bg-white */
+            border: 1px solid rgb(209 213 219); /* border-gray-300 */
+            border-radius: 0.375rem;
+            color: rgb(17 24 39); /* text-gray-900 */
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        }
+        
+        .dark .ts-dropdown {
+            background-color: rgb(55 65 81); /* dark:bg-gray-700 */
+            border-color: rgb(209 213 219); /* dark:border-gray-300 */
+            color: rgb(243 244 246); /* dark:text-gray-100 */
+        }
+        
+        /* Hover item */
+        .ts-dropdown .option:hover {
+            background-color: rgb(59 130 246); /* bg-blue-500 */
+            color: white;
+            cursor: pointer;
+        }
+        
+        /* Selected in dropdown */
+        .ts-dropdown .option.selected {
+            background-color: rgb(37 99 235); /* blue-600 */
+            color: white;
+        }
+        
+        /* No result / loading */
+        .ts-dropdown .loading,
+        .ts-dropdown .no-results {
+            color: rgb(156 163 175); /* text-gray-400 */
+            text-align: center;
+            padding: 0.5rem 0;
+        }
+        
+        /* Clear & remove buttons */
+        .ts-wrapper .clear-button,
+        .ts-wrapper .remove {
+            color: rgb(107 114 128); /* gray-500 */
+        }
+        
+        .dark .ts-wrapper .clear-button,
+        .dark .ts-wrapper .remove {
+            color: rgb(156 163 175); /* dark:gray-400 */
+        }
+        
+        .ts-wrapper .clear-button:hover,
+        .ts-wrapper .remove:hover {
+            color: rgb(59 130 246); /* hover:blue-500 */
+        }
+    </style>
     <link rel="stylesheet" href="https://cdn.ckeditor.com/ckeditor5/43.2.0/ckeditor5.css">
     @endpush
 
@@ -17,35 +131,125 @@
         <div class="mb-4">
             <label class="block font-semibold mb-1">Title</label>
             <input type="text" wire:model="title" placeholder="Insert Title.."
-                class="block w-full text-sm text-gray-900 border border-gray-600 rounded-lg bg-gray-50 dark:text-gray-400 focus:outline-none dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400">
+                class="block w-full text-sm text-gray-900 border border-gray-300 rounded dark:text-gray-400 focus:outline-none dark:bg-gray-700 dark:border-gray-300 dark:placeholder-gray-200">
             @error('title') <p class="text-red-500 text-sm">{{ $message }}</p> @enderror
         </div>
 
-        {{-- Thumbnail --}}
-        <div class="mb-4">
+        {{-- Thumbnail Upload --}}
+        <div 
+            x-cloak x-transition x-data="{ progress: 0 }"
+            x-on:livewire-upload-start="progress = 0"
+            x-on:livewire-upload-finish="progress = 0"
+            x-on:livewire-upload-error="progress = 0"
+            x-on:livewire-upload-progress="progress = $event.detail.progress"
+            class="mb-4">
+        
             <label class="block font-semibold mb-1">Thumbnail</label>
-            <input type="file" wire:model="thumbnail"
-                class="block w-full text-sm text-gray-900 border border-gray-600 rounded-lg cursor-pointer bg-gray-50 dark:text-gray-400 focus:outline-none dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400">
-            @error('thumbnail') <p class="text-red-500 text-sm">{{ $message }}</p> @enderror
-
-            {{-- Preview gambar baru --}}
-            @if ($thumbnail)
-            <div class="flex justify-center mt-2">
-                <figure class="max-w-xs">
-                    <img class="h-100 w-auto rounded-md object-contain border border-gray-200 dark:border-gray-700 shadow-sm"
-                        src="{{ $thumbnail->temporaryUrl() }}" alt="image description">
-                </figure>
+        
+            {{-- Upload Input --}}
+            <input 
+                wire:model="thumbnail" 
+                type="file" 
+                accept="image/*"
+                class="w-full p-2 mb-3 border border-gray-300 rounded dark:bg-gray-700 dark:text-white" 
+            />
+            @error('thumbnail')
+                <p class="text-sm text-red-500">{{ $message }}</p>
+            @enderror
+        
+            {{-- Progress Bar --}}
+            <div x-show="progress > 0" class="w-full mb-4 bg-gray-300 rounded">
+                <div 
+                    class="h-2 rounded transition-all duration-200"
+                    :class="progress < 100 ? 'bg-blue-600' : 'bg-green-600'"
+                    :style="'width: ' + progress + '%'"
+                ></div>
             </div>
-            @elseif ($oldThumbnail)
-            {{-- Preview gambar lama --}}
-            <div class="flex justify-center mt-2">
-                <figure class="max-w-xs">
-                    <img class="h-100 w-auto rounded-md object-contain border border-gray-200 dark:border-gray-700 shadow-sm"
-                        src="{{ asset('storage/' . $oldThumbnail) }}" alt="old thumbnail">
-                </figure>
+        
+            {{-- Preview Thumbnail Baru --}}
+            @if ($thumbnail)
+            <div class="mb-4 flex justify-center">
+                <div class="relative inline-block">
+                    <img 
+                        src="{{ $thumbnail->temporaryUrl() }}" 
+                        class="w-32 h-32 object-cover rounded border"
+                        wire:loading.class="opacity-50"
+                    />
+        
+                    {{-- Tombol Hapus --}}
+                    <button 
+                        type="button" 
+                        wire:click="removeThumbnail" 
+                        wire:target="removeThumbnail"
+                        wire:loading.attr="disabled"
+                        class="absolute top-0 right-0 transform translate-x-1/3 -translate-y-1/3 bg-red-500 hover:bg-red-600 text-white p-1 rounded-full shadow"
+                        title="Remove Thumbnail"
+                    >
+                        <i class="fas fa-times"></i>
+                    </button>
+                </div>
+        
+                {{-- Thumbnail Description --}}
+                    <textarea
+                        wire:model="thumbnail_description"
+                        placeholder="Describe the thumbnail..."
+                        rows="3"
+                        class="block w-full text-sm text-gray-500 border border-gray-300 rounded dark:bg-gray-700 dark:text-gray-200 px-3 py-2"
+                    ></textarea>
+        
+                    @error('thumbnail_description')
+                        <p class="text-red-500 text-sm">{{ $message }}</p>
+                    @enderror
             </div>
             @endif
+        
+        
+            {{-- Preview Thumbnail Lama (jika belum upload baru)--}}
+            @if (!$thumbnail && $oldThumbnail)
+            <div class="mb-4 flex justify-center">
+                <div class="relative inline-block">
+                    <img 
+                        src="{{ asset('storage/'.$oldThumbnail) }}" 
+                        class="w-32 h-32 object-cover rounded border"
+                    />
+        
+                    <button 
+                        type="button" 
+                        wire:click="removeThumbnail"
+                        class="absolute top-0 right-0 transform translate-x-1/3 -translate-y-1/3 bg-red-500 text-white p-1 rounded-full"
+                    >
+                        <i class="fas fa-times"></i>
+                    </button>
+                </div>
+        
+                {{-- Textarea Description --}}
+                    <textarea
+                        wire:model="thumbnail_description"
+                        placeholder="Describe the thumbnail..."
+                        rows="3"
+                        class="block w-full text-sm text-gray-500 border border-gray-300 rounded dark:bg-gray-700 dark:text-gray-200 px-3 py-2"
+                    ></textarea>
+        
+                    @error('thumbnail_description')
+                        <p class="text-red-500 text-sm">{{ $message }}</p>
+                    @enderror
+            </div>
+            @endif
+        
+        
+            {{-- Loading Status --}}
+            <div wire:loading wire:target="thumbnail" class="text-blue-500 flex items-center gap-2">
+                <span>Uploading thumbnail...</span>
+                <i class="fas fa-spinner fa-spin"></i>
+            </div>
+        
+            <div wire:loading wire:target="removeThumbnail" class="text-blue-500 flex items-center gap-2">
+                <span>Removing thumbnail...</span>
+                <i class="fas fa-spinner fa-spin"></i>
+            </div>
+        
         </div>
+
 
         <div class="mb-4" wire:ignore>
             <label class="font-semibold">Categories</label>
@@ -58,11 +262,15 @@
         </div>
 
 
-        {{-- Content CKEditor --}}
+        {{-- Content CKEditor form edit --}}
         <div class="mb-4" wire:ignore>
-            <textarea id="editor">
-                {!! $content !!}
-            </textarea>
+            <label class="block font-semibold mb-1">Content</label>
+            <textarea 
+                wire:model="content" 
+                id="editor"
+                name="content"
+                class="custom-editor w-full border rounded px-3 py-2 dark:bg-gray-700 dark:placeholder-gray-200"
+            >{!! $content !!}</textarea>
         </div>
 
         @error('content') <p class="text-red-500 text-sm">{{ $message }}</p> @enderror
@@ -120,158 +328,6 @@
     });
 </script>
 
-
-{{-- TomSelect Script --}}
-{{-- <script>
-    document.addEventListener('livewire:navigated', () => {
-        setTimeout(() => {
-            cleanup();
-            initTomSelect(
-                'categoriesSelect',
-                @this,
-                'selectedCategories',
-                '/api/categories',
-                false,
-                @js($existingCategories)
-            );
-            initTomSelect(
-                'tagsSelect',
-                @this,
-                'selectedTags',
-                '/api/tags',
-                true,
-                @js($existingTags)
-            );
-        }, 150);
-    });
-    
-    let observer;
-    
-    function cleanup() {
-        if (observer) {
-            observer.disconnect();
-            observer = null;
-        }
-        document.querySelectorAll('#categoriesSelect, #tagsSelect').forEach(el => {
-            if (el.tomselect) el.tomselect.destroy();
-        });
-    }
-    
-    function debounce(fn, delay) {
-        let timer;
-        return (...args) => {
-            clearTimeout(timer);
-            timer = setTimeout(() => fn(...args), delay);
-        };
-    }
-    
-    function initTomSelect(id, livewire, model, url, allowCreate = false, existingData = []) {
-        const el = document.getElementById(id);
-        if (!el) return;
-    
-        const csrf = document.querySelector('meta[name="csrf-token"]').content;
-        if (el.tomselect) el.tomselect.destroy();
-    
-        let nextPage = null;
-        let isLoading = false;
-    
-        const select = new TomSelect(el, {
-            valueField: 'id',
-            labelField: 'name',
-            searchField: 'name',
-            options: existingData,
-            items: existingData.map(item => item.id),
-            preload: true,
-            plugins: ['remove_button', 'clear_button'],
-    
-            create: allowCreate
-                ? (input, cb) => {
-                    fetch('/api/tags', {
-                        method: 'POST',
-                        headers: {
-                            'Content-Type': 'application/json',
-                            'X-CSRF-TOKEN': csrf
-                        },
-                        body: JSON.stringify({ name: input })
-                    })
-                        .then(res => res.json())
-                        .then(json => {
-                            if (json.success && json.item) {
-                                select.addOption(json.item);
-                                select.addItem(json.item.id);
-                                livewire.set(model, select.getValue());
-                                cb(json.item);
-                            } else cb();
-                        })
-                        .catch(() => cb());
-                }
-                : false,
-    
-            load: (query, cb) => {
-                if (isLoading) return;
-                isLoading = true;
-                fetch(`${url}?search=${encodeURIComponent(query)}&page=1`)
-                    .then(res => res.json())
-                    .then(json => {
-                        nextPage = json.next_page_url || null;
-                        cb(json.data || []);
-                    })
-                    .catch(() => cb([]))
-                    .finally(() => (isLoading = false));
-            },
-    
-            render: {
-                option: (data, escape) => `<div class="px-3 py-2">${escape(data.name)}</div>`,
-                no_results: () => `<div class="text-gray-500 p-2">No results</div>`,
-                loading: () => `<div class="text-gray-400 p-2">Loading...</div>`
-            }
-        });
-    
-        select.on('change', () => livewire.set(model, select.getValue()));
-    
-        select.on('dropdown_open', debounce(() => setupLoadMore(select), 200));
-    
-        function setupLoadMore(select) {
-            const dropdown = select.dropdown_content;
-            if (!dropdown || !nextPage) return;
-    
-            const btn = document.createElement('div');
-            btn.className =
-                'ts-load-more text-center py-2 text-blue-500 cursor-pointer border-t hover:bg-gray-100';
-            btn.textContent = 'Load more...';
-    
-            btn.addEventListener(
-                'click',
-                debounce(async () => {
-                    if (isLoading) return;
-                    isLoading = true;
-                    btn.textContent = 'Loading...';
-    
-                    try {
-                        const res = await fetch(nextPage);
-                        const json = await res.json();
-                        nextPage = json.next_page_url || null;
-                        (json.data || []).forEach(item => select.addOption(item));
-                        select.refreshOptions(false);
-                        select.open();
-                        setupLoadMore(select);
-                    } finally {
-                        isLoading = false;
-                        btn.textContent = nextPage ? 'Load more...' : 'No more data';
-                    }
-                }, 200)
-            );
-    
-            dropdown.appendChild(btn);
-    
-            observer = new MutationObserver(() => {
-                if (!dropdown.contains(btn) && nextPage) dropdown.appendChild(btn);
-            });
-    
-            observer.observe(dropdown, { childList: true });
-        }
-    }
-</script> --}}
 
 {{-- TomSelect Script --}}
 <script>
@@ -821,34 +877,38 @@
 	};
     
 
+	
+	let debounceTimer;
     let uploadedImages = [];
-    let debounceTimer;
     let editorInstance;
 
     ClassicEditor.create(document.querySelector('#editor'), editorConfig)
         .then(editor => {
             editorInstance = editor;
 
-            // Set initial data dari Livewire
-            editor.setData(@this.get('content') ?? '');
+            // Upload Adapter
+            editor.plugins.get('FileRepository').createUploadAdapter =
+                (loader) => new MyUploadAdapter(loader);
 
-            // Upload Adapter aktif
-            editor.plugins.get('FileRepository').createUploadAdapter = (loader) => new MyUploadAdapter(loader);
-
-            // Deteksi perubahan konten dengan debounce
+            // Detect perubahan
             editor.model.document.on('change:data', () => {
                 clearTimeout(debounceTimer);
+
                 debounceTimer = setTimeout(() => {
                     const content = editor.getData();
                     @this.set('content', content);
 
-                    // Parse HTML untuk deteksi gambar yang masih ada
+                    // Scan image
                     const parser = new DOMParser();
                     const doc = parser.parseFromString(content, 'text/html');
-                    const currentImages = Array.from(doc.querySelectorAll('img')).map(img => img.getAttribute('src'));
+                    const currentImages =
+                        Array.from(doc.querySelectorAll('img'))
+                        .map(img => img.getAttribute('src'));
 
-                    // Cari gambar yang sudah dihapus dari editor
-                    const removedImages = uploadedImages.filter(url => !currentImages.includes(url));
+                    // Cari yang dihapus
+                    const removedImages = uploadedImages.filter(
+                        url => !currentImages.includes(url)
+                    );
 
                     if (removedImages.length > 0) {
                         removedImages.forEach(url => {
@@ -856,22 +916,23 @@
                                 method: 'POST',
                                 headers: {
                                     'Content-Type': 'application/json',
-                                    'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').getAttribute('content')
+                                    'X-CSRF-TOKEN':
+                                        document.querySelector('meta[name="csrf-token"]').content
                                 },
                                 body: JSON.stringify({ url })
                             });
                         });
 
-                        // Update daftar image aktif
-                        uploadedImages = uploadedImages.filter(url => currentImages.includes(url));
+                        uploadedImages = uploadedImages.filter(
+                            url => currentImages.includes(url)
+                        );
                     }
-                }, 500); // debounce 500ms
-            });
-        })
-        .catch(error => {
-            console.error('CKEditor initialization error:', error);
-        });
 
+                }, 800);
+            });
+
+        })
+        .catch(error => console.error('CKEditor init error:', error));
 
 
     // Upload Image
@@ -903,9 +964,5 @@
 
         abort() {}
     }
-
-
-
-
 </script>
 @endpush

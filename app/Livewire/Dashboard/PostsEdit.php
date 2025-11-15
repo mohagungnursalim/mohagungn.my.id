@@ -17,7 +17,7 @@ class PostsEdit extends Component
     use WithFileUploads;
 
     public $postId;
-    public $title, $slug, $thumbnail, $content;
+    public $title, $slug, $thumbnail, $thumbnail_description, $content;
     public $oldThumbnail;
 
     // Tambahan untuk TomSelect
@@ -30,6 +30,7 @@ class PostsEdit extends Component
         'title' => 'required|min:3',
         'content' => 'required',
         'thumbnail' => 'nullable|image|max:2048',
+        'thumbnail_description' => 'nullable|string|max:150',
     ];
 
     public function mount($slug)
@@ -43,6 +44,7 @@ class PostsEdit extends Component
         $this->slug = $post->slug;
         $this->content = $post->content;
         $this->oldThumbnail = $post->thumbnail;
+        $this->thumbnail_description = $post->thumbnail_description;
 
         // Selected IDs
         $this->selectedCategories = $post->categories->pluck('id')->toArray();
@@ -83,6 +85,7 @@ class PostsEdit extends Component
             'title'     => $this->title,
             'slug'      => $this->slug,
             'thumbnail' => $thumbnailPath,
+            'thumbnail_description' => $this->thumbnail_description,
             'content'   => $this->content,
             'user_id'   => Auth::id(),
         ]);
@@ -97,6 +100,13 @@ class PostsEdit extends Component
             'message' => 'Post updated successfully!',
             'redirect' => route('dashboard.posts.index'),
         ]);
+    }
+    
+    public function removeThumbnail()
+    {
+        $this->thumbnail = null;
+        $this->oldThumbnail = null;
+        $this->thumbnail_description = null;
     }
 
     public function render()
