@@ -131,7 +131,13 @@
             <label class="block font-semibold mb-1">Title</label>
             <input type="text" wire:model="title" placeholder="Insert Title.."
                 class="block w-full text-sm text-gray-900 border border-gray-300 rounded dark:text-gray-400 focus:outline-none dark:bg-gray-700 dark:border-gray-300 dark:placeholder-gray-200">
-            @error('title') <p class="text-red-500 text-sm">{{ $message }}</p> @enderror
+           
+            @error('title')
+                <div wire:key="{{ now() }}" x-data="{ show: true }" x-init="setTimeout(() => show = false, 3000)" x-show="show"
+                    x-transition class="text-red-500 text-sm">
+                    {{ $message }}
+                </div>
+            @enderror
         </div>
     
         {{-- Thumbnail Upload --}}
@@ -151,8 +157,11 @@
                 accept="image/*"
                 class="w-full p-2 mb-3 border border-gray-300 rounded dark:bg-gray-700 dark:text-white" 
             />
-            @error('thumbnail') 
-                <p class="text-sm text-red-500">{{ $message }}</p> 
+            @error('thumbnail')
+                <div wire:key="{{ now() }}" x-data="{ show: true }" x-init="setTimeout(() => show = false, 3000)" x-show="show"
+                    x-transition class="text-red-500 text-sm">
+                    {{ $message }}
+                </div>
             @enderror
     
             {{-- Progress Bar --}}
@@ -196,8 +205,11 @@
                     class="block w-full text-sm text-gray-500 border border-gray-300 rounded dark:bg-gray-700 dark:text-gray-200 focus:outline-none px-3 py-2"
                 ></textarea>
 
-                @error('thumbnail_description') 
-                    <p class="text-red-500 text-sm">{{ $message }}</p> 
+                @error('thumbnail_description')
+                    <div wire:key="{{ now() }}" x-data="{ show: true }" x-init="setTimeout(() => show = false, 3000)" x-show="show"
+                        x-transition class="text-red-500 text-sm">
+                        {{ $message }}
+                    </div>
                 @enderror
             </div>
             @endif
@@ -222,8 +234,11 @@
                 class="block w-full text-sm text-gray-900 rounded bg-gray-50 dark:text-gray-400 focus:outline-none dark:bg-gray-700 dark:placeholder-gray-200" 
                 id="categoriesSelect" multiple placeholder="Select Categories...">
             </select>
-            @error('selectedCategories') 
-                <p class="text-red-500 text-sm">{{ $message }}</p> 
+            @error('selectedCategories')
+                <div wire:key="{{ now() }}" x-data="{ show: true }" x-init="setTimeout(() => show = false, 3000)" x-show="show"
+                    x-transition class="text-red-500 text-sm">
+                    {{ $message }}
+                </div>
             @enderror
         </div>
         
@@ -234,8 +249,11 @@
                 class="block w-full text-sm text-gray-900 rounded bg-gray-50 dark:text-gray-400 focus:outline-none dark:bg-gray-700 dark:placeholder-gray-200" 
                 id="tagsSelect" multiple placeholder="Select Tags...">
             </select>
-            @error('selectedTags') 
-                <p class="text-red-500 text-sm">{{ $message }}</p> 
+            @error('selectedTags')
+                <div wire:key="{{ now() }}" x-data="{ show: true }" x-init="setTimeout(() => show = false, 3000)" x-show="show"
+                    x-transition class="text-red-500 text-sm">
+                    {{ $message }}
+                </div>
             @enderror
         </div>
     
@@ -249,8 +267,11 @@
                 class="custom-editor w-full border rounded px-3 py-2 dark:bg-gray-700 dark:placeholder-gray-200"
             ></textarea>
         </div>
-        @error('content') 
-            <p class="text-red-500 text-sm">{{ $message }}</p> 
+        @error('content')
+            <div wire:key="{{ now() }}" x-data="{ show: true }" x-init="setTimeout(() => show = false, 3000)" x-show="show"
+                x-transition class="text-red-500 text-sm">
+                {{ $message }}
+            </div>
         @enderror
     
         {{-- Tombol Save --}}
