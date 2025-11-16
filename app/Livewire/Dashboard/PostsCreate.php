@@ -25,8 +25,10 @@ class PostsCreate extends Component
      protected $rules = [
          'title' => 'required|min:3',
          'content' => 'required',
-         'thumbnail' => 'nullable|image|max:2048',
-         'thumbnail_description' => 'nullable|string|max:150',
+         'thumbnail' => 'required|image|max:2048',
+         'thumbnail_description' => 'nullable|string|min:10|max:100',
+         'selectedCategories' => 'required|array|min:1',
+         'selectedTags' => 'nullable|array|max:10',
      ];
 
 
