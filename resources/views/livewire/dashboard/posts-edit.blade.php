@@ -132,7 +132,12 @@
             <label class="block font-semibold mb-1">Title</label>
             <input type="text" wire:model="title" placeholder="Insert Title.."
                 class="block w-full text-sm text-gray-900 border border-gray-300 rounded dark:text-gray-400 focus:outline-none dark:bg-gray-700 dark:border-gray-300 dark:placeholder-gray-200">
-            @error('title') <p class="text-red-500 text-sm">{{ $message }}</p> @enderror
+                    @error('title')
+                        <div wire:key="{{ now() }}" x-data="{ show: true }" x-init="setTimeout(() => show = false, 3000)" x-show="show"
+                            x-transition class="text-red-500 text-sm">
+                            {{ $message }}
+                        </div>
+                    @enderror
         </div>
 
         {{-- Thumbnail Upload --}}
@@ -154,7 +159,10 @@
                 class="w-full p-2 mb-3 border border-gray-300 rounded dark:bg-gray-700 dark:text-white" 
             />
             @error('thumbnail')
-                <p class="text-sm text-red-500">{{ $message }}</p>
+                <div wire:key="{{ now() }}" x-data="{ show: true }" x-init="setTimeout(() => show = false, 3000)" x-show="show"
+                    x-transition class="text-red-500 text-sm">
+                    {{ $message }}
+                </div>
             @enderror
         
             {{-- Progress Bar --}}
@@ -231,7 +239,10 @@
                     ></textarea>
         
                     @error('thumbnail_description')
-                        <p class="text-red-500 text-sm">{{ $message }}</p>
+                        <div wire:key="{{ now() }}" x-data="{ show: true }" x-init="setTimeout(() => show = false, 3000)" x-show="show"
+                            x-transition class="text-red-500 text-sm">
+                            {{ $message }}
+                        </div>
                     @enderror
             </div>
             @endif
@@ -273,7 +284,12 @@
             >{!! $content !!}</textarea>
         </div>
 
-        @error('content') <p class="text-red-500 text-sm">{{ $message }}</p> @enderror
+        @error('content')
+            <div wire:key="{{ now() }}" x-data="{ show: true }" x-init="setTimeout(() => show = false, 3000)" x-show="show"
+                x-transition class="text-red-500 text-sm">
+                {{ $message }}
+            </div>
+        @enderror
 
         <div class="flex justify-center">
             <!-- Tombol Update -->
