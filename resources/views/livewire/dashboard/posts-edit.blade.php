@@ -133,8 +133,7 @@
             <input type="text" wire:model="title" placeholder="Insert Title.."
                 class="block w-full text-sm text-gray-900 border border-gray-300 rounded dark:text-gray-400 focus:outline-none dark:bg-gray-700 dark:border-gray-300 dark:placeholder-gray-200">
                     @error('title')
-                        <div wire:key="{{ now() }}" x-data="{ show: true }" x-init="setTimeout(() => show = false, 3000)" x-show="show"
-                            x-transition class="text-red-500 text-sm">
+                        <div class="text-red-500 text-sm">
                             {{ $message }}
                         </div>
                     @enderror
@@ -156,11 +155,10 @@
                 wire:model="thumbnail" 
                 type="file" 
                 accept="image/*"
-                class="w-full p-2 mb-3 border border-gray-300 rounded dark:bg-gray-700 dark:text-white" 
+                class="w-full p-1 mb-2 border border-gray-300 rounded dark:bg-gray-700 dark:text-white" 
             />
             @error('thumbnail')
-                <div wire:key="{{ now() }}" x-data="{ show: true }" x-init="setTimeout(() => show = false, 3000)" x-show="show"
-                    x-transition class="text-red-500 text-sm">
+                <div class="text-red-500 text-sm">
                     {{ $message }}
                 </div>
             @enderror
@@ -238,13 +236,12 @@
                         class="block w-full text-sm text-gray-500 border border-gray-300 rounded dark:bg-gray-700 dark:text-gray-200 px-3 py-2"
                     ></textarea>
         
+            </div>
                     @error('thumbnail_description')
-                        <div wire:key="{{ now() }}" x-data="{ show: true }" x-init="setTimeout(() => show = false, 3000)" x-show="show"
-                            x-transition class="text-red-500 text-sm">
+                        <div class="text-red-500 text-sm">
                             {{ $message }}
                         </div>
                     @enderror
-            </div>
             @endif
         
         
@@ -262,14 +259,36 @@
         </div>
 
 
-        <div class="mb-4" wire:ignore>
-            <label class="font-semibold">Categories</label>
-            <select id="categoriesSelect" multiple></select>
+        {{-- Categories --}}
+        <div class="mb-4">
+            <div wire:ignore>
+                <label class="block font-semibold mb-1">Categories</label>
+                <select 
+                    class="block w-full text-sm text-gray-900 rounded bg-gray-50 dark:text-gray-400 focus:outline-none dark:bg-gray-700 dark:placeholder-gray-200" 
+                    id="categoriesSelect" multiple placeholder="Select Categories...">
+                </select>
+            </div>
+                @error('selectedCategories')
+                    <div class="text-red-500 text-sm">
+                        {{ $message }}
+                    </div>
+                @enderror
         </div>
         
-        <div class="mb-4" wire:ignore>
-            <label class="font-semibold">Tags</label>
-            <select id="tagsSelect" multiple></select>
+        {{-- Tags --}}
+        <div class="mb-4">
+            <div wire:ignore>
+                <label class="block font-semibold mb-1">Tags</label>
+                <select 
+                    class="block w-full text-sm text-gray-900 rounded bg-gray-50 dark:text-gray-400 focus:outline-none dark:bg-gray-700 dark:placeholder-gray-200" 
+                    id="tagsSelect" multiple placeholder="Select Tags...">
+                </select>
+            </div>
+                @error('selectedTags')
+                    <div class="text-red-500 text-sm">
+                        {{ $message }}
+                    </div>
+                @enderror
         </div>
 
 
@@ -285,8 +304,7 @@
         </div>
 
         @error('content')
-            <div wire:key="{{ now() }}" x-data="{ show: true }" x-init="setTimeout(() => show = false, 3000)" x-show="show"
-                x-transition class="text-red-500 text-sm">
+            <div class="text-red-500 text-sm">
                 {{ $message }}
             </div>
         @enderror
