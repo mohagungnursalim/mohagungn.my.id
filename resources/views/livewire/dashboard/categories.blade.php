@@ -197,20 +197,35 @@
                             <label class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Name</label>
                             <input wire:model.defer="name" type="text" placeholder="Category name..."
                                 class="w-full p-2 mb-4 border rounded dark:bg-gray-700 dark:text-white" />
-                            @error('name') <p class="mb-2 text-sm text-red-500">{{ $message }}</p> @enderror
+                            @error('name')
+                                <div wire:key="{{ now() }}" x-data="{ show: true }" x-init="setTimeout(() => show = false, 3000)" x-show="show"
+                                    x-transition class="text-red-500 text-sm">
+                                    {{ $message }}
+                                </div>
+                            @enderror
 
                             {{-- Color --}}
                             <label class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Color</label>
                             <input wire:model.defer="color" type="color"
                                 class="w-full p-2 mb-4 border rounded dark:bg-gray-700 dark:text-white" />
-                            @error('color') <p class="mb-2 text-sm text-red-500">{{ $message }}</p> @enderror
+                            @error('color')
+                                <div wire:key="{{ now() }}" x-data="{ show: true }" x-init="setTimeout(() => show = false, 3000)" x-show="show"
+                                    x-transition class="text-red-500 text-sm">
+                                    {{ $message }}
+                                </div>
+                            @enderror
 
                             {{-- Image Upload --}}
                             <label class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Image
                                 Upload</label>
                             <input wire:model="image" type="file" accept="image/*"
                                 class="w-full p-2 mb-4 border rounded dark:bg-gray-700 dark:text-white" />
-                            @error('image') <p class="mb-2 text-sm text-red-500">{{ $message }}</p> @enderror
+                            @error('image')
+                                <div wire:key="{{ now() }}" x-data="{ show: true }" x-init="setTimeout(() => show = false, 3000)" x-show="show"
+                                    x-transition class="text-red-500 text-sm">
+                                    {{ $message }}
+                                </div>
+                            @enderror
 
                             {{-- Progress Bar --}}
                             <div x-show="progress > 0" class="w-full mb-4 bg-gray-300 rounded">
@@ -303,14 +318,23 @@
                                 <label class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Name</label>
                                 <input wire:model.defer="editName" type="text" placeholder="Category name..."
                                     class="w-full p-2 mb-4 border rounded dark:bg-gray-700 dark:text-white" />
-                                @error('editName') <p class="mb-2 text-sm text-red-500">{{ $message }}</p> @enderror
+                                @error('editName')
+                                    <div wire:key="{{ now() }}" x-data="{ show: true }" x-init="setTimeout(() => show = false, 3000)" x-show="show"
+                                        x-transition class="text-red-500 text-sm">
+                                        {{ $message }}
+                                    </div>
+                                @enderror
 
                                 {{-- editColor --}}
                                 <label
                                     class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Color</label>
                                 <input wire:model.defer="editColor" type="color"
                                     class="w-full p-2 mb-4 border rounded dark:bg-gray-700 dark:text-white" />
-                                @error('editColor') <p class="mb-2 text-sm text-red-500">{{ $message }}</p>
+                                @error('editColor')
+                                    <div wire:key="{{ now() }}" x-data="{ show: true }" x-init="setTimeout(() => show = false, 3000)" x-show="show"
+                                        x-transition class="text-red-500 text-sm">
+                                        {{ $message }}
+                                    </div>
                                 @enderror
 
                                 {{-- editImage Upload --}}
@@ -318,7 +342,11 @@
                                     Upload</label>
                                 <input wire:model="editImage" type="file" accept="image/*"
                                     class="w-full p-2 mb-4 border rounded dark:bg-gray-700 dark:text-white" />
-                                @error('editImage') <p class="mb-2 text-sm text-red-500">{{ $message }}</p>
+                                @error('editImage')
+                                    <div wire:key="{{ now() }}" x-data="{ show: true }" x-init="setTimeout(() => show = false, 3000)" x-show="show"
+                                        x-transition class="text-red-500 text-sm">
+                                        {{ $message }}
+                                    </div>
                                 @enderror
 
                                 {{-- Progress Bar --}}

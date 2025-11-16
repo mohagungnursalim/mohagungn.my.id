@@ -167,7 +167,10 @@
                                     class="w-full p-2 mb-4 border rounded dark:bg-gray-700 dark:text-white" />
 
                                 @error('name')
-                                <p class="mb-2 text-sm text-red-500">{{ $message }}</p>
+                                    <div wire:key="{{ now() }}" x-data="{ show: true }" x-init="setTimeout(() => show = false, 3000)" x-show="show"
+                                        x-transition class="text-red-500 text-sm">
+                                        {{ $message }}
+                                    </div>
                                 @enderror
 
                                 {{-- Button --}}
@@ -219,7 +222,10 @@
                                         class="w-full p-2 mb-4 border rounded dark:bg-gray-700 dark:text-white" />
 
                                     @error('editName')
-                                    <p class="mb-2 text-sm text-red-500">{{ $message }}</p>
+                                        <div wire:key="{{ now() }}" x-data="{ show: true }" x-init="setTimeout(() => show = false, 3000)" x-show="show"
+                                            x-transition class="text-red-500 text-sm">
+                                            {{ $message }}
+                                        </div>
                                     @enderror
 
                                     {{-- Button --}}
