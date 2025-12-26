@@ -309,18 +309,33 @@
             </div>
         @enderror
 
-        <div class="flex justify-center">
-            <!-- Tombol Update -->
-              <button 
-                  type="submit"
-                  wire:target="update"
-                  wire:loading.attr="disabled"
-                  class="px-4 py-2 w-32 text-white bg-blue-500 rounded-full disabled hover:bg-blue-600">
-                  <span wire:loading.remove wire:target="update">Update</span>
-                  <span wire:loading wire:target="update" class="flex items-center justify-center">
-                      <i class="fas fa-spinner fa-spin"></i>
-                  </span>
-              </button>
+        {{-- Tombol Save --}}
+        <div class="flex gap-3 justify-center">
+            <button 
+                type="button"
+                wire:click="updateDraft"
+                wire:target="updateDraft"
+                wire:loading.attr="disabled"
+                class="px-4 py-2 text-white bg-gray-600 rounded-full hover:bg-gray-700 transition"
+            >
+                <span wire:loading.remove wire:target="updateDraft">Update & Draft</span>
+                <span wire:loading wire:target="updateDraft" class="flex items-center justify-center">
+                    <i class="fas fa-spinner fa-spin"></i>
+                </span>
+            </button>
+            
+            <button 
+                type="button"
+                wire:click="updateNow"
+                wire:target="updateNow"
+                wire:loading.attr="disabled"
+                class="px-4 py-2 text-white bg-green-600 rounded-full hover:bg-green-700 transition"
+            >
+                <span wire:loading.remove wire:target="updateNow">Update & Publish</span>
+                <span wire:loading wire:target="updateNow" class="flex items-center justify-center">
+                    <i class="fas fa-spinner fa-spin"></i>
+                </span>
+            </button>
         </div>
     </form>
 </div>

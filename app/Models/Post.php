@@ -13,6 +13,10 @@ class Post extends Model
         'thumbnail',
         'thumbnail_description',
         'user_id',
+        'is_published',
+        'is_archived',
+        'published_at',
+        'archived_at',
     ];
 
     public function categories()
