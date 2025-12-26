@@ -16,6 +16,8 @@ class PostsCreate extends Component
     use WithFileUploads;
 
     public $title, $slug, $thumbnail,$thumbnail_description,$content;
+    public $is_published = false, $is_archived = false,$published_at = null, $archived_at = null;
+
 
     public $selectedCategories = [], $selectedTags = [];
 
@@ -29,50 +31,72 @@ class PostsCreate extends Component
          'thumbnail_description' => 'nullable|string|min:10|max:100',
          'selectedCategories' => 'required|array|min:1',
          'selectedTags' => 'nullable|array|max:10',
+         'is_published' => 'boolean',
+         'is_archived' => 'boolean',
      ];
 
+     public function saveDraft(): void
+     {
+         $this->setPublish(false);
+     }
+     
+     public function publishNow(): void
+     {
+         $this->setPublish(true);
+     }
+
+     public function setPublish($value)
+     {
+         $this->is_published = $value;
+         $this->store();
+     }
 
     /**
      * store
      */
-    public function store() :void
-    {
-        $this->validate();
+     public function store() : void
+     {
+         $this->validate();
+     
+         // Slug unik
+         $this->slug = Str::slug($this->title) . '-' . Str::random(4);
+     
+         // Upload thumbnail
+         $thumbnailPath = $this->thumbnail
+             ? $this->thumbnail->store('thumbnails', 'public')
+             : null;
+     
+         // Set waktu publish jika is_published = true
+         $publishedAt = $this->is_published ? now() : null;
+     
+         $post = Post::create([
+             'title'       => $this->title,
+             'slug'        => $this->slug,
+             'thumbnail'   => $thumbnailPath,
+             'thumbnail_description' => $this->thumbnail_description,
+             'user_id'     => Auth::id(),
+             'content'     => $this->content,
+             'is_published'=> $this->is_published,
+             'published_at'=> $publishedAt,
+             'is_archived' => false,
+             'archived_at' => null,
+         ]);
+     
+         $post->categories()->sync($this->selectedCategories);
+         $post->tags()->sync($this->selectedTags);
+     
+         $this->refreshCache();
+     
+         session()->flash('notif', [
+             'message' => $this->is_published 
+                 ? 'Post published successfully!'
+                 : 'Post saved as draft.',
+             'type' => 'success'
+         ]);
+     
+         $this->redirectIntended(default: route('dashboard.posts.index'), navigate: true);
+     }
 
-        // Buat slug unik berdasarkan title
-        $this->slug = Str::slug($this->title) . '-' . Str::random(4);
-
-        // Upload thumbnail (opsional)
-        $thumbnailPath = $this->thumbnail 
-            ? $this->thumbnail->store('thumbnails', 'public') 
-            : null;
-
-        // Buat post baru
-        $post = Post::create([
-            'title'     => $this->title,
-            'slug'      => $this->slug,
-            'thumbnail' => $thumbnailPath,
-            'thumbnail_description' => $this->thumbnail_description,
-            'user_id'   => Auth::id(),
-            'content'   => $this->content,
-        ]);
-
-        // Sinkronisasi kategori dan tag
-        $post->categories()->sync($this->selectedCategories);
-        $post->tags()->sync($this->selectedTags);
-
-        // Refresh cache global per user
-        $this->refreshCache();
-
-        // Notifikasi
-        session()->flash('notif', [
-            'message' => 'Post has been created successfully!',
-            'type' => 'success',
-        ]);
-
-        // Redirect ke index
-        $this->redirectIntended(default: route('dashboard.posts.index'), navigate: true);
-    }
     
     public function removeThumbnail()
     {

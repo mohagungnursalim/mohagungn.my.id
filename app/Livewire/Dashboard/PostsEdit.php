@@ -20,6 +20,9 @@ class PostsEdit extends Component
     public $title, $slug, $thumbnail, $thumbnail_description, $content;
     public $oldThumbnail;
 
+    public $is_published = false, $is_archived = false,$published_at = null, $archived_at = null;
+
+
     // Tambahan untuk TomSelect
     public $selectedCategories = [];
     public $selectedTags = [];
@@ -33,6 +36,8 @@ class PostsEdit extends Component
         'thumbnail_description' => 'nullable|string|min:10|max:100',
         'selectedCategories' => 'required|array|min:1',
         'selectedTags' => 'nullable|array|max:10',
+        'is_published' => 'boolean',
+        'is_archived' => 'boolean',
     ];
 
     public function mount($slug)
@@ -64,16 +69,36 @@ class PostsEdit extends Component
         ])->toArray();
     }
 
-    public function update()
+    public function updateDraft(): void
+    {
+        $this->setPublish(false);
+    }
+     
+    public function updateNow(): void
+    {
+        $this->setPublish(true);
+    }
+
+    public function setPublish($value)
+    {
+        $this->is_published = $value;
+        $this->update();
+    }
+    
+    public function update(): void
     {
         $this->validate();
 
         $post = Post::findOrFail($this->postId);
 
+        // Slug: berubah hanya jika title berubah
         if ($this->title !== $post->title) {
             $this->slug = Str::slug($this->title) . '-' . Str::random(4);
+        } else {
+            $this->slug = $post->slug;
         }
 
+        // Thumbnail handling
         if ($this->thumbnail) {
             if ($this->oldThumbnail && Storage::disk('public')->exists($this->oldThumbnail)) {
                 Storage::disk('public')->delete($this->oldThumbnail);
@@ -83,13 +108,28 @@ class PostsEdit extends Component
             $thumbnailPath = $this->oldThumbnail;
         }
 
+        // Membuat published_at sesuai perubahan status
+        $publishedAt = $post->published_at;
+
+        // Draft => Publish (pertama kali)
+        if (! $post->is_published && $this->is_published) {
+            $publishedAt = now();
+        }
+
+        // Publish => Draft (jika kamu izinkan)
+        if ($post->is_published && ! $this->is_published) {
+            $publishedAt = null;
+        }
+
         $post->update([
-            'title'     => $this->title,
-            'slug'      => $this->slug,
-            'thumbnail' => $thumbnailPath,
+            'title'        => $this->title,
+            'slug'         => $this->slug,
+            'thumbnail'    => $thumbnailPath,
             'thumbnail_description' => $this->thumbnail_description,
-            'content'   => $this->content,
-            'user_id'   => Auth::id(),
+            'content'      => $this->content,
+            'user_id'      => Auth::id(),
+            'is_published' => $this->is_published,
+            'published_at' => $publishedAt,
         ]);
 
         $post->categories()->sync($this->selectedCategories ?? []);
@@ -99,10 +139,13 @@ class PostsEdit extends Component
 
         $this->dispatch('notify', [
             'type' => 'success',
-            'message' => 'Post updated successfully!',
+            'message' => $this->is_published
+                ? 'Post updated & published!'
+                : 'Draft updated successfully.',
             'redirect' => route('dashboard.posts.index'),
         ]);
     }
+
     
     public function removeThumbnail()
     {

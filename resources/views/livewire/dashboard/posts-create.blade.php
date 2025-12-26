@@ -273,19 +273,36 @@
         @enderror
     
         {{-- Tombol Save --}}
-        <div class="flex justify-center">
+        <div class="flex gap-3 justify-center">
             <button 
-                type="submit"
-                wire:target="store"
+                type="button"
+                wire:click="saveDraft"
+                wire:target="saveDraft"
                 wire:loading.attr="disabled"
-                class="px-4 py-2 w-32 text-white bg-blue-500 rounded-full hover:bg-blue-600 disabled:opacity-50 transition"
+                class="px-4 py-2 w-32 text-white bg-gray-600 rounded-full hover:bg-gray-700 transition"
             >
-                <span wire:loading.remove wire:target="store">Save</span>
-                <span wire:loading wire:target="store" class="flex items-center justify-center">
+                <span wire:loading.remove wire:target="saveDraft">Save as Draft</span>
+                <span wire:loading wire:target="saveDraft" class="flex items-center justify-center">
+                    <i class="fas fa-spinner fa-spin"></i>
+                </span>
+            </button>
+            
+            <button 
+                type="button"
+                wire:click="publishNow"
+                wire:target="publishNow"
+                wire:loading.attr="disabled"
+                class="px-4 py-2 w-32 text-white bg-green-600 rounded-full hover:bg-green-700 transition"
+            >
+                <span wire:loading.remove wire:target="publishNow">Publish Now</span>
+                <span wire:loading wire:target="publishNow" class="flex items-center justify-center">
                     <i class="fas fa-spinner fa-spin"></i>
                 </span>
             </button>
         </div>
+        
+      
+
     </form>
 
 
