@@ -3,10 +3,13 @@
 use App\Http\Controllers\Api\DataController;
 use App\Http\Controllers\CkeditorController;
 use App\Livewire\Dashboard\Categories;
+use App\Livewire\Dashboard\PermissionIndex;
 use App\Livewire\Dashboard\Posts;
 use App\Livewire\Dashboard\PostsCreate;
 use App\Livewire\Dashboard\PostsEdit;
+use App\Livewire\Dashboard\RoleIndex;
 use App\Livewire\Dashboard\Tags;
+use App\Livewire\Dashboard\UserRolePermission;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 use Illuminate\Support\Facades\Storage;
@@ -72,6 +75,26 @@ Route::prefix('dashboard')->name('dashboard.')->middleware(['auth'])->group(func
     // ========= Tags & Categories ==========
     Route::get('/tags', Tags::class)->name('tags');   
     Route::get('/categories', Categories::class)->name('categories');
+
+       /**
+         * ROLE MANAGEMENT
+         */
+        Route::get('/roles', RoleIndex::class)
+            ->name('roles.index');
+
+        /**
+         * PERMISSION MANAGEMENT
+         */
+        Route::get('/permissions', PermissionIndex::class)
+            ->name('permissions.index')
+            ->middleware('permission:manage permissions');
+
+        /**
+         * USER ROLE & PERMISSION
+         */
+        Route::get('/users/{userId}/roles-permissions', UserRolePermission::class)
+            ->name('users.roles-permissions')
+            ->middleware('permission:manage users');
 });
 
 
