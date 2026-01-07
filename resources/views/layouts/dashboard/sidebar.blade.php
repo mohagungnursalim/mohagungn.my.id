@@ -71,7 +71,8 @@
                   class="{{ request()->routeIs(
                      'dashboard.roles.*',
                      'dashboard.permissions.*',
-                     'dashboard.user-permissions.*'
+                     'dashboard.user-permissions.*',
+                     'dashboard.users.index'
                   ) ? '' : 'hidden' }} py-2 space-y-2"
             >
 
@@ -96,7 +97,8 @@
                         class="{{ request()->routeIs(
                               'dashboard.roles.*',
                               'dashboard.permissions.*',
-                              'dashboard.user-permissions.*'
+                              'dashboard.user-permissions.*',
+                              'dashboard.users.index'
                         ) ? '' : 'hidden' }} py-2 space-y-2"
                      >
                         {{-- Roles --}}
@@ -122,6 +124,19 @@
                                        {{ request()->routeIs('dashboard.permissions.*') ? 'bg-gray-200 dark:bg-gray-600' : '' }}">
                                  <i class="fa-solid fa-arrow-right"></i>
                                  <span class="ml-2">Permissions</span>
+                              </a>
+                        </li>
+
+                        {{-- Users Management --}}
+                        <li>
+                              <a wire:navigate
+                                 href="{{ route('dashboard.users.index') }}"
+                                 class="flex items-center w-full p-2 pl-16 rounded-lg transition
+                                       text-gray-900 dark:text-white
+                                       hover:bg-gray-100 dark:hover:bg-gray-700
+                                       {{ request()->routeIs('dashboard.users.index') ? 'bg-gray-200 dark:bg-gray-600' : '' }}">
+                                 <i class="fa-solid fa-arrow-right"></i>
+                                 <span class="ml-2">Users</span>
                               </a>
                         </li>
                      </ul>

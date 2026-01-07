@@ -9,13 +9,25 @@ use App\Livewire\Dashboard\PostsCreate;
 use App\Livewire\Dashboard\PostsEdit;
 use App\Livewire\Dashboard\RoleIndex;
 use App\Livewire\Dashboard\Tags;
-use App\Livewire\Dashboard\UserRolePermission;
+use App\Livewire\Dashboard\UserIndex;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
 use Illuminate\Support\Facades\Storage;
 
+// ========== Frontend ==========
 Route::view('/', 'welcome');
+// ========= End Frontend ==========
 
+// ======== Logout Route ==========
+Route::post('/logout', function () {
+    Auth::logout();
+
+    request()->session()->invalidate();
+    request()->session()->regenerateToken();
+
+    return redirect()->route('login');
+})->name('logout');
 
 
 // =========== Dashboard Page ==========
@@ -86,15 +98,11 @@ Route::prefix('dashboard')->name('dashboard.')->middleware(['auth'])->group(func
          * PERMISSION MANAGEMENT
          */
         Route::get('/permissions', PermissionIndex::class)
-            ->name('permissions.index')
-            ->middleware('permission:manage permissions');
+            ->name('permissions.index');
 
-        /**
-         * USER ROLE & PERMISSION
-         */
-        Route::get('/users/{userId}/roles-permissions', UserRolePermission::class)
-            ->name('users.roles-permissions')
-            ->middleware('permission:manage users');
+        Route::get('/users', UserIndex::class)
+            ->name('users.index');
+
 });
 
 
