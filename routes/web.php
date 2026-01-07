@@ -3,16 +3,31 @@
 use App\Http\Controllers\Api\DataController;
 use App\Http\Controllers\CkeditorController;
 use App\Livewire\Dashboard\Categories;
+use App\Livewire\Dashboard\PermissionIndex;
 use App\Livewire\Dashboard\Posts;
 use App\Livewire\Dashboard\PostsCreate;
 use App\Livewire\Dashboard\PostsEdit;
+use App\Livewire\Dashboard\RoleIndex;
 use App\Livewire\Dashboard\Tags;
+use App\Livewire\Dashboard\UserIndex;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
 use Illuminate\Support\Facades\Storage;
 
+// ========== Frontend ==========
 Route::view('/', 'welcome');
+// ========= End Frontend ==========
 
+// ======== Logout Route ==========
+Route::post('/logout', function () {
+    Auth::logout();
+
+    request()->session()->invalidate();
+    request()->session()->regenerateToken();
+
+    return redirect()->route('login');
+})->name('logout');
 
 
 // =========== Dashboard Page ==========
@@ -72,6 +87,22 @@ Route::prefix('dashboard')->name('dashboard.')->middleware(['auth'])->group(func
     // ========= Tags & Categories ==========
     Route::get('/tags', Tags::class)->name('tags');   
     Route::get('/categories', Categories::class)->name('categories');
+
+       /**
+         * ROLE MANAGEMENT
+         */
+        Route::get('/roles', RoleIndex::class)
+            ->name('roles.index');
+
+        /**
+         * PERMISSION MANAGEMENT
+         */
+        Route::get('/permissions', PermissionIndex::class)
+            ->name('permissions.index');
+
+        Route::get('/users', UserIndex::class)
+            ->name('users.index');
+
 });
 
 
