@@ -68,11 +68,6 @@
 
                         <article class="group relative flex flex-col items-start sm:flex-row sm:gap-x-6">
 
-                            {{-- Thumbnail --}}
-                            <div class="w-full sm:w-1/4 shrink-0 mb-3 sm:mb-0 rounded-lg overflow-hidden">
-                                <div class="w-full h-52 sm:h-32 rounded-lg bg-zinc-200 dark:bg-zinc-800"></div>
-                            </div>
-
                             {{-- Content --}}
                             <div class="w-full sm:w-3/4 flex flex-col justify-center">
 
@@ -97,12 +92,6 @@
                                 <div class="space-y-2">
                                     <div class="h-5 w-11/12 rounded-full bg-zinc-200 dark:bg-zinc-800"></div>
                                     <div class="h-5 w-3/4 rounded-full bg-zinc-200 dark:bg-zinc-800"></div>
-                                </div>
-
-                                {{-- Excerpt --}}
-                                <div class="mt-4 space-y-2">
-                                    <div class="h-3.5 w-full rounded-full bg-zinc-100 dark:bg-zinc-800/60"></div>
-                                    <div class="h-3.5 w-5/6 rounded-full bg-zinc-100 dark:bg-zinc-800/60"></div>
                                 </div>
 
                             </div>
@@ -210,7 +199,7 @@
                 <header class="mt-8 mb-6">
 
                     <h1 style="font-family:monospace" class="text-3xl sm:text-4xl font-bold tracking-tight text-zinc-900 dark:text-zinc-50">
-                        My Shit Posts...
+                        Tulisan Terbaru:
                     </h1>
                     <hr>
                 </header>
@@ -261,7 +250,7 @@
                                 </div>
 
                                 {{-- Title --}}
-                                <h2 style="font-family:monospace" class="underline text-lg sm:text-xl font-bold leading-snug text-zinc-900 dark:text-zinc-100 group-hover:text-zinc-600 dark:group-hover:text-zinc-400 transition-colors duration-200">
+                                <h2 style="font-family:monospace" class="underline text-lg sm:text-xl font-bold leading-snug text-zinc-600 dark:text-zinc-100 group-hover:text-zinc-600 dark:group-hover:text-zinc-400 transition-colors duration-200">
 
                                     <a wire:navigate href="{{ route('front.show', $post->slug) }}">
                                         <span class="absolute inset-0"></span>
