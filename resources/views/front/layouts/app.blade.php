@@ -50,6 +50,31 @@
             </div>
         </div>
     </footer>
+    <!-- Scroll To Top Button -->
+    <div
+        x-data="{ show: false }"
+        x-on:scroll.window="show = window.scrollY > 300"
+        x-show="show"
+        x-transition:enter="transition ease-out duration-300"
+        x-transition:enter-start="opacity-0 translate-y-4"
+        x-transition:enter-end="opacity-100 translate-y-0"
+        x-transition:leave="transition ease-in duration-200"
+        x-transition:leave-start="opacity-100 translate-y-0"
+        x-transition:leave-end="opacity-0 translate-y-4"
+        x-cloak
+        class="fixed bottom-6 right-6 z-50"
+    >
+        <button
+            x-on:click="window.scrollTo({ top: 0, behavior: 'smooth' })"
+            aria-label="Scroll to top"
+            class="group flex items-center justify-center w-10 h-10 rounded-full bg-zinc-800 dark:bg-zinc-700 text-white shadow-lg hover:bg-zinc-900 dark:hover:bg-zinc-600 hover:shadow-xl hover:-translate-y-0.5 active:translate-y-0 transition-all duration-200"
+        >
+            <svg class="w-4 h-4 transition-transform duration-200 group-hover:-translate-y-0.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M5 15l7-7 7 7" />
+            </svg>
+        </button>
+    </div>
+
     @livewireScripts
 </body>
 </html>
