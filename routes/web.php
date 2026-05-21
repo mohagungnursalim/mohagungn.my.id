@@ -15,8 +15,12 @@ use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
 use Illuminate\Support\Facades\Storage;
 
+use App\Livewire\Front\Index;
+use App\Livewire\Front\Show;
+
 // ========== Frontend ==========
-Route::view('/', 'welcome');
+Route::get('/', Index::class)->name('front.index');
+Route::get('/artikel/{slug}', Show::class)->name('front.show');
 // ========= End Frontend ==========
 
 // ======== Logout Route ==========

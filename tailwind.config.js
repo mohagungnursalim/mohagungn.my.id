@@ -3,7 +3,7 @@ import forms from '@tailwindcss/forms';
 
 /** @type {import('tailwindcss').Config} */
 export default {
-    darkMode: 'class', // 🔑 tambahin ini
+    darkMode: 'class', 
 
     content: [
         './vendor/laravel/framework/src/Illuminate/Pagination/resources/views/*.blade.php',
@@ -21,6 +21,7 @@ export default {
     },
 
     plugins: [
-        require('flowbite/plugin')
+        require('flowbite/plugin'),
+        require('@tailwindcss/typography'),
     ],
 };
