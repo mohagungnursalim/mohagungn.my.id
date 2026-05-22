@@ -45,8 +45,8 @@
         <div class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-8 flex items-center justify-between text-sm text-zinc-500 dark:text-zinc-400">
             <p>&copy; {{ date('Y') }} MohAgungN.</p>
             <div class="flex space-x-4">
-               <a href="#" class="hover:text-zinc-900 dark:hover:text-zinc-100 transition-colors">Twitter</a>
-               <a href="#" class="hover:text-zinc-900 dark:hover:text-zinc-100 transition-colors">GitHub</a>
+               <a href="https://www.instagram.com/mohagungn/" class="hover:text-zinc-900 dark:hover:text-zinc-100 transition-colors">Instagram</a>
+               <a href="https://github.com/mohagungnursalim" class="hover:text-zinc-900 dark:hover:text-zinc-100 transition-colors">GitHub</a>
             </div>
         </div>
     </footer>

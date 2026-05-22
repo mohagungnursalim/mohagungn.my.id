@@ -53,11 +53,6 @@
                 </div>
             </div>
 
-            {{-- Section Header --}}
-            <div class="space-y-3">
-                <div class="h-9 w-64 rounded-xl bg-zinc-200 dark:bg-zinc-800"></div>
-                <div class="h-4 w-72 rounded-full bg-zinc-100 dark:bg-zinc-800/60"></div>
-            </div>
 
             {{-- Posts Skeleton --}}
             <div class="space-y-8 lg:space-y-10">
@@ -118,7 +113,9 @@
                 {{-- Hero Header --}}
                 <header class="mb-10 lg:mb-14">
                     <h1 style="font-family:monospace" class="text-4xl md:text-5xl font-extrabold tracking-tight mb-4 text-zinc-900 dark:text-zinc-100">
-                        Hello
+                        Hello <i class="fa-regular fa-hand-spock"></i> 
+
+                        <a href="https://user-images.githubusercontent.com/72663882/171687151-bb31c996-c9d2-49c8-b593-734946893b23.gif"></a>
                         <mark class="px-2 pb-0.5 text-white bg-gray-900 rounded-md">World!</mark>
                     </h1>
 
@@ -143,7 +140,7 @@
 
                                     <div class="flex items-center gap-2 mb-4">
                                         <span style="font-family:monospace" class="inline-flex items-center px-3 py-1 rounded-full text-xs font-semibold bg-gradient-to-r from-zinc-200 to-zinc-100 dark:from-zinc-700 dark:to-zinc-800 text-zinc-700 dark:text-zinc-300">
-                                            👉 Closer to Me
+                                            Closer to Me
                                         </span>
                                     </div>
 
@@ -197,10 +194,6 @@
 
                 {{-- Section Header --}}
                 <header class="mt-8 mb-6">
-
-                    <h1 style="font-family:monospace" class="text-3xl sm:text-4xl font-bold tracking-tight text-zinc-900 dark:text-zinc-50">
-                        Tulisan Terbaru:
-                    </h1>
                     <hr>
                 </header>
 

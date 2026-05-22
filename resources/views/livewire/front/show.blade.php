@@ -141,17 +141,17 @@
                     
                     <!-- Share Twitter -->
                     <a href="https://twitter.com/intent/tweet?text={{ urlencode($post->title) }}&url={{ urlencode(url()->current()) }}" target="_blank" rel="noopener noreferrer" class="p-2 sm:p-2.5 text-zinc-500 hover:text-white hover:bg-black dark:text-zinc-400 dark:hover:text-white dark:hover:bg-zinc-700 rounded-full transition-all focus:outline-none" aria-label="Share on X">
-                        <svg class="w-4 h-4 sm:w-5 sm:h-5" fill="currentColor" viewBox="0 0 24 24" aria-hidden="true"><path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z"></path></svg>
+                      <i class="fab fa-x-twitter"></i>
                     </a>
                     
                     <!-- Share Facebook -->
                     <a href="https://www.facebook.com/sharer/sharer.php?u={{ urlencode(url()->current()) }}" target="_blank" rel="noopener noreferrer" class="p-2 sm:p-2.5 text-zinc-500 hover:text-white hover:bg-[#1877F2] dark:text-zinc-400 dark:hover:text-white dark:hover:bg-[#1877F2] rounded-full transition-all focus:outline-none" aria-label="Share on Facebook">
-                        <svg class="w-4 h-4 sm:w-5 sm:h-5" fill="currentColor" viewBox="0 0 24 24" aria-hidden="true"><path fill-rule="evenodd" d="M22 12c0-5.523-4.477-10-10-10S2 6.477 2 12c0 4.991 3.657 9.128 8.438 9.878v-6.987h-2.54V12h2.54V9.797c0-2.506 1.492-3.89 3.777-3.89 1.094 0 2.238.195 2.238.195v2.46h-1.26c-1.243 0-1.63.771-1.63 1.562V12h2.773l-.443 2.89h-2.33v6.988C18.343 21.128 22 16.991 22 12z" clip-rule="evenodd"></path></svg>
+                        <i class="fab fa-facebook"></i>
                     </a>
                     
                     <!-- Share WhatsApp -->
                     <a href="https://api.whatsapp.com/send?text={{ urlencode($post->title . ' ' . url()->current()) }}" target="_blank" rel="noopener noreferrer" class="p-2 sm:p-2.5 text-zinc-500 hover:text-white hover:bg-[#25D366] dark:text-zinc-400 dark:hover:text-white dark:hover:bg-[#25D366] rounded-full transition-all focus:outline-none" aria-label="Share on WhatsApp">
-                        <svg class="w-4 h-4 sm:w-5 sm:h-5" fill="currentColor" viewBox="0 0 24 24" aria-hidden="true"><path fill-rule="evenodd" d="M12.012 2c5.506 0 9.998 4.476 9.998 9.984 0 1.954-.56 3.782-1.528 5.32l1.503 5.485-5.617-1.472a9.92 9.92 0 01-4.356 1.002C6.505 22.319 2 17.843 2 12.335 2 6.828 6.505 2 12.012 2zm.022 1.688c-4.57 0-8.297 3.712-8.297 8.264 0 1.77.56 3.42 1.554 4.773l-1.012 3.692 3.788-.992a8.214 8.214 0 003.967 1.02h.005c4.57 0 8.296-3.713 8.296-8.266 0-4.551-3.726-8.263-8.297-8.263zm4.52 11.233c-.247-.123-1.464-.716-1.69-.798-.227-.082-.393-.122-.559.122-.165.245-.64 .798-.785.96-.144.162-.289.184-.536.061-.247-.122-1.045-.383-1.99-1.226-.735-.655-1.23-1.465-1.375-1.71-.144-.244-.015-.376.108-.499.112-.112.247-.285.372-.428.123-.142.164-.244.247-.407.082-.162.042-.305-.02-.428-.062-.122-.56-1.336-.767-1.83-.201-.482-.405-.417-.559-.425-.144-.008-.31-.009-.475-.009-.165 0-.434.061-.661.305-.226.244-.866.838-.866 2.045 0 1.207.887 2.373 1.01 2.535.124.163 1.745 2.637 4.227 3.693.59.25 1.05.4 1.408.513.592.188 1.132.161 1.557.098.473-.07 1.464-.593 1.67-1.167.206-.573.206-1.064.145-1.166-.062-.102-.227-.163-.475-.285z" clip-rule="evenodd"></path></svg>
+                        <i class="fab fa-whatsapp"></i>
                     </a>
                     
                     <!-- Copy Link using Alpine -->
@@ -164,13 +164,10 @@
                         aria-label="Copy Link" 
                         title="Copy Link">
                         
-                        <svg x-show="!copied" class="w-4 h-4 sm:w-5 sm:h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 16H6a2 2 0 01-2-2V6a2 2 0 012-2h8a2 2 0 012 2v2m-6 12h8a2 2 0 002-2v-8a2 2 0 00-2-2h-8a2 2 0 00-2 2v8a2 2 0 002 2z"></path>
-                        </svg>
                         
-                        <svg x-cloak x-show="copied" style="display: none;" class="w-4 h-4 sm:w-5 sm:h-5 text-green-400" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path>
-                        </svg>
+                        <i x-show="!copied" class="fa-solid fa-copy"></i>
+                        
+                        <i x-show="copied" class="fa-solid fa-check text-green-500"></i>
     
                         <!-- Tooltip -->
                         <span x-cloak x-show="copied" x-transition.opacity style="display: none;" class="absolute -top-10 left-1/2 transform -translate-x-1/2 bg-zinc-900 border border-zinc-800 text-white text-xs py-1 px-2.5 rounded whitespace-nowrap hidden sm:block">
