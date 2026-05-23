@@ -2,7 +2,9 @@
 
 namespace App\Livewire\Front;
 
+use App\Helpers\CategoriesCacheHelper;
 use App\Helpers\PostsCacheHelper;
+use App\Models\Category;
 use App\Models\Post;
 use Illuminate\Support\Facades\Cache;
 use Livewire\Attributes\Layout;
@@ -10,13 +12,18 @@ use Livewire\Component;
 use Livewire\WithPagination;
 
 #[Layout('front.layouts.app')]
-class Index extends Component
+class CategoryArticles extends Component
 {
     use WithPagination;
 
+    public Category $category;
     public $readyToLoad = false;
 
-        
+    public function mount($slug)
+    {
+        $this->category = Category::where('slug', $slug)->firstOrFail();
+    }
+
     /**
      * loadInitialPosts
      * Trigger loading of posts when the component is ready.
@@ -26,34 +33,30 @@ class Index extends Component
     {
         $this->readyToLoad = true;
     }
-    
+
     /**
      * render
-     * Render the component view with posts and introduction post.
+     * Render the component view with posts filtered by category.
      * @return void
      */
     public function render()
     {
         $posts = null;
-        $introPost = null;
+        $allCategories = null;
         $hasMore = false;
 
         if ($this->readyToLoad) {
-            $introPost = Cache::remember('front.intro_post', now()->addMinutes(60), function () {
-                return Post::whereHas('categories', function ($query) {
-                    $query->where('slug', 'introduction');
-                })
-                ->where('is_published', true)
-                ->first();
-            });
+            // Get all categories for sidebar
+            $allCategories = CategoriesCacheHelper::getFrontendCategories();
 
+            // Get posts for specific category with pagination
             $page = $this->page ?? request()->get('page', 1);
-            $cacheKey = PostsCacheHelper::versionedKey("front.posts.page.{$page}");
+            $cacheKey = PostsCacheHelper::versionedKey("front.category.{$this->category->slug}.page.{$page}");
 
             $posts = Cache::remember($cacheKey, now()->addSeconds(PostsCacheHelper::ttl()), function () {
                 return Post::with(['categories', 'tags'])
-                    ->whereDoesntHave('categories', function ($query) {
-                        $query->where('slug', 'introduction');
+                    ->whereHas('categories', function ($query) {
+                        $query->where('categories.id', $this->category->id);
                     })
                     ->where('is_published', true)
                     ->latest('published_at')
@@ -63,6 +66,6 @@ class Index extends Component
             $hasMore = $posts ? $posts->hasMorePages() : false;
         }
 
-        return view('livewire.front.index', compact('posts', 'introPost', 'hasMore'));
+        return view('livewire.front.category-articles', compact('posts', 'allCategories', 'hasMore'));
     }
 }

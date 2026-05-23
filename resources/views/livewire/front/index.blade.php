@@ -197,6 +197,16 @@
                     <hr>
                 </header>
 
+                {{-- Categories --}}
+                <div class="mb-8">
+                    <livewire:frontend.categories />
+                </div>
+
+                {{-- Section Divider --}}
+                <header class="my-8">
+                    <hr>
+                </header>
+
                 {{-- Posts --}}
                 <div class="space-y-8 lg:space-y-10">
 

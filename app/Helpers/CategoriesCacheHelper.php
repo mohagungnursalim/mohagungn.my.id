@@ -60,4 +60,20 @@ class CategoriesCacheHelper
         $trackerKey = self::$baseKey . '_tracked_keys';
         return Cache::get($trackerKey, []);
     }
+
+    /**
+     * Ambil semua kategori untuk frontend (cached), exclude "Introduction"
+     */
+    public static function getFrontendCategories()
+    {
+        $key = self::$baseKey . '_frontend_all';
+        self::trackCacheKey($key);
+        
+        return Cache::remember($key, self::$ttl, function () {
+            return Category::select(['id', 'name', 'slug', 'color', 'image'])
+                ->where('slug', '!=', 'introduction')
+                ->orderBy('name', 'asc')
+                ->get();
+        });
+    }
 }

@@ -17,9 +17,13 @@ use Illuminate\Support\Facades\Storage;
 
 use App\Livewire\Front\Index;
 use App\Livewire\Front\Show;
+use App\Livewire\Front\CategoryArticles;
+use App\Livewire\Front\CategoriesIndex;
 
 // ========== Frontend ==========
 Route::get('/', Index::class)->name('front.index');
+Route::get('/kategori', CategoriesIndex::class)->name('front.categories');
+Route::get('/kategori/{slug}', CategoryArticles::class)->name('front.category');
 Route::get('/artikel/{slug}', Show::class)->name('front.show');
 // ========= End Frontend ==========
 
