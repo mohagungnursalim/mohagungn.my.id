@@ -147,7 +147,6 @@
                     <!-- Share Twitter -->
                     <a href="https://twitter.com/intent/tweet?text={{ urlencode($post->title) }}&url={{ urlencode(url()->current()) }}" target="_blank" rel="noopener noreferrer" class="p-2 sm:p-2.5 text-zinc-500 hover:text-white hover:bg-black dark:text-zinc-400 dark:hover:text-white dark:hover:bg-zinc-700 rounded-full transition-all focus:outline-none" aria-label="Share on X">
                       <i class="fab fa-x-twitter"></i>
-                      <svg xmlns="http://www.w3.org/2000/svg" width="1em" height="1em" viewBox="0 0 24 24"><title xmlns="">banknote-x</title><g fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"><path d="M13 18H4a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2v5m-5 4l5 5m-4-10h.01M22 17l-5 5M6 12h.01"/><circle cx="12" cy="12" r="2"/></g></svg>
                     </a>
                     
                     <!-- Share Facebook -->
