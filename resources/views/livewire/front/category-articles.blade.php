@@ -115,7 +115,7 @@
                             <div class="w-full sm:w-3/4 flex flex-col justify-center h-full">
 
                                 {{-- Meta --}}
-                                <div class="flex items-center gap-x-2 text-[12px] sm:text-xs font-medium mb-2">
+                                <div class="flex items-center gap-x-2 text-[12px] sm:text-xs font-medium mb-2 flex-wrap">
 
                                     <time
                                         datetime="{{ \Carbon\Carbon::parse($post->published_at)->toIso8601String() }}">
@@ -133,6 +133,12 @@
                                             {{ $postCategory->name }}
                                         </a>
                                     @endforeach
+
+                                    <div class="h-1.5 w-1.5 rounded-full bg-zinc-300 dark:bg-zinc-700"></div>
+                                    <span class="text-zinc-500 dark:text-zinc-400 flex items-center gap-1">
+                                        <i class="far fa-eye text-xs"></i>
+                                        {{ \App\Helpers\ViewsTrackingHelper::getPostViewCount($post) }}
+                                    </span>
 
                                 </div>
 

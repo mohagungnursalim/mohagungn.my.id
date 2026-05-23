@@ -37,12 +37,17 @@
     <article class="max-w-3xl mx-auto">
         <!-- Header -->
         <header class="mb-10 sm:mb-14 text-center">
-            <div class="flex items-center justify-center gap-x-2 text-sm mb-6">
+            <div class="flex items-center justify-center gap-x-2 text-sm mb-6 flex-wrap">
                 <time datetime="{{ \Carbon\Carbon::parse($post->published_at)->toIso8601String() }}" class="font-medium text-zinc-500 dark:text-zinc-400">{{ \Carbon\Carbon::parse($post->published_at)->translatedFormat('d F Y') }}</time>
                 @foreach($post->categories as $category)
                     <span class="text-zinc-300 dark:text-zinc-700">&bull;</span>
                     <span class="font-medium px-2.5 py-0.5 rounded-full bg-zinc-100 dark:bg-zinc-800 text-zinc-600 dark:text-zinc-300">{{ $category->name }}</span>
                 @endforeach
+                <span class="text-zinc-300 dark:text-zinc-700">&bull;</span>
+                <span class="font-medium text-zinc-500 dark:text-zinc-400 flex items-center gap-1">
+                    <i class="far fa-eye"></i>
+                    {{ $viewsCount ?? 0 }} {{ Str::plural('Views', $viewsCount ?? 0) }}
+                </span>
             </div>
             
             <h1 class="text-3xl md:text-5xl font-extrabold tracking-tight text-zinc-900 dark:text-zinc-100 mb-8 leading-tight sm:leading-tight">{{ $post->title }}</h1>
@@ -142,6 +147,7 @@
                     <!-- Share Twitter -->
                     <a href="https://twitter.com/intent/tweet?text={{ urlencode($post->title) }}&url={{ urlencode(url()->current()) }}" target="_blank" rel="noopener noreferrer" class="p-2 sm:p-2.5 text-zinc-500 hover:text-white hover:bg-black dark:text-zinc-400 dark:hover:text-white dark:hover:bg-zinc-700 rounded-full transition-all focus:outline-none" aria-label="Share on X">
                       <i class="fab fa-x-twitter"></i>
+                      <svg xmlns="http://www.w3.org/2000/svg" width="1em" height="1em" viewBox="0 0 24 24"><title xmlns="">banknote-x</title><g fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"><path d="M13 18H4a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2v5m-5 4l5 5m-4-10h.01M22 17l-5 5M6 12h.01"/><circle cx="12" cy="12" r="2"/></g></svg>
                     </a>
                     
                     <!-- Share Facebook -->

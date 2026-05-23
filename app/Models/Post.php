@@ -31,6 +31,19 @@ class Post extends Model
         return $this->belongsToMany(Tag::class, 'pivot_tag_post');
     }
 
+    public function views()
+    {
+        return $this->hasMany(PostView::class);
+    }
+
+    /**
+     * Get total unique views
+     */
+    public function getViewsCount()
+    {
+        return $this->views()->count();
+    }
+
     protected static function booted()
     {
         // Invalidate posts cache by bumping version via helper (safe for non-taggable stores)

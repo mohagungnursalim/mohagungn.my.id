@@ -7,11 +7,13 @@ use Livewire\Attributes\Layout;
 use Livewire\Component;
 
 use App\Helpers\PostsCacheHelper;
+use App\Helpers\ViewsTrackingHelper;
 
 #[Layout('front.layouts.app')]
 class Show extends Component
 {
     public $post;
+    public $viewsCount;
 
     public function mount($slug)
     {
@@ -23,6 +25,12 @@ class Show extends Component
                 ->where('is_published', true)
                 ->firstOrFail();
         });
+
+        // Track view
+        ViewsTrackingHelper::trackView($this->post);
+
+        // Get views count
+        $this->viewsCount = ViewsTrackingHelper::getPostViewCount($this->post);
     }
 
     public function render()
