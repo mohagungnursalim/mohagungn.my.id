@@ -7,16 +7,15 @@
     "license": "MIT",
        "require": {
         "php": "^8.5",
-        "barryvdh/laravel-dompdf": "^3.1",
         "laravel/framework": "^13.0",
         "livewire/livewire": "^4.0@beta",
         "livewire/volt": "^1.10",
         "ryangjchandler/laravel-cloudflare-turnstile": "^3.0",
-        "spatie/laravel-permission": "^6.24"
+        "spatie/laravel-permission": "^7.0"
     },
 
     "require-dev": {
-        "fruitcake/laravel-debugbar": "^4.0",
+        "fruitcake/laravel-debugbar": "^4.2",
         "fakerphp/faker": "^1.23",
         "laravel/breeze": "^2.4",
         "laravel/pail": "^1.2",
@@ -75,6 +74,6 @@
             "php-http/discovery": true
         }
     },
-    "minimum-stability": "dev",
+    "minimum-stability": "stable",
     "prefer-stable": true
 }
