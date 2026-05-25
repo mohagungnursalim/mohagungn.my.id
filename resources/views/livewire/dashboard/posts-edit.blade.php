@@ -309,33 +309,47 @@
             </div>
         @enderror
 
-        {{-- Tombol Save --}}
-        <div class="flex gap-3 justify-center">
-            <button 
-                type="button"
-                wire:click="updateDraft"
-                wire:target="updateDraft"
-                wire:loading.attr="disabled"
-                class="px-4 py-2 text-white bg-gray-600 rounded-full hover:bg-gray-700 transition"
-            >
-                <span wire:loading.remove wire:target="updateDraft">Update & Draft</span>
-                <span wire:loading wire:target="updateDraft" class="flex items-center justify-center">
-                    <i class="fas fa-spinner fa-spin"></i>
-                </span>
-            </button>
-            
-            <button 
-                type="button"
-                wire:click="updateNow"
-                wire:target="updateNow"
-                wire:loading.attr="disabled"
-                class="px-4 py-2 text-white bg-green-600 rounded-full hover:bg-green-700 transition"
-            >
-                <span wire:loading.remove wire:target="updateNow">Update & Publish</span>
-                <span wire:loading wire:target="updateNow" class="flex items-center justify-center">
-                    <i class="fas fa-spinner fa-spin"></i>
-                </span>
-            </button>
+            {{-- Tombol Update --}}
+        <div class="flex justify-center gap-2">
+
+                {{-- Update Draft --}}
+                <button 
+                    type="button"
+                    wire:click="updateDraft"
+                    wire:target="updateDraft"
+                    wire:loading.attr="disabled"
+                    class="inline-flex items-center justify-center min-w-[9rem] px-4 py-2 text-white bg-gray-600 rounded-full transition hover:bg-gray-700 disabled:opacity-50">
+                    <span wire:loading.remove wire:target="updateDraft">
+                        Update Draft
+                    </span>
+
+                    <span 
+                        wire:loading 
+                        wire:target="updateDraft"
+                        class="inline-flex items-center justify-center w-full">
+                        <i class="fas fa-spinner fa-spin"></i>
+                    </span>
+                </button>
+
+                {{-- Update Publish --}}
+                <button 
+                    type="button"
+                    wire:click="updateNow"
+                    wire:target="updateNow"
+                    wire:loading.attr="disabled"
+                    class="inline-flex items-center justify-center min-w-[9rem] px-4 py-2 text-white bg-green-600 rounded-full transition hover:bg-green-700 disabled:opacity-50">
+                    <span wire:loading.remove wire:target="updateNow">
+                        Update Publish
+                    </span>
+
+                    <span 
+                        wire:loading 
+                        wire:target="updateNow"
+                        class="inline-flex items-center justify-center w-full">
+                        <i class="fas fa-spinner fa-spin"></i>
+                    </span>
+                </button>
+
         </div>
     </form>
 </div>
