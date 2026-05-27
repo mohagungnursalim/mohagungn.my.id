@@ -149,7 +149,16 @@ class Posts extends Component
 
     public function render()
     {
-        return view('livewire.dashboard.posts')
-            ->layout('layouts.dashboard.main');
+        $viewCounts = [];
+        // Jika posts sudah diload dan bentuknya iterable (koleksi / array)
+        if ($this->loaded && (is_array($this->posts) || $this->posts instanceof \Illuminate\Support\Collection) && count($this->posts) > 0) {
+            $viewCounts = \App\Helpers\ViewsTrackingHelper::getPostViewCountsForCollection(
+                is_array($this->posts) ? collect($this->posts) : $this->posts
+            );
+        }
+
+        return view('livewire.dashboard.posts', [
+            'viewCounts' => $viewCounts
+        ])->layout('layouts.dashboard.main');
     }
 }

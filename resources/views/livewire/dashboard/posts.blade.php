@@ -50,6 +50,8 @@
                                     <th class="px-6 py-3">Title</th>
                                     <th class="px-6 py-3">Categories</th>
                                     <th class="px-6 py-3">Tags</th>
+                                    <th class="px-6 py-3">Views</th>
+                                    <th class="px-6 py-3">Status</th>
                                     <th class="px-6 py-3">Action</th>
                                 </tr>
                             </thead>
@@ -69,6 +71,12 @@
                                             <div class="h-4 bg-gray-200 dark:bg-gray-700 rounded w-2/3 animate-pulse"></div>
                                         </td>
                                         <td class="px-6 py-4">
+                                            <div class="h-4 bg-gray-200 dark:bg-gray-700 rounded w-1/2 animate-pulse"></div>
+                                        </td>
+                                        <td class="px-6 py-4">
+                                            <div class="w-16 h-5 bg-gray-200 dark:bg-gray-700 rounded-full animate-pulse"></div>
+                                        </td>
+                                        <td class="px-6 py-4">
                                             <div class="flex gap-2">
                                                 <div class="w-12 h-5 bg-gray-200 dark:bg-gray-700 rounded-full animate-pulse"></div>
                                                 <div class="w-12 h-5 bg-gray-200 dark:bg-gray-700 rounded-full animate-pulse"></div>
@@ -86,6 +94,7 @@
                                     <th class="px-6 py-3">Title</th>
                                     <th class="px-6 py-3">Categories</th>
                                     <th class="px-6 py-3">Tags</th>
+                                    <th class="px-6 py-3">Views</th>
                                     <th class="px-6 py-3">Status</th>
                                     <th class="px-6 py-3">Action</th>
                                 </tr>
@@ -114,6 +123,14 @@
                                         {{-- Tags --}}
                                         <td class="px-6 py-4">{{ $post->tags->pluck('name')->join(', ') }}</td>
             
+                                        {{-- Views --}}
+                                        <td class="px-6 py-4 font-medium text-gray-900 dark:text-white">
+                                            <div class="flex items-center">
+                                                <i class="fa-regular fa-eye mr-2 text-gray-400"></i>
+                                                {{ $viewCounts[$post->id] ?? 0 }}
+                                            </div>
+                                        </td>
+
                                         {{-- Status --}}
                                         <td class="px-6 py-4">
                                             @if($post->is_archived)
@@ -158,7 +175,7 @@
                                 {{-- Jika Data Kosong --}}
                                 @if($posts->isEmpty())
                                 <tr>
-                                    <td colspan="5" class="px-6 py-4 text-center text-gray-500 dark:text-gray-400">
+                                    <td colspan="7" class="px-6 py-4 text-center text-gray-500 dark:text-gray-400">
                                         No Posts found
                                     </td>
                                 </tr>

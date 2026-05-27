@@ -105,6 +105,42 @@ class ViewsTrackingHelper
     }
 
     /**
+     * Get bulk views count untuk mencegah N+1 (digunakan di dashboard array of Posts)
+     */
+    public static function getPostViewCountsForCollection($posts)
+    {
+        $missingIds = [];
+        $counts = [];
+
+        foreach ($posts as $post) {
+            $postId = is_array($post) ? $post['id'] : $post->id;
+            $cacheKey = self::getCacheKey($postId);
+
+            if (Cache::has($cacheKey)) {
+                $counts[$postId] = Cache::get($cacheKey);
+            } else {
+                $missingIds[] = $postId;
+            }
+        }
+
+        if (!empty($missingIds)) {
+            $dbCounts = PostView::whereIn('post_id', $missingIds)
+                ->selectRaw('post_id, count(*) as count')
+                ->groupBy('post_id')
+                ->pluck('count', 'post_id');
+
+            foreach ($missingIds as $id) {
+                // Default ke 0 jika tidak ada views di db
+                $count = $dbCounts->get($id, 0); 
+                Cache::put(self::getCacheKey($id), $count, now()->addHours(self::CACHE_TTL_HOURS));
+                $counts[$id] = $count;
+            }
+        }
+
+        return $counts;
+    }
+
+    /**
      * Get cache key untuk views count post
      */
     private static function getCacheKey($postId)

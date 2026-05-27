@@ -39,7 +39,7 @@ Route::post('/logout', function () {
 
 
 // =========== Dashboard Page ==========
-Route::view('dashboard', 'livewire.dashboard.dashboard')
+Route::get('dashboard', \App\Livewire\Dashboard\Dashboard::class)
     ->middleware(['auth', 'verified'])
     ->name('dashboard');
 
