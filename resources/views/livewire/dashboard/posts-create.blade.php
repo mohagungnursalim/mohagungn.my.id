@@ -259,7 +259,7 @@
         {{-- Content CKEditor form create --}}
         <div class="mb-4" wire:ignore>
             <label class="block font-semibold mb-1">Content</label>
-            <textarea 
+            <textarea style="text-align: center;"
                 wire:model="content" 
                 id="editor" 
                 name="content"

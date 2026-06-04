@@ -2,10 +2,10 @@
 
 use App\Http\Controllers\Api\DataController;
 use App\Http\Controllers\CkeditorController;
-use App\Livewire\Dashboard\Dashboard;
 use App\Livewire\Dashboard\Categories;
 use App\Livewire\Dashboard\PermissionIndex;
 use App\Livewire\Dashboard\Posts;
+use App\Livewire\Dashboard\Dashboard;
 use App\Livewire\Dashboard\PostsCreate;
 use App\Livewire\Dashboard\PostsEdit;
 use App\Livewire\Dashboard\RoleIndex;
