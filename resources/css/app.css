@@ -71,4 +71,12 @@
     color: #7a8692 !important;
 }
 
-
+/* ==================================Responsive Iframe ================================= */
+iframe {
+    display: block;
+    margin: 0 auto;
+    max-width: 100%;
+    width: 100% !important;
+    height: auto !important;
+    aspect-ratio: 16 / 9 !important;
+}
