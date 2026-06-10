@@ -1,3 +1,9 @@
 User-agent: *
-Disallow:
-Sitemap: https://mohagungn.my.id/sitemap.xml
+Allow: /
+
+Disallow: /storage/debugbar/
+Disallow: /telescope/
+Disallow: /horizon/
+Disallow: /dashboard/
+
+Sitemap: https://mohagung.my.id/sitemap.xml
