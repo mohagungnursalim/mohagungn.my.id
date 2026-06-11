@@ -40,6 +40,8 @@
         {{ $slot }}
     </main>
 
+    
+
     <!-- Footer -->
     <footer class="border-t border-zinc-100 dark:border-zinc-800 mt-auto">
         <div class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-8 flex items-center justify-between text-sm text-zinc-500 dark:text-zinc-400">
