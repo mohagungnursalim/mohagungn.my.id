@@ -13,6 +13,21 @@
 
         <!-- Scripts -->
         @vite(['resources/css/app.css', 'resources/js/app.js'])
+
+        <!-- PWA Progress -->
+        <link rel="manifest" href="/manifest.json">
+        <meta name="theme-color" content="#ffffff">
+        <script>
+            if ('serviceWorker' in navigator) {
+                window.addEventListener('load', function() {
+                    navigator.serviceWorker.register('/sw.js').then(function(reg) {
+                        console.log('SW registered:', reg.scope);
+                    }).catch(function(err) {
+                        console.log('SW registration failed:', err);
+                    });
+                });
+            }
+        </script>
     </head>
     <body class="font-sans text-black antialiased bg-white">
         <div class="min-h-screen flex flex-col sm:justify-center items-center pt-6 sm:pt-0">

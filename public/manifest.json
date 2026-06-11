@@ -1,0 +1,21 @@
+{
+    "name": "mohagung.my.id - CMS",
+    "short_name": "mohagung.my.id",
+    "start_url": "/dashboard",
+    "display": "standalone",
+    "background_color": "#ffffff",
+    "theme_color": "#000000",
+    "description": "mohagung.my.id CMS",
+    "icons": [
+        {
+            "src": "/img/agungganteng.png",
+            "sizes": "192x192",
+            "type": "image/png"
+        },
+        {
+            "src": "/img/agungganteng.png",
+            "sizes": "512x512",
+            "type": "image/png"
+        }
+    ]
+}
