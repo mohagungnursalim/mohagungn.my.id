@@ -193,7 +193,7 @@
                     </div>
                 @endif
 
-                    <div class="mt-6 ml-4 flex flex-wrap items-center gap-4 text-sm text-zinc-600 dark:text-zinc-400">
+                    <div class="mt-6 flex flex-wrap items-center gap-4 text-sm text-zinc-600 dark:text-zinc-400">
                         <span style="font-family: monospace">
                             Built with
                         </span>
