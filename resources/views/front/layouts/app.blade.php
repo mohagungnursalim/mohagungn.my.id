@@ -12,20 +12,6 @@
         .prose pre { padding: 1.25rem; border-radius: 0.5rem; }
     </style>
     @livewireStyles
-    <!-- PWA Progress -->
-    <link rel="manifest" href="/manifest.json">
-    <meta name="theme-color" content="#ffffff">
-    <script>
-        if ('serviceWorker' in navigator) {
-            window.addEventListener('load', function() {
-                navigator.serviceWorker.register('/sw.js').then(function(reg) {
-                    console.log('SW registered:', reg.scope);
-                }).catch(function(err) {
-                    console.log('SW registration failed:', err);
-                });
-            });
-        }
-    </script>
 </head>
 <body class="bg-white text-zinc-900 dark:bg-zinc-950 dark:text-zinc-300 antialiased transition-colors duration-200 flex flex-col min-h-screen">
     <!-- Navbar -->
