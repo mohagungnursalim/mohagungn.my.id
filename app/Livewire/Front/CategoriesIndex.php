@@ -10,21 +10,10 @@ use Livewire\Component;
 class CategoriesIndex extends Component
 {
     public $categories = [];
-    public $readyToLoad = false;
 
     public function mount()
     {
         $this->categories = CategoriesCacheHelper::getFrontendCategories();
-    }
-
-    /**
-     * loadInitialContent
-     * Trigger loading of content when the component is ready.
-     * @return void
-     */
-    public function loadInitialContent()
-    {
-        $this->readyToLoad = true;
     }
 
     public function render()

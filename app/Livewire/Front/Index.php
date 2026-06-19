@@ -14,19 +14,6 @@ class Index extends Component
 {
     use WithPagination;
 
-    public $readyToLoad = false;
-
-        
-    /**
-     * loadInitialPosts
-     * Trigger loading of posts when the component is ready.
-     * @return void
-     */
-    public function loadInitialPosts()
-    {
-        $this->readyToLoad = true;
-    }
-    
     /**
      * render
      * Render the component view with posts and introduction post.
@@ -34,35 +21,27 @@ class Index extends Component
      */
     public function render()
     {
-        $posts = null;
-        $introPost = null;
-        $hasMore = false;
+        $introPost = Cache::remember('front.intro_post', now()->addMinutes(60), function () {
+            return Post::whereHas('categories', function ($query) {
+                $query->where('slug', 'introduction');
+            })
+            ->where('is_published', true)
+            ->first();
+        });
 
-        if ($this->readyToLoad) {
-            $introPost = Cache::remember('front.intro_post', now()->addMinutes(60), function () {
-                return Post::whereHas('categories', function ($query) {
+        $page = $this->page ?? request()->get('page', 1);
+        $cacheKey = PostsCacheHelper::versionedKey("front.posts.page.{$page}");
+
+        $posts = Cache::remember($cacheKey, now()->addSeconds(PostsCacheHelper::ttl()), function () {
+            return Post::with(['categories', 'tags'])
+                ->whereDoesntHave('categories', function ($query) {
                     $query->where('slug', 'introduction');
                 })
                 ->where('is_published', true)
-                ->first();
-            });
+                ->latest('published_at')
+                ->paginate(5);
+        });
 
-            $page = $this->page ?? request()->get('page', 1);
-            $cacheKey = PostsCacheHelper::versionedKey("front.posts.page.{$page}");
-
-            $posts = Cache::remember($cacheKey, now()->addSeconds(PostsCacheHelper::ttl()), function () {
-                return Post::with(['categories', 'tags'])
-                    ->whereDoesntHave('categories', function ($query) {
-                        $query->where('slug', 'introduction');
-                    })
-                    ->where('is_published', true)
-                    ->latest('published_at')
-                    ->paginate(5);
-            });
-
-            $hasMore = $posts ? $posts->hasMorePages() : false;
-        }
-
-        return view('livewire.front.index', compact('posts', 'introPost', 'hasMore'));
+        return view('livewire.front.index', compact('posts', 'introPost'));
     }
 }

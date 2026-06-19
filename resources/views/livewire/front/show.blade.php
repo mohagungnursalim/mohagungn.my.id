@@ -31,6 +31,36 @@
     @foreach($post->tags as $tag)
         <meta property="article:tag" content="{{ $tag->name }}">
     @endforeach
+
+    <!-- JSON-LD Structured Data for SEO -->
+    <script type="application/ld+json">
+    {
+      "@@context": "https://schema.org",
+      "@@type": "BlogPosting",
+      "mainEntityOfPage": {
+        "@@type": "WebPage",
+        "@@id": "{{ url()->current() }}"
+      },
+      "headline": "{{ $post->title }}",
+      "description": "{{ $excerpt }}",
+      "image": "{{ $imageUrl }}",  
+      "author": {
+        "@@type": "Person",
+        "name": "Mohagung",
+        "url": "{{ url('/') }}"
+      },  
+      "publisher": {
+        "@@type": "Organization",
+        "name": "MohAgungN",
+        "logo": {
+          "@@type": "ImageObject",
+          "url": "{{ url('/favicon.ico') }}"
+        }
+      },
+      "datePublished": "{{ \Carbon\Carbon::parse($post->published_at)->toIso8601String() }}",
+      "dateModified": "{{ $post->updated_at ? $post->updated_at->toIso8601String() : \Carbon\Carbon::parse($post->published_at)->toIso8601String() }}"
+    }
+    </script>
 @endsection
 
 <div>

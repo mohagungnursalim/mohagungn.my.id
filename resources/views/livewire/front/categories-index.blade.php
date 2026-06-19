@@ -4,47 +4,10 @@
     <meta name="description" content="Jelajahi semua kategori artikel">
 @endsection
 
-<div wire:init="loadInitialContent">
+<div>
 
-    @if(!$readyToLoad)
-        {{-- ===================== INITIAL PAGE SKELETON ===================== --}}
-        <div
-            wire:loading.flex
-            wire:target="loadInitialContent"
-            class="flex-col space-y-12 animate-pulse">
-
-            {{-- Hero Header --}}
-            <div class="mb-10 lg:mb-14 space-y-4">
-                <div class="h-10 w-72 rounded-xl bg-zinc-200 dark:bg-zinc-800"></div>
-
-                <div class="space-y-2">
-                    <div class="h-4 w-full max-w-3xl rounded-full bg-zinc-100 dark:bg-zinc-800/60"></div>
-                    <div class="h-4 w-5/6 rounded-full bg-zinc-100 dark:bg-zinc-800/60"></div>
-                </div>
-            </div>
-
-            {{-- Categories Grid Skeleton --}}
-            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-                @for ($i = 0; $i < 6; $i++)
-                    <div class="rounded-lg border border-zinc-100 dark:border-zinc-800/50 p-6 space-y-4">
-                        <div class="flex items-start justify-between">
-                            <div class="space-y-2 flex-1">
-                                <div class="h-6 w-32 rounded-full bg-zinc-200 dark:bg-zinc-800"></div>
-                                <div class="h-4 w-24 rounded-full bg-zinc-100 dark:bg-zinc-800/60"></div>
-                            </div>
-                            <div class="w-12 h-12 rounded-lg bg-zinc-200 dark:bg-zinc-800"></div>
-                        </div>
-                        <div class="h-8 w-16 rounded-full bg-zinc-100 dark:bg-zinc-800/60"></div>
-                    </div>
-                @endfor
-            </div>
-
-        </div>
-    @else
         {{-- ===================== REAL CONTENT ===================== --}}
-        <div
-            wire:loading.remove
-            wire:target="loadInitialContent">
+        <div>
 
             <div class="space-y-12">
 
@@ -140,5 +103,4 @@
             </div>
 
         </div>
-    @endif
 </div>

@@ -4,75 +4,10 @@
     <meta name="description" content="Artikel tentang {{ $category->name }}">
 @endsection
 
-<div wire:init="loadInitialPosts">
+<div>
 
-    @if(!$readyToLoad)
-        {{-- ===================== INITIAL PAGE SKELETON ===================== --}}
-        <div
-            wire:loading.flex
-            wire:target="loadInitialPosts"
-            class="flex-col space-y-12 animate-pulse">
-
-            {{-- Hero Header --}}
-            <div class="mb-10 lg:mb-14 space-y-4">
-                <div class="h-10 w-72 rounded-xl bg-zinc-200 dark:bg-zinc-800"></div>
-
-                <div class="space-y-2">
-                    <div class="h-4 w-full max-w-3xl rounded-full bg-zinc-100 dark:bg-zinc-800/60"></div>
-                    <div class="h-4 w-5/6 rounded-full bg-zinc-100 dark:bg-zinc-800/60"></div>
-                </div>
-            </div>
-
-            {{-- Posts Skeleton --}}
-            <div class="space-y-8 lg:space-y-10">
-
-                @for ($i = 0; $i < 5; $i++)
-
-                    <div>
-
-                        <article class="group relative flex flex-col items-start sm:flex-row sm:gap-x-6">
-
-                            {{-- Content --}}
-                            <div class="w-full sm:w-3/4 flex flex-col justify-center">
-
-                                {{-- Meta --}}
-                                <div class="flex items-center gap-x-2 mb-3">
-
-                                    {{-- Date --}}
-                                    <div class="h-3 w-24 rounded-full bg-zinc-200 dark:bg-zinc-800"></div>
-
-                                    {{-- Dot --}}
-                                    <div class="h-1.5 w-1.5 rounded-full bg-zinc-300 dark:bg-zinc-700"></div>
-
-                                    {{-- Category --}}
-                                    <div class="h-5 w-16 rounded-full bg-zinc-200 dark:bg-zinc-800"></div>
-
-                                </div>
-
-                                {{-- Title --}}
-                                <div class="space-y-2">
-                                    <div class="h-5 w-11/12 rounded-full bg-zinc-200 dark:bg-zinc-800"></div>
-                                    <div class="h-5 w-3/4 rounded-full bg-zinc-200 dark:bg-zinc-800"></div>
-                                </div>
-
-                            </div>
-
-                        </article>
-
-                        <div class="mt-8 border-t border-zinc-100 dark:border-zinc-800/80"></div>
-
-                    </div>
-
-                @endfor
-
-            </div>
-
-        </div>
-    @else
         {{-- ===================== REAL CONTENT ===================== --}}
-        <div
-            wire:loading.remove
-            wire:target="loadInitialPosts">
+        <div>
 
             <div class="space-y-12">
 
@@ -173,75 +108,12 @@
 
                 </div>
 
-                {{-- ===================== LOAD MORE SKELETON ===================== --}}
-                <div
-                    wire:loading.flex
-                    wire:target="loadMore"
-                    class="flex-col space-y-8 lg:space-y-10 mt-8 lg:mt-10 animate-pulse"
-                    aria-hidden="true"
-                >
-
-                    @for ($i = 0; $i < 3; $i++)
-
-                        <div>
-
-                            <article class="group relative flex flex-col items-start sm:flex-row sm:gap-x-6">
-
-                                {{-- Content --}}
-                                <div class="w-full sm:w-3/4 flex flex-col justify-center">
-
-                                    {{-- Meta --}}
-                                    <div class="flex items-center gap-x-2 mb-3">
-
-                                        <div class="h-3 w-24 rounded-full bg-zinc-200 dark:bg-zinc-800"></div>
-
-                                        <div class="h-1.5 w-1.5 rounded-full bg-zinc-300 dark:bg-zinc-700"></div>
-
-                                        <div class="h-5 w-16 rounded-full bg-zinc-200 dark:bg-zinc-800"></div>
-
-                                    </div>
-
-                                    {{-- Title --}}
-                                    <div class="space-y-2">
-                                        <div class="h-5 w-11/12 rounded-full bg-zinc-200 dark:bg-zinc-800"></div>
-                                        <div class="h-5 w-3/4 rounded-full bg-zinc-200 dark:bg-zinc-800"></div>
-                                    </div>
-
-                                </div>
-
-                            </article>
-
-                            <div class="w-full mt-8 border-t border-zinc-100 dark:border-zinc-800/80"></div>
-
-                        </div>
-
-                    @endfor
-
+                {{-- Sentinel / Pagination --}}
+                <div class="mt-8">
+                    {{ $posts->links() }}
                 </div>
-
-                {{-- Sentinel --}}
-                @if($hasMore)
-
-                    <div
-                        x-data
-                        x-intersect.once="false"
-                        id="infinite-scroll-sentinel"
-                        class="h-1 w-full"
-                        aria-hidden="true"
-                    ></div>
-
-                @else
-
-                    @if(count($posts) > 0)
-                        <div class="mt-10 text-center text-sm text-zinc-400 dark:text-zinc-600">
-                            — Semua artikel sudah ditampilkan —
-                        </div>
-                    @endif
-
-                @endif
 
             </div>
 
         </div>
-    @endif
 </div>
