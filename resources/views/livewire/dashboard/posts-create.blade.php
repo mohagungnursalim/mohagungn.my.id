@@ -120,7 +120,7 @@
     <link rel="stylesheet" href="https://cdn.ckeditor.com/ckeditor5/43.2.0/ckeditor5.css">
     @endpush
 
-    <a wire:navigate href="{{ route('dashboard.posts.index') }}" class="ml-2 text-lg dark:text-gray-300">
+    <a wire:navigate.hover href="{{ route('dashboard.posts.index') }}" class="ml-2 text-lg dark:text-gray-300">
         <h1 class="text-lg font-bold mb-6 mt-5 underline"><i class="fa-solid fa-arrow-left"></i> Back To Posts</h1>
     </a>
     <h4 class="text-2xl font-bold mb-6 mt-5">Create New Post</h4>

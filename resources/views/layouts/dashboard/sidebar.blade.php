@@ -2,7 +2,7 @@
     <div class="h-full px-3 pb-4 overflow-y-auto bg-white dark:bg-gray-800">
        <ul class="space-y-2 font-medium">
           <li>
-             <a wire:navigate href="{{ route('dashboard') }}" class="flex items-center p-2 text-gray-900 rounded-lg dark:text-white hover:bg-gray-100 dark:hover:bg-gray-700 group {{ request()->routeIs('dashboard') ? 'bg-gray-200 dark:bg-gray-600' : '' }}">
+             <a wire:navigate.hover href="{{ route('dashboard') }}" class="flex items-center p-2 text-gray-900 rounded-lg dark:text-white hover:bg-gray-100 dark:hover:bg-gray-700 group {{ request()->routeIs('dashboard') ? 'bg-gray-200 dark:bg-gray-600' : '' }}">
                <i class="fa-solid fa-chart-line"></i>
                 <span class="ms-3">Dashboard</span>
              </a>
@@ -15,7 +15,7 @@
             </button>
             <ul id="dropdown-example" class="text-sm {{ request()->routeIs(['dashboard.posts.index','dashboard.posts.create','dashboard.posts.edit','dashboard.categories','dashboard.tags']) ? '' : 'hidden' }} py-2 space-y-2">
                <li>
-                  <a wire:navigate href="{{ route('dashboard.posts.index') }}"
+                  <a wire:navigate.hover href="{{ route('dashboard.posts.index') }}"
                      class="flex items-center w-full p-2 rounded-lg pl-11 transition duration-75 group
                             text-gray-900 dark:text-white
                             hover:bg-gray-100 dark:hover:bg-gray-700
@@ -25,7 +25,7 @@
                   </a>
               </li>
                   <li>
-                     <a wire:navigate href="{{ route('dashboard.categories') }}"
+                     <a wire:navigate.hover href="{{ route('dashboard.categories') }}"
                         class="flex items-center w-full p-2 rounded-lg pl-11 transition duration-75 group
                                text-gray-900 dark:text-white
                                hover:bg-gray-100 dark:hover:bg-gray-700
@@ -36,7 +36,7 @@
                  </li>
                  
                  <li>
-                     <a wire:navigate href="{{ route('dashboard.tags') }}"
+                     <a wire:navigate.hover href="{{ route('dashboard.tags') }}"
                         class="flex items-center w-full p-2 rounded-lg pl-11 transition duration-75 group
                                text-gray-900 dark:text-white
                                hover:bg-gray-100 dark:hover:bg-gray-700
@@ -103,7 +103,7 @@
                      >
                         {{-- Roles --}}
                         <li>
-                              <a wire:navigate
+                              <a wire:navigate.hover
                                  href="{{ route('dashboard.roles.index') }}"
                                  class="flex items-center w-full p-2 pl-16 rounded-lg transition
                                        text-gray-900 dark:text-white
@@ -116,7 +116,7 @@
 
                         {{-- Permissions --}}
                         <li>
-                              <a wire:navigate
+                              <a wire:navigate.hover
                                  href="{{ route('dashboard.permissions.index') }}"
                                  class="flex items-center w-full p-2 pl-16 rounded-lg transition
                                        text-gray-900 dark:text-white
@@ -129,7 +129,7 @@
 
                         {{-- Users Management --}}
                         <li>
-                              <a wire:navigate
+                              <a wire:navigate.hover
                                  href="{{ route('dashboard.users.index') }}"
                                  class="flex items-center w-full p-2 pl-16 rounded-lg transition
                                        text-gray-900 dark:text-white

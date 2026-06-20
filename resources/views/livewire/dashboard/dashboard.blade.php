@@ -83,7 +83,7 @@
                         <p class="text-sm text-gray-500 dark:text-gray-400 mt-1">Here is a quick summary of your website metrics.</p>
                     </div>
                     <div>
-                        <a wire:navigate href="{{ route('dashboard.posts.create') }}" class="inline-flex items-center px-4 py-2 bg-blue-600 border border-transparent rounded-lg font-medium text-white hover:bg-blue-700 shadow-sm focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500 dark:focus:ring-offset-gray-800 transition">
+                        <a wire:navigate.hover href="{{ route('dashboard.posts.create') }}" class="inline-flex items-center px-4 py-2 bg-blue-600 border border-transparent rounded-lg font-medium text-white hover:bg-blue-700 shadow-sm focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500 dark:focus:ring-offset-gray-800 transition">
                             <i class="fa-solid fa-plus mr-2"></i> Create New Post
                         </a>
                     </div>

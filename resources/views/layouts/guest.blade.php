@@ -31,9 +31,9 @@
     </head>
     <body class="font-sans text-black antialiased bg-white">
         <div class="min-h-screen flex flex-col sm:justify-center items-center pt-6 sm:pt-0">
-            <div class="mb-2">
-                <a href="/" wire:navigate class="outline-none">
-                    <x-application-logo />
+            <div>
+                <a href="/" wire:navigate.hover class="outline-none">
+                    <x-application-logo class="w-16 h-16 sm:w-20 sm:h-20 fill-current text-white drop-shadow-md" />
                 </a>
             </div>
 

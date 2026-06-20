@@ -52,7 +52,7 @@
                                     </p>
 
                                     <a
-                                        wire:navigate
+                                        wire:navigate.hover
                                         href="{{ route('front.show', $introPost->slug) }}"
                                         class="inline-flex items-center gap-2 px-5 py-2.5 text-sm font-medium text-zinc-900 dark:text-zinc-50 bg-white dark:bg-zinc-800 rounded-lg border border-zinc-200 dark:border-zinc-700 hover:border-zinc-400 dark:hover:border-zinc-500 hover:shadow-md transition-all duration-200 group/btn"
                                     >
@@ -186,7 +186,7 @@
                                 {{-- Title --}}
                                 <h2 style="font-family:monospace" class="underline text-lg sm:text-xl font-bold leading-snug text-zinc-600 dark:text-zinc-100 group-hover:text-zinc-600 dark:group-hover:text-zinc-400 transition-colors duration-200">
 
-                                    <a wire:navigate href="{{ route('front.show', $post->slug) }}">
+                                    <a wire:navigate.hover href="{{ route('front.show', $post->slug) }}">
                                         <span class="absolute inset-0"></span>
                                         {{ $post->title }}
                                     </a>

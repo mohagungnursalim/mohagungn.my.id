@@ -7,7 +7,7 @@
         <div class="flex flex-wrap gap-2 md:gap-3">
             @foreach($categories as $category)
                 <a
-                    wire:navigate
+                    wire:navigate.hover
                     href="{{ route('front.category', $category->slug) }}"
                     class="inline-flex items-center gap-2 px-4 py-2 text-sm font-medium rounded-full transition-all duration-200 bg-zinc-100 dark:bg-zinc-800 text-zinc-700 dark:text-zinc-300 border border-zinc-200 dark:border-zinc-700 hover:bg-zinc-200 dark:hover:bg-zinc-700 hover:shadow-md"
                     title="Lihat artikel dari kategori {{ $category->name }}"

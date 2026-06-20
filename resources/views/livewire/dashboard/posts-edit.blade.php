@@ -118,7 +118,7 @@
     @endpush
 
     {{-- Tombol kembali --}}
-    <a wire:navigate href="{{ route('dashboard.posts.index') }}" class="ml-2 text-lg dark:text-gray-300">
+    <a wire:navigate.hover href="{{ route('dashboard.posts.index') }}" class="ml-2 text-lg dark:text-gray-300">
         <h1 class="text-lg font-bold mb-6 mt-5 underline">
             <i class="fa-solid fa-arrow-left"></i> Back To Posts
         </h1>
