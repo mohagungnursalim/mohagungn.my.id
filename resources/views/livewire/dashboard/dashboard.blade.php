@@ -5,8 +5,8 @@
             
             @if(!$loaded)
             {{-- Skeleton View --}}
-            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-6">
-                @for ($i = 0; $i < 4; $i++)
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-5 gap-6 mb-6">
+                @for ($i = 0; $i < 5; $i++)
                 <div class="bg-white border border-gray-200 rounded-lg shadow-sm p-6 dark:bg-gray-700 dark:border-gray-600">
                     <div class="flex items-center">
                         <div class="inline-flex flex-shrink-0 justify-center items-center w-12 h-12 bg-gray-200 dark:bg-gray-600 rounded-lg animate-pulse">
@@ -21,7 +21,7 @@
             </div>
             @else
             {{-- Actual Data View --}}
-            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-6">
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-5 gap-6 mb-6">
                 <!-- Total Posts -->
                 <div class="bg-white border border-gray-200 rounded-lg shadow-sm p-6 dark:bg-gray-700 dark:border-gray-600 hover:shadow-md transition">
                     <div class="flex items-center">
@@ -70,6 +70,19 @@
                         <div class="ml-4">
                             <p class="text-sm font-medium text-gray-500 truncate dark:text-gray-400">Total Views</p>
                             <p class="text-2xl font-semibold text-gray-900 dark:text-white">{{ number_format($metrics['total_views']) }}</p>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Total Money -->
+                <div class="bg-white border border-gray-200 rounded-lg shadow-sm p-6 dark:bg-gray-700 dark:border-gray-600 hover:shadow-md transition">
+                    <div class="flex items-center">
+                        <div class="inline-flex flex-shrink-0 justify-center items-center w-12 h-12 text-emerald-600 bg-emerald-100 rounded-lg dark:text-emerald-300 dark:bg-emerald-900">
+                            <i class="fa-solid fa-wallet text-xl"></i>
+                        </div>
+                        <div class="ml-4">
+                            <p class="text-sm font-medium text-gray-500 truncate dark:text-gray-400">Keuangan</p>
+                            <p class="text-2xl font-semibold text-gray-900 dark:text-white">Rp {{ number_format($metrics['total_money'], 0, ',', '.') }}</p>
                         </div>
                     </div>
                 </div>

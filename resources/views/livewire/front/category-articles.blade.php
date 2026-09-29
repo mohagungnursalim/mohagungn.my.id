@@ -15,7 +15,7 @@
                 <header class="mb-10 lg:mb-14">
                     <div class="flex items-center gap-3 mb-4">
                         <a
-                            wire:navigate
+                            wire:navigate.hover
                             href="/"
                             class="text-zinc-600 dark:text-zinc-400 hover:text-zinc-900 dark:hover:text-zinc-200 transition-colors"
                             title="Kembali ke halaman utama"
@@ -61,7 +61,7 @@
 
                                     @foreach($post->categories as $postCategory)
                                         <a
-                                            wire:navigate
+                                            wire:navigate.hover
                                             href="{{ route('front.category', $postCategory->slug) }}"
                                             class="inline-flex items-center px-2 py-0.5 rounded-full text-[11px] sm:text-xs font-semibold bg-zinc-100 dark:bg-zinc-800 text-zinc-700 dark:text-zinc-300 hover:bg-zinc-200 dark:hover:bg-zinc-700 transition-colors"
                                             title="Lihat lebih banyak artikel dari kategori ini">
@@ -81,7 +81,7 @@
                                 <h2 class="text-lg sm:text-xl font-bold leading-tight text-zinc-900 dark:text-zinc-50 hover:text-zinc-600 dark:hover:text-zinc-400 transition-colors">
 
                                     <a
-                                        wire:navigate
+                                        wire:navigate.hover
                                         href="{{ route('front.show', $post->slug) }}"
                                         class="hover:underline">
                                         {{ $post->title }}

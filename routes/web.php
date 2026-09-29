@@ -5,6 +5,7 @@ use App\Http\Controllers\CkeditorController;
 use App\Livewire\Dashboard\Categories;
 use App\Livewire\Dashboard\PermissionIndex;
 use App\Livewire\Dashboard\Posts;
+use App\Livewire\Dashboard\Finances;
 use App\Livewire\Dashboard\Dashboard;
 use App\Livewire\Dashboard\PostsCreate;
 use App\Livewire\Dashboard\PostsEdit;
@@ -96,6 +97,7 @@ Route::prefix('dashboard')->name('dashboard.')->middleware(['auth'])->group(func
     // ========= Tags & Categories ==========
     Route::get('/tags', Tags::class)->name('tags');   
     Route::get('/categories', Categories::class)->name('categories');
+    Route::get('/finances', Finances::class)->name('finances');
 
        /**
          * ROLE MANAGEMENT

@@ -8,6 +8,7 @@ use App\Models\PostView;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Cache;
 use App\Helpers\PostsCacheHelper;
+use App\Helpers\FinanceCacheHelper;
 
 class Dashboard extends Component
 {
@@ -16,7 +17,8 @@ class Dashboard extends Component
         'total_posts' => 0,
         'published_posts' => 0,
         'draft_posts' => 0,
-        'total_views' => 0
+        'total_views' => 0,
+        'total_money' => 0,
     ];
 
     public function mount()
@@ -46,12 +48,17 @@ class Dashboard extends Component
             $totalViews = PostView::whereHas('post', function ($query) use ($userId) {
                 $query->where('user_id', $userId);
             })->count();
+
+            // Gunakan FinanceCacheHelper — 1 query GROUP BY, anti N+1, filter bulan berjalan
+            $summary    = FinanceCacheHelper::monthlySummary();
+            $totalMoney = $summary['balance'];
             
             return [
-                'total_posts' => $totalPosts,
+                'total_posts'     => $totalPosts,
                 'published_posts' => $publishedPosts,
-                'draft_posts' => $draftPosts,
-                'total_views' => $totalViews
+                'draft_posts'     => $draftPosts,
+                'total_views'     => $totalViews,
+                'total_money'     => $totalMoney,
             ];
         });
 

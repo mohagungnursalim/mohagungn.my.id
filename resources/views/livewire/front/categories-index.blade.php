@@ -27,7 +27,7 @@
                     <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
                         @foreach($categories as $category)
                             <a
-                                wire:navigate
+                                wire:navigate.hover
                                 href="{{ route('front.category', $category->slug) }}"
                                 class="group relative rounded-xl border border-zinc-100 dark:border-zinc-800/50 bg-white dark:bg-zinc-900/30 hover:border-zinc-300 dark:hover:border-zinc-700 transition-all duration-300 overflow-hidden hover:shadow-lg hover:-translate-y-1"
                             >
