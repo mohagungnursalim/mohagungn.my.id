@@ -1,7 +1,7 @@
 {
     "name": "mohagung.my.id - CMS",
     "short_name": "mohagung.my.id",
-    "start_url": "/dashboard",
+    "start_url": "/dashboard/finances",
     "display": "standalone",
     "background_color": "#ffffff",
     "theme_color": "#000000",
