@@ -1,11 +1,11 @@
 {
-    "name": "mohagung.my.id - CMS",
-    "short_name": "mohagung.my.id",
+    "name": "Moh Agung Web",
+    "short_name": "Moh Agung Web",
     "start_url": "/dashboard/finances",
     "display": "standalone",
     "background_color": "#ffffff",
-    "theme_color": "#000000",
-    "description": "mohagung.my.id CMS",
+    "theme_color": "#fde047",
+    "description": "Moh Agung Nursalim Web",
     "icons": [
         {
             "src": "/img/agungganteng.png",
