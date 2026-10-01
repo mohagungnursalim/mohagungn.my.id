@@ -1,21 +1,11 @@
-const CACHE_NAME = 'mohagung-web-v2';
-const urlsToCache = [
-    '/',
-    '/dashboard/finances',
-    '/manifest.json'
-];
+const CACHE_NAME = 'mohagungnursalim-123';
+const urlsToCache = ['/'];
 
 self.addEventListener('install', (event) => {
     self.skipWaiting();
     event.waitUntil(
         caches.open(CACHE_NAME).then((cache) => {
-            return Promise.all(
-                urlsToCache.map((url) => {
-                    return cache.add(url).catch((error) => {
-                        console.error('Failed to cache:', url, error);
-                    });
-                })
-            );
+            return cache.addAll(urlsToCache);
         })
     );
 });
@@ -35,24 +25,7 @@ self.addEventListener('activate', (event) => {
 
 self.addEventListener('fetch', (event) => {
     if (event.request.method !== 'GET') return;
-    
     event.respondWith(
-        fetch(event.request)
-            .then((response) => {
-                const responseClone = response.clone();
-                caches.open(CACHE_NAME).then((cache) => {
-                    cache.put(event.request, responseClone);
-                });
-                return response;
-            })
-            .catch(() => {
-                return caches.match(event.request).then((cacheRes) => {
-                    if (cacheRes) return cacheRes;
-                    
-                    if (event.request.mode === 'navigate') {
-                        return caches.match('/dashboard/finances') || caches.match('/');
-                    }
-                });
-            })
+        fetch(event.request).catch(() => caches.match(event.request))
     );
 });
