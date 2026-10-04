@@ -3,18 +3,9 @@
         <div class="mb-4 sm:mb-0">
             <h1 class="text-2xl md:text-3xl text-gray-800 dark:text-gray-100 font-bold">Manajemen Keuangan</h1>
         </div>
-
-        <div class="grid grid-flow-col sm:auto-cols-max justify-start sm:justify-end gap-2">
-            <button @click="showModal = true; isEdit = false; $wire.resetFields()" class="btn bg-indigo-500 hover:bg-indigo-600 text-white rounded-lg px-4 py-2 flex items-center shadow-sm transition">
-                <svg class="w-4 h-4 fill-current opacity-50 shrink-0" viewBox="0 0 16 16">
-                    <path d="M15 7H9V1c0-.6-.4-1-1-1S7 .4 7 1v6H1c-.6 0-1 .4-1 1s.4 1 1 1h6v6c0 .6.4 1 1 1s1-.4 1-1V9h6c.6 0 1-.4 1-1s-.4-1-1-1z" />
-                </svg>
-                <span class="ml-2 font-medium">Tambah Transaksi</span>
-            </button>
-        </div>
     </div>
 
-
+  
 
     <!-- Summary Cards Bulan Berjalan -->
     <div class="grid grid-cols-1 sm:grid-cols-3 gap-4 mb-6">
@@ -57,7 +48,6 @@
         <header class="px-5 py-4 border-b border-gray-100 dark:border-gray-700 flex flex-col sm:flex-row justify-between items-center gap-3">
             <h2 class="font-semibold text-gray-800 dark:text-gray-100">
                 Transaksi Bulan <span class="text-indigo-600 dark:text-indigo-400">{{ \Carbon\Carbon::parse($filterMonth . '-01')->translatedFormat('F Y') }}</span>
-                <span class="text-gray-400 font-medium ml-1">({{ $finances->total() }})</span>
             </h2>
             <div class="flex flex-col sm:flex-row gap-2 w-full sm:w-auto">
                 <!-- Filter Bulan -->
@@ -153,12 +143,37 @@
                 </table>
             </div>
             
-            <!-- Pagination -->
-            <div class="mt-4">
-                {{ $finances->links() }}
+            <!-- Load More -->
+            @if($hasMore)
+            <div class="mt-4 flex justify-center">
+                <button wire:click="loadMore" wire:loading.attr="disabled" class="px-5 py-2.5 text-sm font-medium text-gray-700 bg-white border border-gray-300 rounded-lg shadow-sm hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 dark:bg-gray-700 dark:text-gray-200 dark:border-gray-600 dark:hover:bg-gray-600 transition-colors flex items-center">
+                    <span wire:loading.remove wire:target="loadMore">Muat Lebih Banyak</span>
+                    <span wire:loading wire:target="loadMore">
+                        <svg class="animate-spin -ml-1 mr-2 h-4 w-4 text-indigo-500 inline-block" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"><circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle><path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path></svg>
+                        Memuat...
+                    </span>
+                </button>
             </div>
+            @endif
         </div>
     </div>
+
+    <!-- Floating Action Button (FAB) - Hidden when modal is open -->
+    <button 
+        x-show="!showModal"
+        x-transition:enter="transition ease-out duration-300"
+        x-transition:enter-start="opacity-0 translate-y-8"
+        x-transition:enter-end="opacity-100 translate-y-0"
+        x-transition:leave="transition ease-in duration-200"
+        x-transition:leave-start="opacity-100 translate-y-0"
+        x-transition:leave-end="opacity-0 translate-y-8"
+        @click="showModal = true; isEdit = false; $wire.resetFields()" 
+        class="fixed bottom-8 right-8 z-30 flex items-center justify-center w-14 h-14 bg-indigo-500 hover:bg-indigo-600 text-white rounded-full shadow-lg hover:shadow-xl transition-all duration-300 focus:outline-none focus:ring-4 focus:ring-indigo-300 dark:focus:ring-indigo-800"
+        title="Tambah Transaksi">
+        <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"></path>
+        </svg>
+    </button>
 
     <!-- Background Overlay -->
     <div x-show="showModal" 
@@ -171,18 +186,20 @@
          class="fixed inset-0 z-40 bg-gray-900 bg-opacity-75 backdrop-blur-sm"
          @click="showModal = false" style="display: none;"></div>
 
-    <!-- Slide-in Modal dari Kiri -->
-    <div x-show="showModal"
-         x-transition:enter="transition ease-out duration-300"
-         x-transition:enter-start="-translate-x-full shadow-none"
-         x-transition:enter-end="translate-x-0 shadow-2xl"
-         x-transition:leave="transition ease-in duration-200"
-         x-transition:leave-start="translate-x-0 shadow-2xl"
-         x-transition:leave-end="-translate-x-full shadow-none"
-         @close-modal.window="showModal = false"
-         class="fixed inset-y-0 left-0 z-50 w-full max-w-sm bg-white dark:bg-gray-800 border-r border-gray-100 dark:border-gray-700 overflow-y-auto" style="display: none;">
-        
-        <div class="p-6 h-full flex flex-col">
+    <!-- Floating Center Modal -->
+    <div x-show="showModal" style="display: none;" class="fixed inset-0 z-50 flex items-center justify-center p-4 sm:p-6">
+        <div x-show="showModal"
+             x-transition:enter="ease-out duration-300"
+             x-transition:enter-start="opacity-0 scale-95"
+             x-transition:enter-end="opacity-100 scale-100"
+             x-transition:leave="ease-in duration-200"
+             x-transition:leave-start="opacity-100 scale-100"
+             x-transition:leave-end="opacity-0 scale-95"
+             @click.outside="showModal = false"
+             @close-modal.window="showModal = false"
+             class="bg-white dark:bg-gray-800 rounded-xl border border-gray-100 dark:border-gray-700 shadow-2xl max-w-lg w-full max-h-[90vh] flex flex-col relative overflow-hidden">
+            
+            <div class="p-6 flex flex-col h-full overflow-y-auto">
             <!-- Header -->
             <div class="flex items-center justify-between border-b border-gray-100 dark:border-gray-700 pb-4 mb-5">
                 <h3 class="text-xl font-bold text-gray-800 dark:text-gray-100" x-text="isEdit ? 'Edit Transaksi' : 'Tambah Transaksi'"></h3>
@@ -214,11 +231,44 @@
 
                 <div>
                     <label class="block text-sm font-semibold mb-2 text-gray-700 dark:text-gray-300">Jumlah (Rp)</label>
-                    <div class="relative">
+                    <div class="relative" 
+                         x-data="{ 
+                             displayAmount: '', 
+                             init() {
+                                 // Pantau perubahan dari Livewire (misal saat buka Edit / $wire.resetFields)
+                                 this.$watch('$wire.amount', value => {
+                                     this.formatDisplay(value);
+                                 });
+                                 this.formatDisplay($wire.amount);
+                             },
+                             formatDisplay(val) {
+                                 if (!val) {
+                                     this.displayAmount = '';
+                                     return;
+                                 }
+                                 let num = String(val).replace(/\D/g, '');
+                                 if(num.length > 0) {
+                                     this.displayAmount = new Intl.NumberFormat('id-ID').format(num);
+                                 } else {
+                                     this.displayAmount = '';
+                                 }
+                             },
+                             handleInput(e) {
+                                 // Hanya ambil digit angka
+                                 let val = e.target.value.replace(/\D/g, '');
+                                 if (val.length > 0) {
+                                     this.displayAmount = new Intl.NumberFormat('id-ID').format(val);
+                                     $wire.amount = val; // Di Livewire 3, ini berjalan secara 'deferred' (tidak nembak ke server langsung)
+                                 } else {
+                                     this.displayAmount = '';
+                                     $wire.amount = null;
+                                 }
+                             }
+                         }">
                         <div class="absolute inset-y-0 left-0 flex items-center pl-3 pointer-events-none">
                             <span class="text-gray-500 dark:text-gray-400 font-medium">Rp</span>
                         </div>
-                        <input type="number" wire:model="amount" class="w-full pl-10 pr-4 py-2 bg-white dark:bg-gray-700 text-gray-900 dark:text-gray-100 border border-gray-200 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-indigo-200 dark:focus:ring-indigo-500/50 focus:border-indigo-400 dark:focus:border-indigo-500 outline-none transition-all placeholder-gray-400 dark:placeholder-gray-500" placeholder="0">
+                        <input type="text" x-model="displayAmount" @input="handleInput" class="w-full pl-10 pr-4 py-2 bg-white dark:bg-gray-700 text-gray-900 dark:text-gray-100 border border-gray-200 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-indigo-200 dark:focus:ring-indigo-500/50 focus:border-indigo-400 dark:focus:border-indigo-500 outline-none transition-all placeholder-gray-400 dark:placeholder-gray-500" placeholder="0">
                     </div>
                     @error('amount') <span class="text-red-500 text-xs mt-1">{{ $message }}</span> @enderror
                 </div>
@@ -243,6 +293,7 @@
                 </div>
             </form>
         </div>
+    </div>
     </div>
 
     <!-- Modal Delete Confirmation (Slide from top/scale) -->

@@ -12,7 +12,13 @@ use Illuminate\Support\Facades\Cache;
 
 class Finances extends Component
 {
-    use WithPagination;
+    // Load More Optimization
+    public $perPage = 10;
+
+    public function loadMore()
+    {
+        $this->perPage += 10;
+    }
 
     // --- Form fields ---
     public $type = 'in';
@@ -32,8 +38,8 @@ class Finances extends Component
     }
 
     // Reset pagination saat filter berubah
-    public function updatedSearch(): void    { $this->resetPage(); }
-    public function updatedFilterMonth(): void { $this->resetPage(); }
+    public function updatedSearch(): void    { $this->perPage = 10; }
+    public function updatedFilterMonth(): void { $this->perPage = 10; }
 
     // ----------------------------------------------------------------
     // FORM HELPERS
@@ -145,17 +151,24 @@ class Finances extends Component
             $query->where('description', 'like', '%' . $this->search . '%');
         }
 
-        $finances = $query->orderBy('date', 'desc')
-                          ->orderBy('id', 'desc')
-                          ->paginate(10);
+        $rawFinances = $query->orderBy('date', 'desc')
+                             ->orderBy('id', 'desc')
+                             ->take($this->perPage + 1)
+                             ->get();
+        
+        $hasMore = $rawFinances->count() > $this->perPage;
+        $finances = $rawFinances->take($this->perPage);
 
         // Summary bulan berjalan dari cache (single query, tidak ada N+1)
         $summary = FinanceCacheHelper::monthlySummary($this->filterMonth);
 
         return view('livewire.dashboard.finances', [
             'finances' => $finances,
+            'hasMore'  => $hasMore,
             'summary'  => $summary,
             'filterMonth' => $this->filterMonth,
         ])->layout('layouts.dashboard.main');
     }
 }
+
+
