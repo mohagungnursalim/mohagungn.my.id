@@ -7,8 +7,10 @@ use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\Storage;
 use Livewire\Attributes\Url;
 use Livewire\Component;
+use Livewire\Attributes\Title;
 use App\Helpers\PostsCacheHelper; // ⬅️ Tambahkan ini
 
+#[Title('Artikel Anda')]
 class Posts extends Component
 {
     /**

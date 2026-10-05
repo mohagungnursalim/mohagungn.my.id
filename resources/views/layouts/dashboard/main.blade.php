@@ -17,7 +17,7 @@
         })();
     </script>
 
-    <title>Dashboard</title>
+    <title>{{ $title ?? 'Dashboard' }} - Moh Agung N</title>
     @vite(['resources/css/app.css', 'resources/js/app.js'])
     @livewireStyles
     @stack('styles')

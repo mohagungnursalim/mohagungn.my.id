@@ -3,9 +3,11 @@
 namespace App\Livewire\Dashboard;
 
 use Livewire\Component;
+use Livewire\Attributes\Title;
 use Spatie\Permission\Models\Permission;
 
 
+#[Title('Hak Akses')]
 class PermissionIndex extends Component
 {
     public $name = '';

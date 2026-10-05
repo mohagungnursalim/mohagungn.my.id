@@ -3,10 +3,12 @@
 namespace App\Livewire\Dashboard;
 
 use Livewire\Component;
+use Livewire\Attributes\Title;
 use App\Models\User;
 use Illuminate\Support\Facades\Hash;
 use Spatie\Permission\Models\Role;
 
+#[Title('Pengguna')]
 class UserIndex extends Component
 {
     public $users;

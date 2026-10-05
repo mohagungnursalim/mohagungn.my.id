@@ -10,7 +10,9 @@ use Illuminate\Support\Str;
 use Livewire\Attributes\Url;
 use Livewire\WithFileUploads;
 use Livewire\Component;
+use Livewire\Attributes\Title;
 
+#[Title('Kategori')]
 class Categories extends Component
 {
     use WithFileUploads;

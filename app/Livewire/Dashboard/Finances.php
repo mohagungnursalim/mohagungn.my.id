@@ -4,12 +4,14 @@ namespace App\Livewire\Dashboard;
 
 use Livewire\Component;
 use Livewire\WithPagination;
+use Livewire\Attributes\Title;
 use App\Models\Finance;
 use App\Helpers\PostsCacheHelper;
 use App\Helpers\FinanceCacheHelper;
 use Carbon\Carbon;
 use Illuminate\Support\Facades\Cache;
 
+#[Title('Manajemen Keuangan')]
 class Finances extends Component
 {
     // Load More Optimization

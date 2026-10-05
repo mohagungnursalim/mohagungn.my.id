@@ -3,6 +3,7 @@
 namespace App\Livewire\Dashboard;
 
 use Livewire\Component;
+use Livewire\Attributes\Title;
 use App\Models\Post;
 use App\Models\PostView;
 use Illuminate\Support\Facades\Auth;
@@ -10,6 +11,7 @@ use Illuminate\Support\Facades\Cache;
 use App\Helpers\PostsCacheHelper;
 use App\Helpers\FinanceCacheHelper;
 
+#[Title('Overview')]
 class Dashboard extends Component
 {
     public $loaded = false;

@@ -3,9 +3,11 @@
 namespace App\Livewire\Dashboard;
 
 use Livewire\Component;
+use Livewire\Attributes\Title;
 use Spatie\Permission\Models\Role;
 use Spatie\Permission\Models\Permission;
 
+#[Title('Grup Peran')]
 class RoleIndex extends Component
 {
     public bool $showPermissionsModal = false;

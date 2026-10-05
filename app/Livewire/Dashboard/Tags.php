@@ -3,12 +3,14 @@
 namespace App\Livewire\Dashboard;
 
 use Livewire\Component;
+use Livewire\Attributes\Title;
 use App\Models\Tag;
 use App\Helpers\TagsCacheHelper;
 use Illuminate\Support\Str;
 use Livewire\Attributes\Url;
 use Illuminate\Support\Facades\DB;
 
+#[Title('Tag Artikel')]
 class Tags extends Component
 {
     public $name, $showModalAdd;

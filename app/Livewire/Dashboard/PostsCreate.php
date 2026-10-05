@@ -3,6 +3,7 @@
 namespace App\Livewire\Dashboard;
 
 use Livewire\Component;
+use Livewire\Attributes\Title;
 use Livewire\WithFileUploads;
 use App\Models\Post;
 use App\Models\Category;
@@ -11,6 +12,7 @@ use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Str;
 use App\Helpers\PostsCacheHelper; 
 
+#[Title('Tulis Artikel')]
 class PostsCreate extends Component
 {
     use WithFileUploads;
