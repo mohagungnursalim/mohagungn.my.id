@@ -10,7 +10,7 @@
           <li>
              <a wire:navigate.hover href="{{ route('dashboard.finances') }}" class="flex items-center p-2 text-gray-900 rounded-lg dark:text-white hover:bg-gray-100 dark:hover:bg-gray-700 group {{ request()->routeIs('dashboard.finances') ? 'bg-gray-200 dark:bg-gray-600' : '' }}">
                <i class="fa-solid fa-wallet"></i>
-                <span class="ms-3">Keuangan</span>
+                <span class="ms-3">Finances</span>
              </a>
           </li>
           <li>
