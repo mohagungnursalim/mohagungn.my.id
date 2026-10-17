@@ -1,7 +1,7 @@
 <div class="px-4 sm:px-6 lg:px-8 py-8 w-full max-w-9xl mx-auto dark:bg-gray-900 min-h-screen" x-data="{ showModal: false, isEdit: false, deleteModal: false, itemToDelete: null }">
     <div class="sm:flex sm:justify-between sm:items-center mb-8">
         <div class="mb-4 sm:mb-0">
-            <h1 class="text-2xl md:text-3xl text-gray-800 dark:text-gray-100 font-bold">Manajemen Keuangan</h1>
+            <h1 class="text-2xl md:text-3xl text-gray-800 dark:text-gray-100 font-bold">Financial Management</h1>
         </div>
     </div>
 
@@ -15,7 +15,7 @@
                 <svg class="w-6 h-6 text-emerald-600 dark:text-emerald-400" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M12 4v16m8-8H4"/></svg>
             </div>
             <div>
-                <p class="text-xs font-semibold uppercase tracking-wider text-gray-500 dark:text-gray-400">Pemasukan Bulan Ini</p>
+                <p class="text-xs font-semibold uppercase tracking-wider text-gray-500 dark:text-gray-400">Income {{ \Carbon\Carbon::parse($filterMonth . '-01')->translatedFormat('F Y') }}</p>
                 <p class="text-xl font-bold text-emerald-600 dark:text-emerald-400 mt-0.5">Rp {{ number_format($summary['in'], 0, ',', '.') }}</p>
             </div>
         </div>
@@ -25,7 +25,7 @@
                 <svg class="w-6 h-6 text-rose-600 dark:text-rose-400" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M20 12H4"/></svg>
             </div>
             <div>
-                <p class="text-xs font-semibold uppercase tracking-wider text-gray-500 dark:text-gray-400">Pengeluaran Bulan Ini</p>
+                <p class="text-xs font-semibold uppercase tracking-wider text-gray-500 dark:text-gray-400">Expense {{ \Carbon\Carbon::parse($filterMonth . '-01')->translatedFormat('F Y') }}</p>
                 <p class="text-xl font-bold text-rose-600 dark:text-rose-400 mt-0.5">Rp {{ number_format($summary['out'], 0, ',', '.') }}</p>
             </div>
         </div>
@@ -35,7 +35,7 @@
                 <i class="fa-solid fa-wallet text-xl {{ $summary['balance'] >= 0 ? 'text-indigo-600 dark:text-indigo-400' : 'text-amber-600 dark:text-amber-400' }}"></i>
             </div>
             <div>
-                <p class="text-xs font-semibold uppercase tracking-wider text-gray-500 dark:text-gray-400">Saldo Bulan Ini</p>
+                <p class="text-xs font-semibold uppercase tracking-wider text-gray-500 dark:text-gray-400">Balance {{ \Carbon\Carbon::parse($filterMonth . '-01')->translatedFormat('F Y') }} </p>
                 <p class="text-xl font-bold {{ $summary['balance'] >= 0 ? 'text-indigo-600 dark:text-indigo-400' : 'text-amber-600 dark:text-amber-400' }} mt-0.5">
                     {{ $summary['balance'] >= 0 ? '+' : '' }}Rp {{ number_format($summary['balance'], 0, ',', '.') }}
                 </p>
@@ -47,7 +47,7 @@
     <div class="bg-white dark:bg-gray-800 shadow-lg rounded-xl border border-gray-100 dark:border-gray-700 relative overflow-hidden">
         <header class="px-5 py-4 border-b border-gray-100 dark:border-gray-700 flex flex-col sm:flex-row justify-between items-center gap-3">
             <h2 class="font-semibold text-gray-800 dark:text-gray-100">
-                Transaksi Bulan <span class="text-indigo-600 dark:text-indigo-400">{{ \Carbon\Carbon::parse($filterMonth . '-01')->translatedFormat('F Y') }}</span>
+                <span class="text-indigo-600 dark:text-indigo-400">{{ \Carbon\Carbon::parse($filterMonth . '-01')->translatedFormat('F Y') }}</span> All Transaction
             </h2>
             <div class="flex flex-col sm:flex-row gap-2 w-full sm:w-auto">
                 <!-- Filter Bulan -->
@@ -60,7 +60,7 @@
                             <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="m19 19-4-4m0-7A7 7 0 1 1 1 8a7 7 0 0 1 14 0Z"/>
                         </svg>
                     </div>
-                    <input type="text" wire:model.live.debounce.300ms="search" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-indigo-500 focus:border-indigo-500 block w-full pl-10 p-2 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white" placeholder="Cari transaksi...">
+                    <input type="text" wire:model.live.debounce.300ms="search" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-indigo-500 focus:border-indigo-500 block w-full pl-10 p-2 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white" placeholder="Search...">
                 </div>
             </div>
         </header>
@@ -69,11 +69,11 @@
                 <table class="table-auto w-full">
                     <thead class="text-xs font-semibold uppercase text-gray-500 dark:text-gray-400 bg-gray-50 dark:bg-gray-700 border-t border-b border-gray-100 dark:border-gray-600">
                         <tr>
-                            <th class="px-2 py-3 whitespace-nowrap"><div class="font-semibold text-left">Tanggal</div></th>
-                            <th class="px-2 py-3 whitespace-nowrap"><div class="font-semibold text-left">Deskripsi</div></th>
-                            <th class="px-2 py-3 whitespace-nowrap"><div class="font-semibold text-left">Tipe</div></th>
-                            <th class="px-2 py-3 whitespace-nowrap"><div class="font-semibold text-right">Jumlah (Rp)</div></th>
-                            <th class="px-2 py-3 whitespace-nowrap"><div class="font-semibold text-center">Aksi</div></th>
+                            <th class="px-2 py-3 whitespace-nowrap"><div class="font-semibold text-left">Date</div></th>
+                            <th class="px-2 py-3 whitespace-nowrap"><div class="font-semibold text-left">Description</div></th>
+                            <th class="px-2 py-3 whitespace-nowrap"><div class="font-semibold text-left">Type</div></th>
+                            <th class="px-2 py-3 whitespace-nowrap"><div class="font-semibold text-right">Amount (Rp)</div></th>
+                            <th class="px-2 py-3 whitespace-nowrap"><div class="font-semibold text-center">Action</div></th>
                         </tr>
                     </thead>
                     <tbody class="text-sm divide-y divide-gray-100 dark:divide-gray-700">
@@ -88,11 +88,11 @@
                             <td class="px-2 py-3 whitespace-nowrap">
                                 @if($finance->type === 'in')
                                     <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-emerald-100 text-emerald-700 dark:bg-emerald-900/30 dark:text-emerald-400 border border-emerald-200 dark:border-emerald-800">
-                                        Pemasukan
+                                        Income
                                     </span>
                                 @else
                                     <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-rose-100 text-rose-700 dark:bg-rose-900/30 dark:text-rose-400 border border-rose-200 dark:border-rose-800">
-                                        Pengeluaran
+                                        Expense
                                     </span>
                                 @endif
                             </td>
@@ -134,7 +134,7 @@
                             <td colspan="5" class="px-2 py-8 text-center text-gray-500 dark:text-gray-400">
                                 <div class="flex flex-col items-center justify-center">
                                     <svg class="w-12 h-12 text-gray-300 dark:text-gray-600 mb-3" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M20 12H4M8 16l-4-4 4-4M16 8l4 4-4 4"></path></svg>
-                                    <p>Belum ada transaksi.</p>
+                                    <p>No transactions yet.</p>
                                 </div>
                             </td>
                         </tr>
@@ -147,10 +147,10 @@
             @if($hasMore)
             <div class="mt-4 flex justify-center">
                 <button wire:click="loadMore" wire:loading.attr="disabled" class="px-5 py-2.5 text-sm font-medium text-gray-700 bg-white border border-gray-300 rounded-lg shadow-sm hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 dark:bg-gray-700 dark:text-gray-200 dark:border-gray-600 dark:hover:bg-gray-600 transition-colors flex items-center">
-                    <span wire:loading.remove wire:target="loadMore">Muat Lebih Banyak</span>
+                    <span wire:loading.remove wire:target="loadMore">Load More</span>
                     <span wire:loading wire:target="loadMore">
                         <svg class="animate-spin -ml-1 mr-2 h-4 w-4 text-indigo-500 inline-block" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"><circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle><path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path></svg>
-                        Memuat...
+                        Loading...
                     </span>
                 </button>
             </div>
@@ -169,7 +169,7 @@
         x-transition:leave-end="opacity-0 translate-y-8"
         @click="showModal = true; isEdit = false; $wire.resetFields()" 
         class="fixed bottom-8 right-8 z-30 flex items-center justify-center w-14 h-14 bg-indigo-500 hover:bg-indigo-600 text-white rounded-full shadow-lg hover:shadow-xl transition-all duration-300 focus:outline-none focus:ring-4 focus:ring-indigo-300 dark:focus:ring-indigo-800"
-        title="Tambah Transaksi">
+        title="Add Transaction">
         <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"></path>
         </svg>
@@ -202,7 +202,7 @@
             <div class="p-6 flex flex-col h-full overflow-y-auto">
             <!-- Header -->
             <div class="flex items-center justify-between border-b border-gray-100 dark:border-gray-700 pb-4 mb-5">
-                <h3 class="text-xl font-bold text-gray-800 dark:text-gray-100" x-text="isEdit ? 'Edit Transaksi' : 'Tambah Transaksi'"></h3>
+                <h3 class="text-xl font-bold text-gray-800 dark:text-gray-100" x-text="isEdit ? 'Edit Transaction' : 'Add Transaction'"></h3>
                 <button @click="showModal = false" class="text-gray-400 hover:text-gray-500 dark:hover:text-gray-300 rounded-full p-2 bg-gray-50 dark:bg-gray-700 hover:bg-gray-100 dark:hover:bg-gray-600 transition-colors">
                     <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path></svg>
                 </button>
@@ -211,18 +211,18 @@
             <!-- Form -->
             <form wire:submit.prevent="save" class="flex-1 overflow-y-auto pr-2 pb-6 space-y-5">
                 <div>
-                    <label class="block text-sm font-semibold mb-2 text-gray-700 dark:text-gray-300">Tipe Transaksi</label>
+                    <label class="block text-sm font-semibold mb-2 text-gray-700 dark:text-gray-300">Type Transaction</label>
                     <div class="grid grid-cols-2 gap-3">
                         <label class="cursor-pointer relative">
                             <input type="radio" wire:model="type" value="in" class="peer sr-only">
                             <div class="p-3 text-center rounded-lg border border-gray-200 dark:border-gray-600 peer-checked:border-emerald-500 dark:peer-checked:border-emerald-500 peer-checked:bg-emerald-50 dark:peer-checked:bg-emerald-900/30 peer-checked:text-emerald-700 dark:peer-checked:text-emerald-400 hover:bg-gray-50 dark:hover:bg-gray-700 transition-all font-medium text-gray-600 dark:text-gray-400 block w-full">
-                                Pemasukan
+                                Income
                             </div>
                         </label>
                         <label class="cursor-pointer relative">
                             <input type="radio" wire:model="type" value="out" class="peer sr-only">
                             <div class="p-3 text-center rounded-lg border border-gray-200 dark:border-gray-600 peer-checked:border-rose-500 dark:peer-checked:border-rose-500 peer-checked:bg-rose-50 dark:peer-checked:bg-rose-900/30 peer-checked:text-rose-700 dark:peer-checked:text-rose-400 hover:bg-gray-50 dark:hover:bg-gray-700 transition-all font-medium text-gray-600 dark:text-gray-400 block w-full">
-                                Pengeluaran
+                                Expense
                             </div>
                         </label>
                     </div>
@@ -230,7 +230,7 @@
                 </div>
 
                 <div>
-                    <label class="block text-sm font-semibold mb-2 text-gray-700 dark:text-gray-300">Jumlah (Rp)</label>
+                    <label class="block text-sm font-semibold mb-2 text-gray-700 dark:text-gray-300">Amount (Rp)</label>
                     <div class="relative" 
                          x-data="{ 
                              displayAmount: '', 
@@ -274,21 +274,21 @@
                 </div>
 
                 <div>
-                    <label class="block text-sm font-semibold mb-2 text-gray-700 dark:text-gray-300">Tanggal</label>
-                    <input type="date" wire:model="date" class="w-full px-4 py-2 bg-white dark:bg-gray-700 text-gray-900 dark:text-gray-100 border border-gray-200 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-indigo-200 dark:focus:ring-indigo-500/50 focus:border-indigo-400 dark:focus:border-indigo-500 outline-none transition-all">
+                    <label class="block text-sm font-semibold mb-2 text-gray-700 dark:text-gray-300">Date</label>
+                    <input type="datetime-local" wire:model="date" class="w-full px-4 py-2 bg-white dark:bg-gray-700 text-gray-900 dark:text-gray-100 border border-gray-200 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-indigo-200 dark:focus:ring-indigo-500/50 focus:border-indigo-400 dark:focus:border-indigo-500 outline-none transition-all">
                     @error('date') <span class="text-red-500 text-xs mt-1">{{ $message }}</span> @enderror
                 </div>
 
                 <div>
-                    <label class="block text-sm font-semibold mb-2 text-gray-700 dark:text-gray-300">Deskripsi</label>
-                    <textarea wire:model="description" rows="3" class="w-full px-4 py-2 bg-white dark:bg-gray-700 text-gray-900 dark:text-gray-100 border border-gray-200 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-indigo-200 dark:focus:ring-indigo-500/50 focus:border-indigo-400 dark:focus:border-indigo-500 outline-none transition-all resize-none placeholder-gray-400 dark:placeholder-gray-500" placeholder="Masukkan keterangan tambahan..."></textarea>
+                    <label class="block text-sm font-semibold mb-2 text-gray-700 dark:text-gray-300">Description</label>
+                    <textarea wire:model="description" rows="3" class="w-full px-4 py-2 bg-white dark:bg-gray-700 text-gray-900 dark:text-gray-100 border border-gray-200 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-indigo-200 dark:focus:ring-indigo-500/50 focus:border-indigo-400 dark:focus:border-indigo-500 outline-none transition-all resize-none placeholder-gray-400 dark:placeholder-gray-500" placeholder="Additional Information..."></textarea>
                     @error('description') <span class="text-red-500 text-xs mt-1">{{ $message }}</span> @enderror
                 </div>
                 
                 <div class="pt-4 border-t border-gray-100 dark:border-gray-700 mt-4">
                     <button type="submit" class="w-full py-3 bg-indigo-500 hover:bg-indigo-600 dark:bg-indigo-600 dark:hover:bg-indigo-700 text-white font-semibold rounded-lg shadow-sm transition-colors flex justify-center items-center">
-                        <span wire:loading.remove wire:target="save">Simpan Data</span>
-                        <span wire:loading wire:target="save">Memproses...</span>
+                        <span wire:loading.remove wire:target="save">Save</span>
+                        <span wire:loading wire:target="save">Saving...</span>
                     </button>
                 </div>
             </form>
@@ -322,8 +322,8 @@
                     <div class="w-16 h-16 rounded-full bg-rose-100 dark:bg-rose-900/30 text-rose-500 dark:text-rose-400 flex items-center justify-center mx-auto mb-4">
                         <svg class="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z"></path></svg>
                     </div>
-                    <h3 class="text-lg font-bold text-gray-900 dark:text-gray-100 mb-2">Hapus Transaksi</h3>
-                    <p class="text-sm text-gray-500 dark:text-gray-400 mb-6">Apakah Anda yakin ingin menghapus transaksi ini? Data yang dihapus tidak dapat dikembalikan.</p>
+                    <h3 class="text-lg font-bold text-gray-900 dark:text-gray-100 mb-2">Delete Transaction</h3>
+                    <p class="text-sm text-gray-500 dark:text-gray-400 mb-6">Are you sure you want to delete this transaction? Deleted data cannot be recovered.</p>
                     <div class="flex space-x-3">
                         <button @click="deleteModal = false" class="flex-1 py-2 bg-white dark:bg-gray-700 border border-gray-300 dark:border-gray-600 text-gray-700 dark:text-gray-300 rounded-lg hover:bg-gray-50 dark:hover:bg-gray-600 font-medium transition-colors">
                             Batal
