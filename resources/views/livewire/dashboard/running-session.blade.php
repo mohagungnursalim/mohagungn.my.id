@@ -64,7 +64,7 @@
     </div>
 
     {{-- LEAFLET INTERACTIVE MAP SECTION --}}
-    <div wire:poll.5s class="mb-6 bg-white dark:bg-gray-800 rounded-2xl border border-gray-200 dark:border-gray-700 shadow-sm overflow-hidden"
+    <div class="mb-6 bg-white dark:bg-gray-800 rounded-2xl border border-gray-200 dark:border-gray-700 shadow-sm overflow-hidden"
         wire:ignore x-data="runningMapManager(@js($mapData))" x-init="init()">
 
         {{-- Map Controls Toolbar --}}
@@ -399,14 +399,15 @@
                         </div>
 
                         {{-- Route Action Buttons --}}
-                        <div class="flex items-center gap-1.5 self-end sm:self-auto">
+                       <div class="flex items-center gap-1.5 self-end sm:self-auto">
                             <button type="button" wire:click="openRouteModal({{ $route->id }})" aria-label="Edit route"
                                 class="p-1.5 text-gray-500 hover:text-gray-700 dark:text-gray-400 dark:hover:text-gray-200 hover:bg-gray-100 dark:hover:bg-gray-700 rounded-lg transition-colors">
                                 <i class="fa-solid fa-pen-to-square text-xs"></i>
                             </button>
-
-                            <button type="button" wire:click="deleteRoute({{ $route->id }})"
-                                wire:confirm="Yakin ingin menghapus rute ini beserta water station di dalamnya?"
+                                
+                            {{-- Set routeIdToDelete di Livewire saat diklik --}}
+                            <button type="button" 
+                                wire:click="$set('routeIdToDelete', {{ $route->id }})"
                                 class="px-2.5 py-1 text-xs text-rose-600 hover:bg-rose-50 dark:hover:bg-rose-950/30 rounded-lg transition-colors">
                                 <i class="fa-solid fa-trash-can mr-1"></i> Delete
                             </button>
@@ -602,7 +603,7 @@
                     <div class="flex items-center justify-end gap-2 pt-3 border-t border-gray-100 dark:border-gray-700">
                         <button type="button" @click="routeModalOpen = false"
                             class="px-4 py-2 text-xs font-semibold text-gray-600 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700 rounded-lg">
-                            Cancel
+                            Close
                         </button>
                         <button type="submit"
                             class="px-4 py-2 text-xs font-semibold bg-indigo-600 hover:bg-indigo-700 text-white rounded-lg shadow-sm">
@@ -721,7 +722,7 @@
                     <div class="flex items-center justify-end gap-2 pt-3 border-t border-gray-100 dark:border-gray-700">
                         <button type="button" @click="stationModalOpen = false"
                             class="px-4 py-2 text-xs font-semibold text-gray-600 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700 rounded-lg">
-                            Cancel
+                            Close
                         </button>
                         <button type="submit"
                             class="px-4 py-2 text-xs font-semibold bg-cyan-600 hover:bg-cyan-700 text-white rounded-lg shadow-sm">
@@ -759,7 +760,7 @@
                 <div class="flex items-center justify-center gap-3 mt-6">
                     <button type="button" @click="deleteSessionModalOpen = false"
                         class="px-4 py-2 text-xs font-semibold text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700 rounded-lg">
-                        Cancel
+                        Close
                     </button>
                     <button type="button" wire:click="deleteSession" @click="deleteSessionModalOpen = false"
                         class="px-4 py-2 text-xs font-semibold bg-rose-600 hover:bg-rose-700 text-white rounded-lg shadow-sm">
@@ -770,36 +771,45 @@
         </div>
     </div>
 
-    {{-- MODAL 4: Delete Route Confirmation Modal --}}
-    <div x-cloak x-show="routeIdToDelete !== null" role="dialog" aria-modal="true"
-        class="fixed inset-0 z-50 overflow-y-auto" style="display: none;">
+   {{-- MODAL DELETE ROUTE (GLOBAL) --}}
+    <div x-cloak 
+        x-show="$wire.routeIdToDelete !== null" 
+        role="dialog" 
+        aria-modal="true"
+        class="fixed inset-0 z-50 overflow-y-auto">
 
-        <div class="fixed inset-0 bg-gray-900/60 backdrop-blur-xs" @click="routeIdToDelete = null"></div>
+        {{-- Backdrop --}}
+        <div class="fixed inset-0 bg-gray-900/60 backdrop-blur-xs" @click="$wire.set('routeIdToDelete', null)"></div>
 
         <div class="min-h-full flex items-center justify-center p-4">
-            <div class="relative bg-white dark:bg-gray-800 rounded-2xl border border-gray-200 dark:border-gray-700 w-full max-w-sm shadow-xl p-5"
-                @click.outside="routeIdToDelete = null">
+            <div class="relative bg-white dark:bg-gray-800 rounded-2xl border border-gray-200 dark:border-gray-700 w-full max-w-md shadow-xl p-6"
+                @click.outside="$wire.set('routeIdToDelete', null)">
 
-                <h3 class="text-sm font-bold text-gray-900 dark:text-white text-center">
+                <div class="w-12 h-12 rounded-full bg-rose-100 text-rose-600 dark:bg-rose-950/50 dark:text-rose-400 flex items-center justify-center mx-auto mb-4 text-xl">
+                    <i class="fa-solid fa-triangle-exclamation"></i>
+                </div>
+
+                <h3 class="text-base font-bold text-gray-900 dark:text-white text-center">
                     Delete Route?
                 </h3>
-                <p class="text-xs text-gray-500 dark:text-gray-400 text-center mt-1">
-                    All associated water stations on this route will also be removed.
+                <p class="text-xs text-gray-500 dark:text-gray-400 text-center mt-1.5 leading-relaxed">
+                   This will permanently delete the route and all water stations within it. This action cannot be undone.
                 </p>
 
-                <div class="flex items-center justify-center gap-3 mt-4">
-                    <button type="button" @click="routeIdToDelete = null"
-                        class="px-3 py-1.5 text-xs font-semibold text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700 rounded-lg">
-                        Cancel
+                <div class="flex items-center justify-center gap-3 mt-6">
+                    <button type="button" @click="$wire.set('routeIdToDelete', null)"
+                        class="px-4 py-2 text-xs font-semibold text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700 rounded-lg">
+                        Close
                     </button>
-                    <button type="button" wire:click="deleteRoute(routeIdToDelete)"
-                        class="px-3 py-1.5 text-xs font-semibold bg-rose-600 hover:bg-rose-700 text-white rounded-lg shadow-sm">
-                        Delete Route
+                    <button type="button" wire:click="deleteRoute($wire.routeIdToDelete)"
+                        class="px-4 py-2 text-xs font-semibold bg-rose-600 hover:bg-rose-700 text-white rounded-lg shadow-sm">
+                        Yes, Delete Route
                     </button>
                 </div>
             </div>
         </div>
     </div>
+    
 </div>
 
 @push('styles')
@@ -848,1202 +858,316 @@
 
 
 @push('scripts')
-
 <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"
     integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo=" crossorigin=""></script>
 
-
-
 <script>
     function runningMapManager(initialMapData) {
-
         return {
-
             map: null,
-
             mode: 'view', // 'view', 'draw_route', 'add_station'
-
             routeData: initialMapData.route || null,
-
             tempPoints: [],
-
             tempPolyline: null,
-
             tempPointMarkers: [],
-
             routeLayers: [],
-
             stationMarkers: [],
-
+            tempStationMarker: null, // 🔴 Marker sementara untuk Drink Spot
             drawnDistanceKm: '0.00',
 
-
-
             init() {
-
                 this.loadLeafletThen(() => {
-
                     this.initMap();
-
                 });
-                // 🔴 Tangkap Notifikasi Global dengan SweetAlert2 (Mode Toast)
-                    Livewire.on('notify', (data) => {
-                        const payload = Array.isArray(data) ? data[0] : data;
-                        const type = payload.type || 'info'; // success, error, warning, info
-                        const message = payload.message || '';
-                        
-                        // Konfigurasi SweetAlert sebagai Toast
-                        const Toast = Swal.mixin({
-                            toast: true,
-                            position: 'top-end',
-                            showConfirmButton: false,
-                            timer: 3000,
-                            timerProgressBar: true,
-                            didOpen: (toast) => {
-                                toast.onmouseenter = Swal.stopTimer;
-                                toast.onmouseleave = Swal.resumeTimer;
-                            }
-                        });
 
-                        Toast.fire({
-                            icon: type,
-                            title: message
-                        });
+                // Tangkap Notifikasi Global dengan SweetAlert2 (Mode Toast)
+                Livewire.on('notify', (data) => {
+                    const payload = Array.isArray(data) ? data[0] : data;
+                    const type = payload.type || 'info'; 
+                    const message = payload.message || '';
+                    
+                    const Toast = Swal.mixin({
+                        toast: true,
+                        position: 'top-end',
+                        showConfirmButton: false,
+                        timer: 3000,
+                        timerProgressBar: true,
+                        didOpen: (toast) => {
+                            toast.onmouseenter = Swal.stopTimer;
+                            toast.onmouseleave = Swal.resumeTimer;
+                        }
                     });
 
-
-                // 🔴 Dengarkan event dari Livewire saat tombol edit diklik
-
-                Livewire.on('focus-route-on-map', ({
-                    route
-                }) => {
-
-                    this.routeData = route;
-
-                    this.renderRouteAndStations();
-
-                    this.fitBounds();
-
-
-
-                    // Scroll halus ke elemen peta jika posisi tombol jauh di bawah
-
-                    const mapEl = document.getElementById('running-leaflet-map');
-
-                    if (mapEl) {
-
-                        mapEl.scrollIntoView({
-                            behavior: 'smooth',
-                            block: 'center'
-                        });
-
-                    }
-
+                    Toast.fire({ icon: type, title: message });
                 });
 
+                // Dengarkan event dari Livewire saat data rute di-refresh (misal setelah save route/station)
+                Livewire.on('focus-route-on-map', (data) => {
+                    const route = Array.isArray(data) ? data[0].route : data.route;
+                    if (!route) return;
+
+                    this.routeData = route;
+                    this.renderRouteAndStations();
+                    this.fitBounds();
+
+                    // Scroll halus ke elemen peta
+                    const mapEl = document.getElementById('running-leaflet-map');
+                    if (mapEl) {
+                        mapEl.scrollIntoView({ behavior: 'smooth', block: 'center' });
+                    }
+                });
             },
-
-
 
             loadLeafletThen(callback) {
-
                 if (window.L) {
-
                     callback();
-
                     return;
-
                 }
-
                 const checkInterval = setInterval(() => {
-
                     if (window.L) {
-
                         clearInterval(checkInterval);
-
                         callback();
-
                     }
-
                 }, 50);
-
             },
 
-
-
             initMap() {
-
                 const mapEl = document.getElementById('running-leaflet-map');
+                if (!mapEl) return;
 
-                if (!mapEl || this.map) return;
-
-
-
-                // Center default: Kota Palu, Sulawesi Tengah
-
-                let center = [-0.8917, 119.8707];
-
-                let zoom = 13;
-
-
-
-                // Jika sudah ada rute tersimpan, fokus ke titik awal rute
-
-                if (this.routeData && this.routeData.path && this.routeData.path.length > 0) {
-
-                    center = this.routeData.path[0];
-
-                    zoom = 14;
-
-                } else if (this.routeData && this.routeData.stations && this.routeData.stations.length > 0) {
-
-                    center = [this.routeData.stations[0].lat, this.routeData.stations[0].lng];
-
-                    zoom = 14;
-
+                // FIX BUG BLANK MAP: Hancurkan instance peta lama jika DOM direplace
+                if (this.map) {
+                    this.map.remove();
+                    this.map = null;
+                }
+                if (mapEl._leaflet_id) {
+                    mapEl._leaflet_id = null;
                 }
 
+                // Center default: Kota Palu, Sulawesi Tengah
+                let center = [-0.8917, 119.8707];
+                let zoom = 14;
 
+                // Jika sudah ada rute tersimpan, set center ke titik awal rute
+                if (this.routeData && this.routeData.path && this.routeData.path.length > 0) {
+                    center = this.routeData.path[0];
+                    zoom = 14;
+                } else if (this.routeData && this.routeData.stations && this.routeData.stations.length > 0) {
+                    center = [this.routeData.stations[0].lat, this.routeData.stations[0].lng];
+                    zoom = 14;
+                }
 
                 this.map = L.map(mapEl).setView(center, zoom);
 
-
-
                 // Tile OpenStreetMap
-
                 L.tileLayer('https://tile.openstreetmap.org/{z}/{x}/{y}.png', {
-
                     maxZoom: 19,
-
                     attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a>'
-
                 }).addTo(this.map);
 
-
-
-
-                // Render rute & water station yang ada di DB
-
+                // Render rute & water station
                 this.renderRouteAndStations();
 
-
-
                 // Map Click Listener
-
                 this.map.on('click', (e) => {
-
                     this.handleMapClick(e);
-
                 });
-
-
-
-                // Auto-fit bounds jika rute/station sudah ada
 
                 this.fitBounds();
 
-
-
-                // Listen Livewire navigation update
-
+                // FIX BUG BLANK MAP: Re-calculate map size
                 window.addEventListener('livewire:navigated', () => {
-
-                    setTimeout(() => this.map && this.map.invalidateSize(), 200);
-
+                    setTimeout(() => this.map && this.map.invalidateSize(), 300);
                 });
-
+                setTimeout(() => {
+                    if (this.map) this.map.invalidateSize();
+                }, 300);
             },
-
-
 
             setMode(newMode) {
-
                 this.mode = newMode;
-
                 const mapEl = document.getElementById('running-leaflet-map');
 
-
-
-                if (newMode === 'draw_route') {
-
-                    mapEl.style.cursor = 'crosshair';
-
-                } else if (newMode === 'add_station') {
-
-                    mapEl.style.cursor = 'cell';
-
-                } else {
-
-                    mapEl.style.cursor = '';
-
-                }
-
+                if (newMode === 'draw_route') mapEl.style.cursor = 'crosshair';
+                else if (newMode === 'add_station') mapEl.style.cursor = 'cell';
+                else mapEl.style.cursor = '';
             },
-
-
 
             handleMapClick(e) {
-
                 const lat = parseFloat(e.latlng.lat.toFixed(7));
-
                 const lng = parseFloat(e.latlng.lng.toFixed(7));
 
-
-
                 if (this.mode === 'draw_route') {
-
                     this.tempPoints.push([lat, lng]);
-
                     this.updateTempPolyline();
-
                 } else if (this.mode === 'add_station') {
-
                     if (!this.routeData || !this.routeData.id) {
-
                         alert('Silakan buat rute terlebih dahulu sebelum menambah water station.');
-
                         this.setMode('view');
-
                         return;
-
                     }
 
+                    // 🔴 Bersihkan marker sementara sebelumnya (jika ada klik ganda)
+                    if (this.tempStationMarker) {
+                        this.map.removeLayer(this.tempStationMarker);
+                    }
 
+                    // 🔴 Tampilkan marker sementara seketika
+                    const tempIcon = L.divIcon({
+                        className: 'station-marker-pin bg-emerald-500',
+                        html: '<i class="fa-solid fa-droplet text-white"></i>',
+                        iconSize: [28, 28],
+                        iconAnchor: [14, 14]
+                    });
+
+                    this.tempStationMarker = L.marker([lat, lng], { icon: tempIcon }).addTo(this.map);
+                    this.tempStationMarker.bindPopup(`<strong>Menunggu Disimpan...</strong>`).openPopup();
 
                     // Buka modal station via Livewire
-
                     this.$wire.openStationModal(this.routeData.id, null, lat, lng);
-
                     this.setMode('view');
-
                 }
-
             },
-
-
 
             updateTempPolyline() {
-
-                if (this.tempPolyline) {
-
-                    this.map.removeLayer(this.tempPolyline);
-
-                }
-
+                if (this.tempPolyline) this.map.removeLayer(this.tempPolyline);
                 this.tempPointMarkers.forEach(m => this.map.removeLayer(m));
-
                 this.tempPointMarkers = [];
 
-
-
                 if (this.tempPoints.length === 0) {
-
                     this.drawnDistanceKm = '0.00';
-
                     return;
-
                 }
-
-
-
-                // Garis putus-putus saat menggambar
 
                 this.tempPolyline = L.polyline(this.tempPoints, {
-
-                    color: '#06b6d4',
-
-                    weight: 5,
-
-                    dashArray: '8, 8',
-
-                    opacity: 0.9
-
+                    color: '#06b6d4', weight: 5, dashArray: '8, 8', opacity: 0.9
                 }).addTo(this.map);
 
-
-
-                // Dot marker pada setiap waypoint
-
                 this.tempPoints.forEach((pt, idx) => {
-
                     const dot = L.circleMarker(pt, {
-
                         radius: 5,
-
-                        color: idx === 0 ? '#10b981' : (idx === this.tempPoints.length - 1 ? '#ef4444' :
-                            '#06b6d4'),
-
-                        fillColor: '#ffffff',
-
-                        fillOpacity: 1,
-
-                        weight: 2
-
+                        color: idx === 0 ? '#10b981' : (idx === this.tempPoints.length - 1 ? '#ef4444' : '#06b6d4'),
+                        fillColor: '#ffffff', fillOpacity: 1, weight: 2
                     }).addTo(this.map);
-
                     this.tempPointMarkers.push(dot);
-
                 });
-
-
-
-                // Hitung total jarak sepanjang waypoint
 
                 let meters = 0;
-
                 for (let i = 0; i < this.tempPoints.length - 1; i++) {
-
-                    const p1 = L.latLng(this.tempPoints[i]);
-
-                    const p2 = L.latLng(this.tempPoints[i + 1]);
-
-                    meters += p1.distanceTo(p2);
-
+                    meters += L.latLng(this.tempPoints[i]).distanceTo(L.latLng(this.tempPoints[i + 1]));
                 }
-
-
-
                 this.drawnDistanceKm = (meters / 1000).toFixed(2);
-
             },
-
-
 
             undoLastPoint() {
-
                 this.tempPoints.pop();
-
                 this.updateTempPolyline();
-
             },
-
-
 
             clearDrawnPath() {
-
                 this.tempPoints = [];
-
                 this.updateTempPolyline();
-
             },
-
-
-
-            // AUTO-SAVE langsung ke Database via Livewire
 
             saveDrawnPathAsRoute() {
-
                 if (this.tempPoints.length < 2) return;
 
-
-
                 const name = 'Running Route';
-
                 const distance = parseFloat(this.drawnDistanceKm);
-
                 const coordinates = this.tempPoints;
 
-
-
-                // Panggil method autoSaveRoute di Livewire Component
-
                 this.$wire.autoSaveRoute(name, distance, coordinates).then(() => {
-
                     this.clearDrawnPath();
-
                     this.setMode('view');
-
                 });
-
             },
 
-
-
             renderRouteAndStations() {
-
                 // Clear existing layers
-
                 this.routeLayers.forEach(l => this.map.removeLayer(l));
-
                 this.stationMarkers.forEach(m => this.map.removeLayer(m));
-
                 this.routeLayers = [];
-
                 this.stationMarkers = [];
 
-
+                // 🔴 Hapus marker drink spot sementara karena data yang asli telah tiba dari backend
+                if (this.tempStationMarker) {
+                    this.map.removeLayer(this.tempStationMarker);
+                    this.tempStationMarker = null;
+                }
 
                 if (!this.routeData) return;
 
-
-
-                //Render Polyline Rute Utama
+                // Render Polyline Rute Utama
                 if (this.routeData.path && this.routeData.path.length > 1) {
-
                     const line = L.polyline(this.routeData.path, {
-
-                        color: '#06b6d4',
-
-                        weight: 5,
-
-                        opacity: 0.85
-
+                        color: '#06b6d4', weight: 5, opacity: 0.85
                     }).addTo(this.map);
-
-
 
                     line.bindPopup(`
-
-<div class="text-xs">
-
-<strong class="block text-sm font-bold">${this.routeData.name}</strong>
-
-<span>Jarak: ${this.routeData.distance_km} km</span>
-
-<div class="mt-2">
-
-<button type="button"
-
-onclick="if(confirm('Hapus rute ini?')) { Livewire.find('${this.$wire.__instance.id}').deleteRoute(${this.routeData.id}) }"
-
-class="px-2 py-1 bg-rose-600 text-white text-[11px] font-semibold rounded shadow-xs">
-
-Delete Route
-
-</button>
-
-</div>
-
-</div>
-
-`);
-
+                        <div class="text-xs">
+                            <strong class="block text-sm font-bold">${this.routeData.name}</strong>
+                            <span>Jarak: ${this.routeData.distance_km} km</span>
+                        </div>
+                    `);
                     this.routeLayers.push(line);
 
-
-
-                    // Marker Start (S) & End (E)
-
                     const startIcon = L.divIcon({
-
                         className: 'endpoint-marker-pin bg-emerald-500',
-
                         html: '<span class="text-white font-bold text-xs flex items-center justify-center h-full">S</span>',
-
-                        iconSize: [22, 22],
-
-                        iconAnchor: [11, 11]
-
+                        iconSize: [22, 22], iconAnchor: [11, 11]
                     });
-
                     const endIcon = L.divIcon({
-
                         className: 'endpoint-marker-pin bg-rose-500',
-
                         html: '<span class="text-white font-bold text-xs flex items-center justify-center h-full">E</span>',
-
-                        iconSize: [22, 22],
-
-                        iconAnchor: [11, 11]
-
+                        iconSize: [22, 22], iconAnchor: [11, 11]
                     });
 
-
-
-                    const startMarker = L.marker(this.routeData.path[0], {
-                        icon: startIcon
-                    }).addTo(this.map).bindPopup('<strong>Start Point</strong>');
-
-                    const endMarker = L.marker(this.routeData.path[this.routeData.path.length - 1], {
-                        icon: endIcon
-                    }).addTo(this.map).bindPopup('<strong>End Point</strong>');
-
-
+                    const startMarker = L.marker(this.routeData.path[0], { icon: startIcon }).addTo(this.map).bindPopup('<strong>Start Point</strong>');
+                    const endMarker = L.marker(this.routeData.path[this.routeData.path.length - 1], { icon: endIcon }).addTo(this.map).bindPopup('<strong>End Point</strong>');
 
                     this.routeLayers.push(startMarker);
-
                     this.routeLayers.push(endMarker);
-
                 }
 
-
-
-                // 2. Render Water Stations
-
+                // Render Water Stations (Permanen)
                 if (this.routeData.stations) {
-
                     this.routeData.stations.forEach(station => {
-
                         const stationIcon = L.divIcon({
-
                             className: 'station-marker-pin',
-
                             html: '<i class="fa-solid fa-droplet text-white"></i>',
-
-                            iconSize: [28, 28],
-
-                            iconAnchor: [14, 14]
-
+                            iconSize: [28, 28], iconAnchor: [14, 14]
                         });
 
-
-
-                        const marker = L.marker([station.lat, station.lng], {
-                            icon: stationIcon
-                        }).addTo(this.map);
-
+                        const marker = L.marker([station.lat, station.lng], { icon: stationIcon }).addTo(this.map);
                         marker.bindPopup(`
-
-<div class="text-xs">
-
-<div class="font-bold text-gray-900">${station.name}</div>
-
-<div class="text-[11px] text-cyan-600 font-semibold">${station.type_label || station.type}</div>
-
-${station.notes ? `<div class="text-[10px] text-gray-600 italic mt-0.5">"${station.notes}"</div>` : ''}
-
-</div>
-
-`);
-
+                            <div class="text-xs">
+                                <div class="font-bold text-gray-900">${station.name}</div>
+                                <div class="text-[11px] text-cyan-600 font-semibold">${station.type_label || station.type}</div>
+                                ${station.notes ? `<div class="text-[10px] text-gray-600 italic mt-0.5">"${station.notes}"</div>` : ''}
+                            </div>
+                        `);
                         this.stationMarkers.push(marker);
-
                     });
-
                 }
-
             },
 
-
-
             fitBounds() {
-
                 if (!this.map || !this.routeData) return;
 
-
-
                 const allLatLngs = [];
-
-
 
                 if (this.routeData.path && this.routeData.path.length > 0) {
-
                     this.routeData.path.forEach(pt => allLatLngs.push(pt));
-
                 }
-
                 if (this.routeData.stations) {
-
                     this.routeData.stations.forEach(st => allLatLngs.push([st.lat, st.lng]));
-
                 }
-
-
 
                 if (allLatLngs.length > 0) {
-
-                    this.map.fitBounds(L.latLngBounds(allLatLngs), {
-                        padding: [40, 40]
-                    });
-
+                    this.map.fitBounds(L.latLngBounds(allLatLngs), { padding: [40, 40] });
                 }
-
             }
-
         };
-
     }
-
 </script>
-
-@endpush
-
-
-
-@push('scripts')
-
-<script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"
-    integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo=" crossorigin=""></script>
-
-<script>
-    function runningMapManager(initialMapData) {
-
-        return {
-
-            map: null,
-
-            mode: 'view', // 'view', 'draw_route', 'add_station'
-
-            routesData: initialMapData.routes || [],
-
-            tempPoints: [],
-
-            tempPolyline: null,
-
-            tempPointMarkers: [],
-
-            routeLayers: [],
-
-            stationMarkers: [],
-
-            drawnDistanceKm: '0.00',
-
-
-
-            init() {
-
-                this.loadLeafletThen(() => {
-
-                    this.initMap();
-
-                });
-
-            },
-
-
-
-            loadLeafletThen(callback) {
-
-                if (window.L) {
-
-                    callback();
-
-                    return;
-
-                }
-
-                const checkInterval = setInterval(() => {
-
-                    if (window.L) {
-
-                        clearInterval(checkInterval);
-
-                        callback();
-
-                    }
-
-                }, 50);
-
-            },
-
-
-
-            initMap() {
-
-                const mapEl = document.getElementById('running-leaflet-map');
-
-                if (!mapEl || this.map) return;
-
-
-
-                // Center default: Indonesia / Jakarta or first station coordinate
-
-                let center = [-6.2088, 106.8456];
-
-                let zoom = 13;
-
-
-
-                // Find first available coordinate among routes or stations
-
-                const firstRoute = this.routesData.find(r => r.path && r.path.length > 0);
-
-                if (firstRoute) {
-
-                    center = firstRoute.path[0];
-
-                    zoom = 14;
-
-                } else {
-
-                    const firstStationRoute = this.routesData.find(r => r.stations && r.stations.length > 0);
-
-                    if (firstStationRoute) {
-
-                        center = [firstStationRoute.stations[0].lat, firstStationRoute.stations[0].lng];
-
-                        zoom = 14;
-
-                    }
-
-                }
-
-
-
-                this.map = L.map(mapEl).setView(center, zoom);
-
-
-
-                // Add OpenStreetMap tiles
-
-                L.tileLayer('https://tile.openstreetmap.org/{z}/{x}/{y}.png', {
-
-                    maxZoom: 19,
-
-                    attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a>'
-
-                }).addTo(this.map);
-
-
-
-                // Render existing routes and water stations
-
-                this.renderAllRoutesAndStations();
-
-
-
-                // Map Click Listener
-
-                this.map.on('click', (e) => {
-
-                    this.handleMapClick(e);
-
-                });
-
-
-
-                // Auto-fit if data exists
-
-                this.fitBounds();
-
-
-
-                // Listen for Livewire updates
-
-                window.addEventListener('livewire:navigated', () => {
-
-                    setTimeout(() => this.map && this.map.invalidateSize(), 200);
-
-                });
-
-            },
-
-
-
-            setMode(newMode) {
-
-                this.mode = newMode;
-
-                const mapEl = document.getElementById('running-leaflet-map');
-
-
-
-                if (newMode === 'draw_route') {
-
-                    mapEl.style.cursor = 'crosshair';
-
-                } else if (newMode === 'add_station') {
-
-                    mapEl.style.cursor = 'cell';
-
-                } else {
-
-                    mapEl.style.cursor = '';
-
-                }
-
-            },
-
-
-
-            handleMapClick(e) {
-
-                const lat = parseFloat(e.latlng.lat.toFixed(7));
-
-                const lng = parseFloat(e.latlng.lng.toFixed(7));
-
-
-
-                if (this.mode === 'draw_route') {
-
-                    this.tempPoints.push([lat, lng]);
-
-                    this.updateTempPolyline();
-
-                } else if (this.mode === 'add_station') {
-
-                    // Place visual preview marker
-
-                    const tempIcon = L.divIcon({
-
-                        className: 'station-marker-pin',
-
-                        html: '<i class="fa-solid fa-droplet text-white"></i>',
-
-                        iconSize: [28, 28],
-
-                        iconAnchor: [14, 14]
-
-                    });
-
-
-
-                    L.marker([lat, lng], {
-                            icon: tempIcon
-                        }).addTo(this.map)
-
-                        .bindPopup(`<strong>Dropped Drink Spot</strong><br>Lat: ${lat}, Lng: ${lng}`).openPopup();
-
-
-
-                    // If at least one route exists, open modal with selected route
-
-                    const firstRoute = this.routesData[0];
-
-                    if (firstRoute) {
-
-                        @this.openStationModal(firstRoute.id, null, lat, lng);
-
-                    } else {
-
-                        alert('Please add a route first before adding water stations.');
-
-                    }
-
-
-
-                    this.setMode('view');
-
-                }
-
-            },
-
-
-
-            updateTempPolyline() {
-
-                if (this.tempPolyline) {
-
-                    this.map.removeLayer(this.tempPolyline);
-
-                }
-
-                this.tempPointMarkers.forEach(m => this.map.removeLayer(m));
-
-                this.tempPointMarkers = [];
-
-
-
-                if (this.tempPoints.length === 0) {
-
-                    this.drawnDistanceKm = '0.00';
-
-                    return;
-
-                }
-
-
-
-                // Draw connecting line
-
-                this.tempPolyline = L.polyline(this.tempPoints, {
-
-                    color: '#06b6d4',
-
-                    weight: 5,
-
-                    dashArray: '8, 8',
-
-                    opacity: 0.9
-
-                }).addTo(this.map);
-
-
-
-                // Add small dot markers on waypoints
-
-                this.tempPoints.forEach((pt, idx) => {
-
-                    const dot = L.circleMarker(pt, {
-
-                        radius: 5,
-
-                        color: idx === 0 ? '#10b981' : (idx === this.tempPoints.length - 1 ? '#ef4444' :
-                            '#06b6d4'),
-
-                        fillColor: '#ffffff',
-
-                        fillOpacity: 1,
-
-                        weight: 2
-
-                    }).addTo(this.map);
-
-                    this.tempPointMarkers.push(dot);
-
-                });
-
-
-
-                // Calculate total distance along waypoints
-
-                let meters = 0;
-
-                for (let i = 0; i < this.tempPoints.length - 1; i++) {
-
-                    const p1 = L.latLng(this.tempPoints[i]);
-
-                    const p2 = L.latLng(this.tempPoints[i + 1]);
-
-                    meters += p1.distanceTo(p2);
-
-                }
-
-
-
-                this.drawnDistanceKm = (meters / 1000).toFixed(2);
-
-            },
-
-
-
-            undoLastPoint() {
-
-                this.tempPoints.pop();
-
-                this.updateTempPolyline();
-
-            },
-
-
-
-            clearDrawnPath() {
-
-                this.tempPoints = [];
-
-                this.updateTempPolyline();
-
-            },
-
-
-
-            saveDrawnPathAsRoute() {
-
-                if (this.tempPoints.length < 2) return;
-
-
-
-                // Buat nama otomatis, contoh: "Route #1", "Route #2", dst.
-
-                const routeCount = (this.mapData ? .routes ? .length || 0) + 1;
-
-                const autoName = `Route #${routeCount}`;
-
-                const distance = parseFloat(this.drawnDistanceKm);
-
-
-
-                // Format koordinat ke [lat, lng]
-
-                const coordinates = this.tempPoints.map(p => [p.lat, p.lng]);
-
-
-
-                // Panggil method Livewire langsung
-
-                this.$wire.autoSaveRoute(autoName, distance, coordinates).then(() => {
-
-                    // Reset state drawing setelah auto save
-
-                    this.clearDrawnPath();
-
-                    this.setMode('view');
-
-                });
-
-            }
-
-
-
-            renderAllRoutesAndStations() {
-
-                // Clear existing layers
-
-                this.routeLayers.forEach(l => this.map.removeLayer(l));
-
-                this.stationMarkers.forEach(m => this.map.removeLayer(m));
-
-                this.routeLayers = [];
-
-                this.stationMarkers = [];
-
-
-
-                const palette = ['#06b6d4', '#6366f1', '#10b981', '#f59e0b', '#ec4899'];
-
-
-
-                this.routesData.forEach((route, idx) => {
-
-                    const color = palette[idx % palette.length];
-
-
-
-                    //Draw route polyline if waypoints exist
-                    if (route.path && route.path.length > 1) {
-
-                        const line = L.polyline(route.path, {
-
-                            color: color,
-
-                            weight: 5,
-
-                            opacity: 0.85
-
-                        }).addTo(this.map);
-
-
-
-                        line.bindPopup(
-                            `<strong>Route #${route.order}: ${route.name}</strong><br>Distance: ${route.distance_km} km<br>Terrain: ${route.terrain_type || 'Road'}`
-                            );
-
-                        this.routeLayers.push(line);
-
-
-
-                        // Start & End markers
-
-                        const startIcon = L.divIcon({
-
-                            className: 'endpoint-marker-pin bg-emerald-500',
-
-                            html: 'S',
-
-                            iconSize: [22, 22],
-
-                            iconAnchor: [11, 11]
-
-                        });
-
-                        const endIcon = L.divIcon({
-
-                            className: 'endpoint-marker-pin bg-rose-500',
-
-                            html: 'E',
-
-                            iconSize: [22, 22],
-
-                            iconAnchor: [11, 11]
-
-                        });
-
-
-
-                        const startMarker = L.marker(route.path[0], {
-                            icon: startIcon
-                        }).addTo(this.map).bindPopup(`<strong>Start of ${route.name}</strong>`);
-
-                        const endMarker = L.marker(route.path[route.path.length - 1], {
-                            icon: endIcon
-                        }).addTo(this.map).bindPopup(`<strong>End of ${route.name}</strong>`);
-
-
-
-                        this.routeLayers.push(startMarker);
-
-                        this.routeLayers.push(endMarker);
-
-                    }
-
-
-
-                    // 2. Draw water stations on this route
-
-                    if (route.stations) {
-
-                        route.stations.forEach(station => {
-
-                            const stationIcon = L.divIcon({
-
-                                className: 'station-marker-pin',
-
-                                html: '<i class="fa-solid fa-droplet text-white"></i>',
-
-                                iconSize: [28, 28],
-
-                                iconAnchor: [14, 14]
-
-                            });
-
-
-
-                            const marker = L.marker([station.lat, station.lng], {
-                                icon: stationIcon
-                            }).addTo(this.map);
-
-                            marker.bindPopup(`
-
-<div class="text-xs">
-
-<div class="font-bold text-gray-900">${station.name}</div>
-
-<div class="text-[11px] text-cyan-600 font-semibold">${station.type_label}</div>
-
-<div class="text-[10px] text-gray-500 mt-1">Route #${route.order}: ${route.name} (Stop #${station.order})</div>
-
-${station.notes ? `<div class="text-[10px] text-gray-600 italic mt-0.5">"${station.notes}"</div>` : ''}
-
-<div class="mt-2 text-[10px] text-gray-400">Coords: ${station.lat.toFixed(5)}, ${station.lng.toFixed(5)}</div>
-
-</div>
-
-`);
-
-                            this.stationMarkers.push(marker);
-
-                        });
-
-                    }
-
-                });
-
-            },
-
-
-
-            fitBounds() {
-
-                if (!this.map) return;
-
-
-
-                const allLatLngs = [];
-
-
-
-                this.routesData.forEach(route => {
-
-                    if (route.path && route.path.length > 0) {
-
-                        route.path.forEach(pt => allLatLngs.push(pt));
-
-                    }
-
-                    if (route.stations) {
-
-                        route.stations.forEach(st => allLatLngs.push([st.lat, st.lng]));
-
-                    }
-
-                });
-
-
-
-                if (allLatLngs.length > 0) {
-
-                    this.map.fitBounds(L.latLngBounds(allLatLngs), {
-                        padding: [40, 40]
-                    });
-
-                }
-
-            }
-
-        };
-
-    }
-
-</script>
-
 @endpush

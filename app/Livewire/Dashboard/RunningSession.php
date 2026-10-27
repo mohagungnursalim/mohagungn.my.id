@@ -222,51 +222,6 @@ class RunningSession extends Component
     // ROUTE CRUD
     // -------------------------------------------------------------
 
-    // public function openRouteModal(?int $routeId = null): void
-    // {
-    //     // If workout hasn't been saved to DB yet, save it first so a foreign key exists
-    //     if (! $this->workoutId) {
-    //         $this->saveSession();
-    //     }
-
-    //     $this->resetValidation();
-
-    //     if ($routeId) {
-    //         $route = RunningRoute::query()
-    //             ->where('id', $routeId)
-    //             ->where('user_id', Auth::id())
-    //             ->firstOrFail();
-
-    //         $this->editingRouteId = $route->id;
-    //         $this->routeName = $route->name;
-    //         $this->routeDescription = $route->description ?? '';
-    //         $this->routePlannedDistance = $route->planned_distance_km;
-    //         $this->routeOrder = $route->order;
-    //         $this->routeTerrainType = $route->terrain_type ?? 'Road';
-    //         $this->routeElevationGain = $route->elevation_gain_m;
-    //         $this->routeNotes = $route->notes ?? '';
-    //         $this->routePathCoordinates = json_encode($route->path_coordinates ?? []);
-    //     } else {
-    //         $maxOrder = RunningRoute::query()
-    //             ->where('workout_id', $this->workoutId)
-    //             ->where('user_id', Auth::id())
-    //             ->max('order') ?? 0;
-
-    //         $this->editingRouteId = null;
-    //         $this->routeName = '';
-    //         $this->routeDescription = '';
-    //         $this->routePlannedDistance = null;
-    //         $this->routeOrder = $maxOrder + 1;
-    //         $this->routeTerrainType = 'Road';
-    //         $this->routeElevationGain = null;
-    //         $this->routeNotes = '';
-    //         $this->routePathCoordinates = '[]';
-    //     }
-
-    //     $this->showRouteModal = true;
-    //     $this->dispatch('open-route-modal', ['path' => $this->routePathCoordinates]);
-    // }
-
     public function openRouteModal(?int $routeId = null): void
     {
         if (! $this->workoutId) {
@@ -410,6 +365,9 @@ class RunningSession extends Component
             'type' => 'success',
             'message' => 'Route successfully deleted.',
         ]);
+
+        
+        $this->redirectRoute('dashboard.workout.running', ['date' => now()->format('Y-m-d')], navigate: true);
     }
 
     public function moveRoute(int $routeId, string $direction): void
@@ -488,11 +446,11 @@ class RunningSession extends Component
         ]);
     }
 
-    public function saveStation(): void
+public function saveStation(): void
     {
         $this->validate([
             'stationName' => 'required|string|max:120',
-            'stationType' => 'required|string|in:water_fountain,convenience_store,vending_machine,aid_station,hydration_point',
+            'stationType' => 'required|string',
             'stationLatitude' => 'required|numeric|between:-90,90',
             'stationLongitude' => 'required|numeric|between:-180,180',
             'stationNotes' => 'nullable|string|max:1000',
@@ -524,10 +482,15 @@ class RunningSession extends Component
         });
 
         $this->showStationModal = false;
+        
         $this->dispatch('notify', [
             'type' => 'success',
             'message' => $this->editingStationId ? 'Water station updated.' : 'Water station added.',
         ]);
+
+        // 🔴 Ambil data rute terbaru beserta stasiunnya lalu lempar ke peta Alpine
+        $route->load(['waterStations' => fn ($q) => $q->orderBy('order')]);
+        $this->dispatchMapUpdate($route);
     }
 
     public function deleteStation(int $stationId): void
@@ -537,6 +500,8 @@ class RunningSession extends Component
             ->where('user_id', Auth::id())
             ->firstOrFail();
 
+        $routeId = $station->running_route_id;
+
         DB::transaction(function () use ($station) {
             $station->delete();
         });
@@ -545,6 +510,33 @@ class RunningSession extends Component
         $this->dispatch('notify', [
             'type' => 'success',
             'message' => 'Water station removed.',
+        ]);
+
+        // 🔴 Ambil data rute terbaru (yang stasiunnya sudah hilang) lalu lempar ke peta Alpine
+        $route = RunningRoute::with(['waterStations' => fn ($q) => $q->orderBy('order')])->findOrFail($routeId);
+        $this->dispatchMapUpdate($route);
+    }
+
+    /**
+     * Helper khusus untuk melempar pembaruan rute ke Map Alpine.
+     */
+    private function dispatchMapUpdate(RunningRoute $route): void
+    {
+        $this->dispatch('focus-route-on-map', route: [
+            'id' => $route->id,
+            'name' => $route->name,
+            'distance_km' => $route->planned_distance_km,
+            'terrain_type' => $route->terrain_type,
+            'path' => $route->path_coordinates ?? [],
+            'stations' => $route->waterStations->map(fn ($s) => [
+                'id' => $s->id,
+                'name' => $s->name,
+                'type' => $s->type,
+                'type_label' => $s->type_label ?? $s->type,
+                'lat' => (float) $s->latitude,
+                'lng' => (float) $s->longitude,
+                'notes' => $s->notes,
+            ])->values()->all(),
         ]);
     }
 
