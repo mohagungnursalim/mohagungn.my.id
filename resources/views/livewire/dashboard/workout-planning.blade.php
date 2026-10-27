@@ -259,7 +259,7 @@
                     </button>
                 </div>
 
-                {{-- Modal Body: Check if date has activities or is empty --}}
+              {{-- Modal Body: Check if date has activities or is empty --}}
                 <div class="py-5">
                     @if($selectedActivities->isNotEmpty())
                         {{-- Date with Existing Activities --}}
@@ -337,17 +337,20 @@
                                 @endif
 
                                 @if(!$selectedActivities->contains(fn ($w) => $w->type === 'strength'))
-                                    <a href="{{ route('dashboard.workout.strength', ['date' => $selectedDate]) }}"
-                                       wire:navigate
-                                       class="flex items-center gap-3 p-3 rounded-xl border border-gray-200 dark:border-gray-700 hover:border-indigo-500 dark:hover:border-indigo-400 hover:bg-indigo-50/30 dark:hover:bg-indigo-950/20 transition-all group">
-                                        <div class="w-8 h-8 rounded-lg bg-indigo-100 dark:bg-indigo-900/50 text-indigo-600 dark:text-indigo-400 flex items-center justify-center flex-shrink-0 group-hover:scale-105 transition-transform">
-                                            <i class="fa-solid fa-dumbbell"></i>
+                                    <div class="flex items-center justify-between p-3 rounded-xl border border-gray-200 dark:border-gray-700 opacity-60 cursor-not-allowed pointer-events-none">
+                                        <div class="flex items-center gap-3">
+                                            <div class="w-8 h-8 rounded-lg bg-indigo-100 dark:bg-indigo-900/50 text-indigo-600 dark:text-indigo-400 flex items-center justify-center flex-shrink-0">
+                                                <i class="fa-solid fa-dumbbell"></i>
+                                            </div>
+                                            <div>
+                                                <p class="text-xs font-bold text-gray-800 dark:text-gray-200">Add Strength</p>
+                                                <p class="text-[10px] text-gray-500 dark:text-gray-400">Sets, reps, exercises</p>
+                                            </div>
                                         </div>
-                                        <div>
-                                            <p class="text-xs font-bold text-gray-800 dark:text-gray-200 group-hover:text-indigo-600 dark:group-hover:text-indigo-400">Add Strength</p>
-                                            <p class="text-[10px] text-gray-500 dark:text-gray-400">Sets, reps, exercises</p>
-                                        </div>
-                                    </a>
+                                        <span class="inline-flex items-center px-2 py-0.5 rounded-full text-[10px] font-semibold bg-gray-100 text-gray-600 dark:bg-gray-800 dark:text-gray-400 uppercase tracking-wider">
+                                            On Progress
+                                        </span>
+                                    </div>
                                 @endif
                             </div>
                         </div>
@@ -382,19 +385,22 @@
                                 </a>
 
                                 {{-- Option 2: Strength Workout --}}
-                                <a href="{{ route('dashboard.workout.strength', ['date' => $selectedDate]) }}"
-                                   wire:navigate
-                                   class="p-4 rounded-xl border-2 border-gray-200 dark:border-gray-700 hover:border-indigo-500 dark:hover:border-indigo-400 hover:bg-indigo-50/40 dark:hover:bg-indigo-950/20 transition-all group block">
-                                    <div class="w-10 h-10 rounded-lg bg-indigo-100 dark:bg-indigo-900/50 text-indigo-600 dark:text-indigo-400 flex items-center justify-center mb-3 group-hover:scale-110 transition-transform">
-                                        <i class="fa-solid fa-dumbbell text-lg"></i>
+                                <div class="p-4 rounded-xl border-2 border-gray-200 dark:border-gray-700 opacity-60 cursor-not-allowed pointer-events-none block relative">
+                                    <div class="flex items-center justify-between mb-3">
+                                        <div class="w-10 h-10 rounded-lg bg-indigo-100 dark:bg-indigo-900/50 text-indigo-600 dark:text-indigo-400 flex items-center justify-center">
+                                            <i class="fa-solid fa-dumbbell text-lg"></i>
+                                        </div>
+                                        <span class="inline-flex items-center px-2 py-0.5 rounded-full text-[10px] font-semibold bg-gray-100 text-gray-600 dark:bg-gray-800 dark:text-gray-400 uppercase tracking-wider">
+                                            On Progress
+                                        </span>
                                     </div>
-                                    <p class="text-sm font-bold text-gray-900 dark:text-white group-hover:text-indigo-600 dark:group-hover:text-indigo-400">
+                                    <p class="text-sm font-bold text-gray-900 dark:text-white">
                                         Strength Workout
                                     </p>
                                     <p class="text-xs text-gray-500 dark:text-gray-400 mt-1 leading-snug">
                                         Plan or log weightlifting exercises, sets, reps, and volume.
                                     </p>
-                                </a>
+                                </div>
                             </div>
                         </div>
                     @endif
