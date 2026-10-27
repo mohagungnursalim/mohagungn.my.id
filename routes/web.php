@@ -6,6 +6,9 @@ use App\Livewire\Dashboard\Categories;
 use App\Livewire\Dashboard\PermissionIndex;
 use App\Livewire\Dashboard\Posts;
 use App\Livewire\Dashboard\Finances;
+use App\Livewire\Dashboard\WorkoutPlanning;
+use App\Livewire\Dashboard\RunningSession;
+use App\Livewire\Dashboard\WorkoutDetailPlaceholder;
 use App\Livewire\Dashboard\Dashboard;
 use App\Livewire\Dashboard\PostsCreate;
 use App\Livewire\Dashboard\PostsEdit;
@@ -97,8 +100,15 @@ Route::prefix('dashboard')->name('dashboard.')->middleware(['auth'])->group(func
     // ========= Tags & Categories ==========
     Route::get('/tags', Tags::class)->name('tags');   
     Route::get('/categories', Categories::class)->name('categories');
+    // ======================================
     Route::get('/finances', Finances::class)->name('finances');
-
+    Route::get('/workout-planning', WorkoutPlanning::class)->name('workout');
+    Route::get('/workout-planning/running/{date}', RunningSession::class)
+        ->name('workout.running');
+    Route::get('/workout-planning/workout/{date}', WorkoutDetailPlaceholder::class)
+        ->defaults('type', 'workout')
+        ->name('workout.strength');
+    
        /**
          * ROLE MANAGEMENT
          */

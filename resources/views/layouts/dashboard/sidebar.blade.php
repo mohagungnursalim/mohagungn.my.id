@@ -14,6 +14,12 @@
              </a>
           </li>
           <li>
+             <a wire:navigate href="{{ route('dashboard.workout') }}" class="flex items-center p-2 text-gray-900 rounded-lg dark:text-white hover:bg-gray-100 dark:hover:bg-gray-700 group {{ request()->routeIs('dashboard.workout*') ? 'bg-gray-200 dark:bg-gray-600' : '' }}">
+               <i class="fa-solid fa-running"></i>
+                <span class="ms-3">Workout Planning</span>
+             </a>
+          </li>
+          <li>
             <button type="button" class="flex items-center w-full p-2 text-base text-gray-900 transition duration-75 rounded-lg group hover:bg-gray-100 dark:text-white dark:hover:bg-gray-700" aria-controls="dropdown-example" data-collapse-toggle="dropdown-example">
               <i class="fa-regular fa-pen-to-square"></i>
                   <span class="flex-1 ms-3 text-left rtl:text-right whitespace-nowrap">Posts</span>
@@ -57,100 +63,102 @@
          </li>
        </ul>
 
-      <ul class="space-y-2 font-medium">
-         {{-- SETTINGS --}}
-         <li>
-            <button
-                  type="button"
-                  class="flex items-center w-full p-2 text-base text-gray-900 transition duration-75 rounded-lg
-                        hover:bg-gray-100 dark:text-white dark:hover:bg-gray-700"
-                  aria-controls="dropdown-settings"
-                  data-collapse-toggle="dropdown-settings"
-            >
-                  <i class="fa-solid fa-gear"></i>
-                  <span class="flex-1 ms-3 text-left whitespace-nowrap">Settings</span>
-                  <i class="fa-solid fa-sort-down"></i>
-            </button>
-
-            <ul
-                  id="dropdown-settings"
-                  class="{{ request()->routeIs(
-                     'dashboard.roles.*',
-                     'dashboard.permissions.*',
-                     'dashboard.user-permissions.*',
-                     'dashboard.users.index'
-                  ) ? '' : 'hidden' }} py-2 space-y-2"
-            >
-
-                  {{-- ROLE & PERMISSIONS --}}
-                  <li class="text-sm">
-                     <button
-                        type="button"
-                        class="flex items-center w-full p-2 pl-11 text-gray-900 transition duration-75 rounded-lg
-                                 hover:bg-gray-100 dark:text-white dark:hover:bg-gray-700"
-                        aria-controls="dropdown-role-permission"
-                        data-collapse-toggle="dropdown-role-permission"
-                     >
-                        <i class="fas fa-users-cog"></i>
-                        <span class="flex-1 ms-3 text-left whitespace-nowrap">
-                              Roles & Permissions
-                        </span>
-                        <i class="fa-solid fa-sort-down"></i>
-                     </button>
-
-                     <ul
-                        id="dropdown-role-permission"
-                        class="{{ request()->routeIs(
-                              'dashboard.roles.*',
-                              'dashboard.permissions.*',
-                              'dashboard.user-permissions.*',
-                              'dashboard.users.index'
-                        ) ? '' : 'hidden' }} py-2 space-y-2"
-                     >
-                        {{-- Roles --}}
-                        <li>
-                              <a wire:navigate.hover
-                                 href="{{ route('dashboard.roles.index') }}"
-                                 class="flex items-center w-full p-2 pl-16 rounded-lg transition
-                                       text-gray-900 dark:text-white
-                                       hover:bg-gray-100 dark:hover:bg-gray-700
-                                       {{ request()->routeIs('dashboard.roles.*') ? 'bg-gray-200 dark:bg-gray-600' : '' }}">
-                                 <i class="fa-solid fa-arrow-right"></i>
-                                 <span class="ml-2">Roles</span>
-                              </a>
-                        </li>
-
-                        {{-- Permissions --}}
-                        <li>
-                              <a wire:navigate.hover
-                                 href="{{ route('dashboard.permissions.index') }}"
-                                 class="flex items-center w-full p-2 pl-16 rounded-lg transition
-                                       text-gray-900 dark:text-white
-                                       hover:bg-gray-100 dark:hover:bg-gray-700
-                                       {{ request()->routeIs('dashboard.permissions.*') ? 'bg-gray-200 dark:bg-gray-600' : '' }}">
-                                 <i class="fa-solid fa-arrow-right"></i>
-                                 <span class="ml-2">Permissions</span>
-                              </a>
-                        </li>
-
-                        {{-- Users Management --}}
-                        <li>
-                              <a wire:navigate.hover
-                                 href="{{ route('dashboard.users.index') }}"
-                                 class="flex items-center w-full p-2 pl-16 rounded-lg transition
-                                       text-gray-900 dark:text-white
-                                       hover:bg-gray-100 dark:hover:bg-gray-700
-                                       {{ request()->routeIs('dashboard.users.index') ? 'bg-gray-200 dark:bg-gray-600' : '' }}">
-                                 <i class="fa-solid fa-arrow-right"></i>
-                                 <span class="ml-2">Users</span>
-                              </a>
-                        </li>
-                     </ul>
-                  </li>
-
-            </ul>
-         </li>
-      </ul>
+       @can('admin')    
+       <ul class="space-y-2 font-medium">
+          {{-- SETTINGS --}}
+          <li>
+             <button
+                   type="button"
+                   class="flex items-center w-full p-2 text-base text-gray-900 transition duration-75 rounded-lg
+                         hover:bg-gray-100 dark:text-white dark:hover:bg-gray-700"
+                   aria-controls="dropdown-settings"
+                   data-collapse-toggle="dropdown-settings"
+             >
+                   <i class="fa-solid fa-gear"></i>
+                   <span class="flex-1 ms-3 text-left whitespace-nowrap">Settings</span>
+                   <i class="fa-solid fa-sort-down"></i>
+             </button>
+ 
+             <ul
+                   id="dropdown-settings"
+                   class="{{ request()->routeIs(
+                      'dashboard.roles.*',
+                      'dashboard.permissions.*',
+                      'dashboard.user-permissions.*',
+                      'dashboard.users.index'
+                   ) ? '' : 'hidden' }} py-2 space-y-2"
+             >
+ 
+                   {{-- ROLE & PERMISSIONS --}}
+                   <li class="text-sm">
+                      <button
+                         type="button"
+                         class="flex items-center w-full p-2 pl-11 text-gray-900 transition duration-75 rounded-lg
+                                  hover:bg-gray-100 dark:text-white dark:hover:bg-gray-700"
+                         aria-controls="dropdown-role-permission"
+                         data-collapse-toggle="dropdown-role-permission"
+                      >
+                         <i class="fas fa-users-cog"></i>
+                         <span class="flex-1 ms-3 text-left whitespace-nowrap">
+                               Roles & Permissions
+                         </span>
+                         <i class="fa-solid fa-sort-down"></i>
+                      </button>
+ 
+                      <ul
+                         id="dropdown-role-permission"
+                         class="{{ request()->routeIs(
+                               'dashboard.roles.*',
+                               'dashboard.permissions.*',
+                               'dashboard.user-permissions.*',
+                               'dashboard.users.index'
+                         ) ? '' : 'hidden' }} py-2 space-y-2"
+                      >
+                         {{-- Roles --}}
+                         <li>
+                               <a wire:navigate.hover
+                                  href="{{ route('dashboard.roles.index') }}"
+                                  class="flex items-center w-full p-2 pl-16 rounded-lg transition
+                                        text-gray-900 dark:text-white
+                                        hover:bg-gray-100 dark:hover:bg-gray-700
+                                        {{ request()->routeIs('dashboard.roles.*') ? 'bg-gray-200 dark:bg-gray-600' : '' }}">
+                                  <i class="fa-solid fa-arrow-right"></i>
+                                  <span class="ml-2">Roles</span>
+                               </a>
+                         </li>
+ 
+                         {{-- Permissions --}}
+                         <li>
+                               <a wire:navigate.hover
+                                  href="{{ route('dashboard.permissions.index') }}"
+                                  class="flex items-center w-full p-2 pl-16 rounded-lg transition
+                                        text-gray-900 dark:text-white
+                                        hover:bg-gray-100 dark:hover:bg-gray-700
+                                        {{ request()->routeIs('dashboard.permissions.*') ? 'bg-gray-200 dark:bg-gray-600' : '' }}">
+                                  <i class="fa-solid fa-arrow-right"></i>
+                                  <span class="ml-2">Permissions</span>
+                               </a>
+                         </li>
+ 
+                         {{-- Users Management --}}
+                         <li>
+                               <a wire:navigate.hover
+                                  href="{{ route('dashboard.users.index') }}"
+                                  class="flex items-center w-full p-2 pl-16 rounded-lg transition
+                                        text-gray-900 dark:text-white
+                                        hover:bg-gray-100 dark:hover:bg-gray-700
+                                        {{ request()->routeIs('dashboard.users.index') ? 'bg-gray-200 dark:bg-gray-600' : '' }}">
+                                  <i class="fa-solid fa-arrow-right"></i>
+                                  <span class="ml-2">Users</span>
+                               </a>
+                         </li>
+                      </ul>
+                   </li>
+ 
+             </ul>
+          </li>
+       </ul>
+       @endcan
 
     </div>
  </aside>
