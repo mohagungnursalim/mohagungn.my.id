@@ -62,8 +62,7 @@
             </ul>
          </li>
        </ul>
-
-       @can('admin')    
+    
        <ul class="space-y-2 font-medium">
           {{-- SETTINGS --}}
           <li>
@@ -158,7 +157,6 @@
              </ul>
           </li>
        </ul>
-       @endcan
 
     </div>
  </aside>
